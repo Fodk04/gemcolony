@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "gemcolony:white_chroma"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "id": "gemcolony:chroma_pressure_plate"
+  }
+}

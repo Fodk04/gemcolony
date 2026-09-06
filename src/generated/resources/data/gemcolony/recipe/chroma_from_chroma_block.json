@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "chroma",
+  "ingredients": [
+    "gemcolony:chroma_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "gemcolony:white_chroma"
+  }
+}

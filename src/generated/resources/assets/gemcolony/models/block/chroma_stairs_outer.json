@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "gemcolony:block/chroma_block",
+    "side": "gemcolony:block/chroma_block",
+    "top": "gemcolony:block/chroma_block"
+  }
+}

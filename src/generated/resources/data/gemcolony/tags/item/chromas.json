@@ -1,0 +1,20 @@
+{
+  "values": [
+    "gemcolony:white_chroma",
+    "gemcolony:light_gray_chroma",
+    "gemcolony:gray_chroma",
+    "gemcolony:black_chroma",
+    "gemcolony:brown_chroma",
+    "gemcolony:red_chroma",
+    "gemcolony:orange_chroma",
+    "gemcolony:yellow_chroma",
+    "gemcolony:lime_chroma",
+    "gemcolony:green_chroma",
+    "gemcolony:cyan_chroma",
+    "gemcolony:light_blue_chroma",
+    "gemcolony:blue_chroma",
+    "gemcolony:purple_chroma",
+    "gemcolony:magenta_chroma",
+    "gemcolony:pink_chroma"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "gemcolony:block/chroma_deposit",
+  "textures": {
+    "0": "gemcolony:block/green_chroma_deposit",
+    "particle": "gemcolony:block/green_chroma_deposit"
+  }
+}

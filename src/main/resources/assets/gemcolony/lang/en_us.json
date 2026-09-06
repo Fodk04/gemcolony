@@ -1,0 +1,128 @@
+{
+  "item.gemcolony.white_chroma": "White Chroma",
+  "item.gemcolony.light_gray_chroma": "Light Gray Chroma",
+  "item.gemcolony.gray_chroma": "Gray Chroma",
+  "item.gemcolony.black_chroma": "Black Chroma",
+  "item.gemcolony.brown_chroma": "Brown Chroma",
+  "item.gemcolony.red_chroma": "Red Chroma",
+  "item.gemcolony.orange_chroma": "Orange Chroma",
+  "item.gemcolony.yellow_chroma": "Yellow Chroma",
+  "item.gemcolony.lime_chroma": "Lime Chroma",
+  "item.gemcolony.green_chroma": "Green Chroma",
+  "item.gemcolony.cyan_chroma": "Cyan Chroma",
+  "item.gemcolony.light_blue_chroma": "Light Blue Chroma",
+  "item.gemcolony.blue_chroma": "Blue Chroma",
+  "item.gemcolony.purple_chroma": "Purple Chroma",
+  "item.gemcolony.magenta_chroma": "Magenta Chroma",
+  "item.gemcolony.pink_chroma": "Pink Chroma",
+
+  "item.gemcolony.gem_shards": "Gem Shards",
+
+  "item.gemcolony.chroma_sword": "Chroma Sword",
+  "item.gemcolony.chroma_pickaxe": "Chroma Pickaxe",
+  "item.gemcolony.chroma_shovel": "Chroma Shovel",
+  "item.gemcolony.chroma_axe": "Chroma Axe",
+  "item.gemcolony.chroma_hoe": "Chroma Hoe",
+  "item.gemcolony.chroma_spear": "Chroma Spear",
+
+  "item.gemcolony.chroma_bow": "Chroma Bow",
+
+  "item.gemcolony.chroma_helmet": "Chroma Helmet",
+  "item.gemcolony.chroma_chestplate": "Chroma Chestplate",
+  "item.gemcolony.chroma_leggings": "Chroma Leggings",
+  "item.gemcolony.chroma_boots": "Chroma Boots",
+
+  "item.gemcolony.chroma_horse_armor": "Chroma Horse Armor",
+
+  "item.gemcolony.strawberry": "Strawberry",
+
+  "item.gemcolony.pink_essence_bottle": "Bottle of Pink Essence",
+  "item.gemcolony.blue_essence_bottle": "Bottle of Blue Essence",
+  "item.gemcolony.yellow_essence_bottle": "Bottle of Yellow Essence",
+  "item.gemcolony.white_essence_bottle": "Bottle of White Essence",
+
+  "item.gemcolony.chroma_seed": "Chroma Seed",
+
+  "item.gemcolony.pebble_gem": "Pebble Gem",
+
+  "item.minecraft.potion.effect.sadness_potion": "Sadness Potion",
+  "item.minecraft.splash_potion.effect.sadness_potion": "Sadness Splash Potion",
+  "item.minecraft.lingering_potion.effect.sadness_potion": "Sadness Lingering Potion",
+
+  "block.gemcolony.chroma_block": "Chroma Block",
+  "block.gemcolony.chroma_stairs": "Chroma Stairs",
+  "block.gemcolony.chroma_slab": "Chroma Slab",
+  "block.gemcolony.chroma_pressure_plate": "Chroma Pressure Plate",
+  "block.gemcolony.chroma_button": "Chroma Button",
+  "block.gemcolony.chroma_fence": "Chroma Fence",
+  "block.gemcolony.chroma_fence_gate": "Chroma Fence Gate",
+  "block.gemcolony.chroma_wall": "Chroma Wall",
+  "block.gemcolony.chroma_door": "Chroma Door",
+  "block.gemcolony.chroma_trapdoor": "Chroma Trapdoor",
+
+  "block.gemcolony.drained_stone": "Drained Stone",
+  "block.gemcolony.destabilizer_wall_generator": "Destabilizer Wall Generator",
+
+  "block.gemcolony.white_chroma_deposit": "White Chroma Deposit",
+  "block.gemcolony.light_gray_chroma_deposit": "Light Gray Chroma Deposit",
+  "block.gemcolony.gray_chroma_deposit": "Gray Chroma Deposit",
+  "block.gemcolony.black_chroma_deposit": "Black Chroma Deposit",
+  "block.gemcolony.brown_chroma_deposit": "Brown Chroma Deposit",
+  "block.gemcolony.red_chroma_deposit": "Red Chroma Deposit",
+  "block.gemcolony.orange_chroma_deposit": "Orange Chroma Deposit",
+  "block.gemcolony.yellow_chroma_deposit": "Yellow Chroma Deposit",
+  "block.gemcolony.lime_chroma_deposit": "Lime Chroma Deposit",
+  "block.gemcolony.green_chroma_deposit": "Green Chroma Deposit",
+  "block.gemcolony.cyan_chroma_deposit": "Cyan Chroma Deposit",
+  "block.gemcolony.light_blue_chroma_deposit": "Light Blue Chroma Deposit",
+  "block.gemcolony.blue_chroma_deposit": "Blue Chroma Deposit",
+  "block.gemcolony.purple_chroma_deposit": "Purple Chroma Deposit",
+  "block.gemcolony.magenta_chroma_deposit": "Magenta Chroma Deposit",
+  "block.gemcolony.pink_chroma_deposit": "Pink Chroma Deposit",
+
+  "block.gemcolony.chroma_crop": "Growing Chroma Deposit",
+  "block.gemcolony.strawberry_bush": "Strawberry Bush",
+
+  "gemcolony.configuration.title": "Gem Colony Configs",
+  "gemcolony.configuration.section.gemcolony.common.toml": "Gem Colony Configs",
+  "gemcolony.configuration.section.gemcolony.common.toml.title": "Gem Colony Configs",
+  "gemcolony.configuration.items": "Item List",
+
+  "creativetab.gemcolony.gem_ingredients": "Gem Ingredients",
+  "creativetab.gemcolony.gem_blocks": "Gem Blocks",
+  "creativetab.gemcolony.gem_foods": "Gem Foods",
+  "creativetab.gemcolony.gem_tools": "Gem Tools",
+  "creativetab.gemcolony.gem_songs": "Gem Songs",
+
+  "tooltip.gemcolony.gem_shards.tooltip": "What remains of shattered gems...",
+  "tooltip.gemcolony.destabilizer_wall_generator.tooltip": "Does what it says",
+  "tooltip.gemcolony.essence_bottle.detailed_tooltip": "If used on %s, this essence can make a %s",
+  "tooltip.gemcolony.essence_bottle.tooltip": "Press §eShift§r for more information",
+
+  "painting.gemcolony.ruby_sapphire.title": "Ruby and Sapphire",
+  "painting.gemcolony.ruby_sapphire.author": "Test",
+
+  "sounds.gemcolony.gem_poof": "Gem Poof",
+
+  "sounds.gemcolony.love_like_you": "Playing Love like you Music Disc",
+  "sounds.gemcolony.its_over_isnt_it": "Playing It's over isn't it ? Music Disc",
+
+  "jukebox_song.gemcolony.love_like_you": "Rebecca Sugar - Love like you",
+  "jukebox_song.gemcolony.its_over_isnt_it": "Pearl - It's over isn't it ?",
+
+  "item.gemcolony.love_like_you_music_disc": "Gem Song Music Disc",
+  "item.gemcolony.its_over_isnt_it_music_disc": "Gem Song Music Disc",
+
+  "effect.gemcolony.sadness": "Sadness",
+  "effect.gemcolony.sadness.description": "Blue's emotional powers weakens gems",
+
+  "death.attack.destabilize": "%s's physical form was destabilized !",
+  "death.attack.destabilize.player": "%s was destabilized by %s",
+
+  "advancements.gemcolony.plant_strawberry.title": "Plant a Strawberry !",
+  "advancements.gemcolony.plant_strawberry.description": "Be careful of the butterflies tho...",
+
+  "entity.minecraft.villager.gemcolony.gemologist": "Gemologist",
+
+  "key.gemcolony.bubble_gem": "Bubble Gem"
+}

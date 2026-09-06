@@ -1,0 +1,12 @@
+{
+  "gives": {
+    "id": "gemcolony:destabilizer_wall_generator"
+  },
+  "max_uses": 8.0,
+  "reputation_discount": 0.05,
+  "wants": {
+    "count": 15.0,
+    "id": "minecraft:emerald"
+  },
+  "xp": 12.0
+}

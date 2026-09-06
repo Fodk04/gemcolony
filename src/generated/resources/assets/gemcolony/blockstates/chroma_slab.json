@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "gemcolony:block/chroma_slab"
+    },
+    "type=double": {
+      "model": "gemcolony:block/chroma_block"
+    },
+    "type=top": {
+      "model": "gemcolony:block/chroma_slab_top"
+    }
+  }
+}

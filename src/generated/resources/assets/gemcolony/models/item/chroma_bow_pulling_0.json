@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/bow",
+  "textures": {
+    "layer0": "gemcolony:item/chroma_bow_pulling_0"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_right_open",
+  "textures": {
+    "bottom": "gemcolony:block/chroma_door_bottom",
+    "top": "gemcolony:block/chroma_door_top"
+  }
+}

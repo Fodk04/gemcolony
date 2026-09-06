@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "chroma",
+  "ingredients": [
+    "gemcolony:white_chroma"
+  ],
+  "result": {
+    "id": "gemcolony:chroma_button"
+  }
+}

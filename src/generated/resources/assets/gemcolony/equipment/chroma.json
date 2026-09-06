@@ -1,0 +1,24 @@
+{
+  "layers": {
+    "horse_body": [
+      {
+        "texture": "gemcolony:chroma"
+      }
+    ],
+    "humanoid": [
+      {
+        "texture": "gemcolony:chroma"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "gemcolony:chroma"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "gemcolony:chroma"
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "gemcolony:block/drained_stone"
+    }
+  }
+}

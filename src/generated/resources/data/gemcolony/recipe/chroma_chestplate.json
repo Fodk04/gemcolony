@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "chroma",
+  "key": {
+    "C": "gemcolony:white_chroma"
+  },
+  "pattern": [
+    "C C",
+    "CCC",
+    "CCC"
+  ],
+  "result": {
+    "id": "gemcolony:chroma_chestplate"
+  }
+}

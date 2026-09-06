@@ -1,0 +1,13 @@
+{
+  "asset_id": "gemcolony:ruby_sapphire",
+  "author": {
+    "color": "gray",
+    "translate": "painting.gemcolony.ruby_sapphire.author"
+  },
+  "height": 2,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.gemcolony.ruby_sapphire.title"
+  },
+  "width": 4
+}

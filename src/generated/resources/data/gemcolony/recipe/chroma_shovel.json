@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "chroma",
+  "key": {
+    "C": "gemcolony:white_chroma",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "C",
+    "S",
+    "S"
+  ],
+  "result": {
+    "id": "gemcolony:chroma_shovel"
+  }
+}

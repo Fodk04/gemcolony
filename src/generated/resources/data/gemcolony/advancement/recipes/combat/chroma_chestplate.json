@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "gemcolony:chroma_chestplate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_white_chroma": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gemcolony:white_chroma"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_white_chroma"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "gemcolony:chroma_chestplate"
+    ]
+  }
+}

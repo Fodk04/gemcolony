@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gemcolony:item/its_over_isnt_it_music_disc"
+  }
+}

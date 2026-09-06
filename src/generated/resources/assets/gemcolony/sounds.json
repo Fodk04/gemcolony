@@ -1,0 +1,26 @@
+{
+  "gem_poof": {
+    "sounds": [
+      "gemcolony:gem_poof"
+    ],
+    "subtitle": "sounds.gemcolony.gem_poof"
+  },
+  "its_over_isnt_it": {
+    "sounds": [
+      {
+        "name": "gemcolony:its_over_isnt_it",
+        "stream": true
+      }
+    ],
+    "subtitle": "sounds.gemcolony.its_over_isnt_it"
+  },
+  "love_like_you": {
+    "sounds": [
+      {
+        "name": "gemcolony:love_like_you",
+        "stream": true
+      }
+    ],
+    "subtitle": "sounds.gemcolony.love_like_you"
+  }
+}

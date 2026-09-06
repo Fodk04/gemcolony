@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "strawberry_planted": {
+      "conditions": {
+        "location": [
+          {
+            "block": "gemcolony:strawberry_bush",
+            "condition": "minecraft:block_state_property"
+          }
+        ]
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.gemcolony.plant_strawberry.description"
+    },
+    "icon": {
+      "id": "gemcolony:strawberry"
+    },
+    "title": {
+      "translate": "advancements.gemcolony.plant_strawberry.title"
+    }
+  },
+  "requirements": [
+    [
+      "strawberry_planted"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gemcolony:item/love_like_you_music_disc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "chroma",
+  "key": {
+    "#": "minecraft:stick",
+    "W": "gemcolony:chroma_block"
+  },
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "result": {
+    "id": "gemcolony:chroma_fence_gate"
+  }
+}

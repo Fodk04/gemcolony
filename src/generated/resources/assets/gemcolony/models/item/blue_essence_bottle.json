@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gemcolony:item/blue_essence_bottle"
+  }
+}

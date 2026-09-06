@@ -1,0 +1,14 @@
+{
+  "values": [
+    "gemcolony:chroma_block",
+    "gemcolony:chroma_stairs",
+    "gemcolony:chroma_slab",
+    "gemcolony:chroma_pressure_plate",
+    "gemcolony:chroma_fence",
+    "gemcolony:chroma_fence_gate",
+    "gemcolony:chroma_wall",
+    "gemcolony:chroma_door",
+    "gemcolony:chroma_trapdoor",
+    "#gemcolony:chroma_deposits"
+  ]
+}

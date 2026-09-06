@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "experience": 0.5,
+  "group": "chroma",
+  "ingredient": "gemcolony:drained_stone",
+  "result": {
+    "id": "gemcolony:white_chroma"
+  }
+}

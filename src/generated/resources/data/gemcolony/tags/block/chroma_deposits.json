@@ -1,0 +1,20 @@
+{
+  "values": [
+    "gemcolony:white_chroma_deposit",
+    "gemcolony:light_gray_chroma_deposit",
+    "gemcolony:gray_chroma_deposit",
+    "gemcolony:black_chroma_deposit",
+    "gemcolony:brown_chroma_deposit",
+    "gemcolony:red_chroma_deposit",
+    "gemcolony:orange_chroma_deposit",
+    "gemcolony:yellow_chroma_deposit",
+    "gemcolony:lime_chroma_deposit",
+    "gemcolony:green_chroma_deposit",
+    "gemcolony:cyan_chroma_deposit",
+    "gemcolony:light_blue_chroma_deposit",
+    "gemcolony:blue_chroma_deposit",
+    "gemcolony:purple_chroma_deposit",
+    "gemcolony:magenta_chroma_deposit",
+    "gemcolony:pink_chroma_deposit"
+  ]
+}

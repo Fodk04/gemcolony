@@ -1,0 +1,8 @@
+{
+  "remove": [
+    "#gemcolony:needs_chroma_tool"
+  ],
+  "values": [
+    "#minecraft:incorrect_for_iron_tool"
+  ]
+}

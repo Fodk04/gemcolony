@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "gemcolony:block/destabilizer_wall_generator"
+    },
+    "active=true": {
+      "model": "gemcolony:block/destabilizer_wall_generator_on"
+    }
+  }
+}
