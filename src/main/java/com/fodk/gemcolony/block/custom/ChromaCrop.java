@@ -68,7 +68,7 @@ public class ChromaCrop extends NetherWartBlock {
             CommonHooks.fireCropGrowPost(level, pos, state);
             grown = true;
         }
-        if(age == MAX_AGE){
+        if(age == MAX_AGE && CommonHooks.canCropGrow(level, pos, state, random.nextInt(10) == 0)){
             Block growthBlock = level.getBlockState(pos.below(1)).getBlock();
             level.setBlockAndUpdate(pos, BlockToColoredChroma.depositFromGrowthBlock(growthBlock).get().defaultBlockState());
             grown = true;

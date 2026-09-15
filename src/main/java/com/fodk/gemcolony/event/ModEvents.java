@@ -1,15 +1,19 @@
 package com.fodk.gemcolony.event;
 
 import com.fodk.gemcolony.GemColony;
+import com.fodk.gemcolony.entity.custom.GemRisingItemEntity;
 import com.fodk.gemcolony.item.ModItems;
+import com.fodk.gemcolony.item.custom.GemItem;
 import com.fodk.gemcolony.networking.ClientPayloadHandler;
-import com.fodk.gemcolony.networking.packet.TestPacketC2S;
+import com.fodk.gemcolony.networking.packet.BubblingPacketC2S;
 import com.fodk.gemcolony.potion.ModPotions;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -24,7 +28,7 @@ public class ModEvents {
     public static void onBrewingRecipeRegister(RegisterBrewingRecipesEvent event) {
         PotionBrewing.Builder builder = event.getBuilder();
 
-        builder.addMix(Potions.AWKWARD, ModItems.BLUE_ESSENCE_BOTTLE.get(), ModPotions.STINKY_POTION);
+        builder.addMix(Potions.AWKWARD, ModItems.BLUE_ESSENCE_BOTTLE.get(), ModPotions.SADNESS_POTION);
     }
 
     @SubscribeEvent
@@ -32,6 +36,24 @@ public class ModEvents {
         final PayloadRegistrar registrar = event.registrar("1")
                 .executesOn(HandlerThread.MAIN);
 
-        registrar.playToServer(TestPacketC2S.TYPE, TestPacketC2S.STREAM_CODEC, ClientPayloadHandler::handleTestPacket);
+        registrar.playToServer(BubblingPacketC2S.TYPE, BubblingPacketC2S.STREAM_CODEC, ClientPayloadHandler::handleBubblingPacket);
+    }
+
+    @SubscribeEvent
+    public static void onEntityTick(EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof ItemEntity itemEntity))
+            return;
+
+        if(itemEntity instanceof GemRisingItemEntity)
+            return;
+
+        if (itemEntity.level().isClientSide())
+            return;
+
+        if (!(itemEntity.getItem().getItem() instanceof GemItem gemItem))
+            return;
+
+
+        gemItem.tickReformation(itemEntity);
     }
 }

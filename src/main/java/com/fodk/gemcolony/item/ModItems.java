@@ -2,13 +2,14 @@ package com.fodk.gemcolony.item;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
+import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.food.ModFoods;
 import com.fodk.gemcolony.item.custom.ChromaItem;
 import com.fodk.gemcolony.item.custom.EssenceBottle;
 import com.fodk.gemcolony.item.custom.EssenceType;
 import com.fodk.gemcolony.item.custom.GemItem;
 import com.fodk.gemcolony.sound.ModSounds;
-import com.fodk.gemcolony.util.ColorToIndex;
+import com.fodk.gemcolony.util.ColorUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -27,37 +28,37 @@ public class ModItems {
 
     //CHROMAS
     public static final DeferredItem<Item> WHITE_CHROMA = ITEMS.registerItem("white_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.WHITE.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.WHITE.getColorIndex()));
     public static final DeferredItem<Item> LIGHT_GRAY_CHROMA = ITEMS.registerItem("light_gray_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.LIGHT_GRAY.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.LIGHT_GRAY.getColorIndex()));
     public static final DeferredItem<Item> GRAY_CHROMA = ITEMS.registerItem("gray_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.GRAY.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.GRAY.getColorIndex()));
     public static final DeferredItem<Item> BLACK_CHROMA = ITEMS.registerItem("black_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.BLACK.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.BLACK.getColorIndex()));
     public static final DeferredItem<Item> BROWN_CHROMA = ITEMS.registerItem("brown_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.BROWN.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.BROWN.getColorIndex()));
     public static final DeferredItem<Item> RED_CHROMA = ITEMS.registerItem("red_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.RED.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.RED.getColorIndex()));
     public static final DeferredItem<Item> ORANGE_CHROMA = ITEMS.registerItem("orange_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.ORANGE.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.ORANGE.getColorIndex()));
     public static final DeferredItem<Item> YELLOW_CHROMA = ITEMS.registerItem("yellow_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.YELLOW.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.YELLOW.getColorIndex()));
     public static final DeferredItem<Item> LIME_CHROMA = ITEMS.registerItem("lime_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.LIME.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.LIME.getColorIndex()));
     public static final DeferredItem<Item> GREEN_CHROMA = ITEMS.registerItem("green_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.GREEN.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.GREEN.getColorIndex()));
     public static final DeferredItem<Item> CYAN_CHROMA = ITEMS.registerItem("cyan_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.CYAN.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.CYAN.getColorIndex()));
     public static final DeferredItem<Item> LIGHT_BLUE_CHROMA = ITEMS.registerItem("light_blue_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.LIGHT_BLUE.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.LIGHT_BLUE.getColorIndex()));
     public static final DeferredItem<Item> BLUE_CHROMA = ITEMS.registerItem("blue_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.BLUE.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.BLUE.getColorIndex()));
     public static final DeferredItem<Item> PURPLE_CHROMA = ITEMS.registerItem("purple_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.PURPLE.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.PURPLE.getColorIndex()));
     public static final DeferredItem<Item> MAGENTA_CHROMA = ITEMS.registerItem("magenta_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.MAGENTA.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.MAGENTA.getColorIndex()));
     public static final DeferredItem<Item> PINK_CHROMA = ITEMS.registerItem("pink_chroma",
-            properties -> new ChromaItem(properties, ColorToIndex.PINK.getColorIndex()));
+            properties -> new ChromaItem(properties, ColorUtil.PINK.getColorIndex()));
 
     public static final DeferredItem<Item> STRAWBERRY = ITEMS.registerItem("strawberry",
             properties -> new BlockItem(ModBlocks.STRAWBERRY_BUSH.get(), properties.food(ModFoods.STRAWBERRY)));
@@ -111,7 +112,10 @@ public class ModItems {
 
     //GEMS
     public static final DeferredItem<Item> PEBBLE_GEM = ITEMS.registerItem("pebble_gem",
-            properties -> new GemItem(properties, "Pebble"));
+            properties -> new GemItem(properties, "Pebble", ModEntities.PERIDOT.get()));
+
+    public static final DeferredItem<Item> PERIDOT_GEM = ITEMS.registerItem("peridot_gem",
+            properties -> new GemItem(properties, "Peridot", ModEntities.PERIDOT.get()));
 
     public static final DeferredItem<Item> CHROMA_BOW = ITEMS.registerItem("chroma_bow",
             properties -> new BowItem(properties.durability(600)));

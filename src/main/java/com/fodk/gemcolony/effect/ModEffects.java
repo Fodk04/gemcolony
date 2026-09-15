@@ -1,7 +1,7 @@
 package com.fodk.gemcolony.effect;
 
 import com.fodk.gemcolony.GemColony;
-import com.fodk.gemcolony.util.ColorToIndex;
+import com.fodk.gemcolony.util.ColorUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -19,7 +19,7 @@ public class ModEffects {
             DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, GemColony.MOD_ID);
 
     public static final Holder<MobEffect> SADNESS_EFFECT = MOB_EFFECTS.register("sadness",
-            () -> new MobEffect(MobEffectCategory.HARMFUL, ColorToIndex.colorToInt(Color.blue)) {}
+            () -> new MobEffect(MobEffectCategory.HARMFUL, ColorUtil.colorToInt(Color.blue)) {}
                     .addAttributeModifier(Attributes.MOVEMENT_SPEED, Identifier.fromNamespaceAndPath("gemcolony", "effect.sadness_speed"), -0.15D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
                     .addAttributeModifier(Attributes.BLOCK_BREAK_SPEED, Identifier.fromNamespaceAndPath("gemcolony", "effect.sadness_block_break_speed"), -0.4D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
                     .addAttributeModifier(Attributes.ATTACK_SPEED, Identifier.fromNamespaceAndPath("gemcolony", "effect.sadness_attack_speed"), -0.2D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)

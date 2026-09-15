@@ -55,7 +55,6 @@ public class EssenceBottle extends Item {
                 spawnGemStarterParticles(level, positionClicked);
                 //add a gem_item with the corresponding data to player
                 ItemStack gemItem = new ItemStack(ModItems.PEBBLE_GEM.get());
-                gemItem.set(ModDataComponents.COORDINATES, positionClicked);
                 player.getInventory().add(gemItem);
             }
         }

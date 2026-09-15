@@ -8,18 +8,16 @@ import com.fodk.gemcolony.block.custom.DestabilizerWallGenerator;
 import com.fodk.gemcolony.block.custom.StrawberryBushBlock;
 import com.fodk.gemcolony.item.ModArmorMaterials;
 import com.fodk.gemcolony.item.ModItems;
-import com.fodk.gemcolony.util.ColorToIndex;
+import com.fodk.gemcolony.util.ColorUtil;
 import com.mojang.math.Quadrant;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.renderer.block.dispatch.VariantMutator;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
@@ -35,23 +33,23 @@ public class ModModelProvider extends ModelProvider {
         super(output, GemColony.MOD_ID);
     }
 
-    private static final Map<ColorToIndex, DeferredBlock<Block>> CHROMA_DEPOSITS = Map.ofEntries(
-            Map.entry(ColorToIndex.WHITE, ModBlocks.WHITE_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.LIGHT_GRAY, ModBlocks.LIGHT_GRAY_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.GRAY, ModBlocks.GRAY_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.BLACK, ModBlocks.BLACK_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.BROWN, ModBlocks.BROWN_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.RED, ModBlocks.RED_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.ORANGE, ModBlocks.ORANGE_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.YELLOW, ModBlocks.YELLOW_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.LIME, ModBlocks.LIME_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.GREEN, ModBlocks.GREEN_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.CYAN, ModBlocks.CYAN_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.LIGHT_BLUE, ModBlocks.LIGHT_BLUE_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.BLUE, ModBlocks.BLUE_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.PURPLE, ModBlocks.PURPLE_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.MAGENTA, ModBlocks.MAGENTA_CHROMA_DEPOSIT),
-            Map.entry(ColorToIndex.PINK, ModBlocks.PINK_CHROMA_DEPOSIT)
+    private static final Map<ColorUtil, DeferredBlock<Block>> CHROMA_DEPOSITS = Map.ofEntries(
+            Map.entry(ColorUtil.WHITE, ModBlocks.WHITE_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.LIGHT_GRAY, ModBlocks.LIGHT_GRAY_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.GRAY, ModBlocks.GRAY_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.BLACK, ModBlocks.BLACK_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.BROWN, ModBlocks.BROWN_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.RED, ModBlocks.RED_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.ORANGE, ModBlocks.ORANGE_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.YELLOW, ModBlocks.YELLOW_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.LIME, ModBlocks.LIME_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.GREEN, ModBlocks.GREEN_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.CYAN, ModBlocks.CYAN_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.LIGHT_BLUE, ModBlocks.LIGHT_BLUE_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.BLUE, ModBlocks.BLUE_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.PURPLE, ModBlocks.PURPLE_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.MAGENTA, ModBlocks.MAGENTA_CHROMA_DEPOSIT),
+            Map.entry(ColorUtil.PINK, ModBlocks.PINK_CHROMA_DEPOSIT)
     );
 
     private static final TextureSlot SLOT_ZERO = TextureSlot.create("0");
@@ -94,6 +92,7 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.CHROMA_SEED.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.PEBBLE_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.PERIDOT_GEM.get(), ModelTemplates.FLAT_ITEM);
 
         //tools
         itemModels.generateFlatItem(ModItems.CHROMA_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -135,7 +134,7 @@ public class ModModelProvider extends ModelProvider {
 
         //custom 3d model blocks
 
-        for (ColorToIndex color : ColorToIndex.values()) {
+        for (ColorUtil color : ColorUtil.values()) {
             Block depositBlock = CHROMA_DEPOSITS.get(color).get();
             Identifier texture = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + color.getColorName() + "_chroma_deposit");
 

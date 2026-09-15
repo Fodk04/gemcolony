@@ -4,10 +4,13 @@ import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.creativemodtab.ModCreativeModeTabs;
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.effect.ModEffects;
+import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.item.ModItems;
+import com.fodk.gemcolony.menu.ModMenus;
 import com.fodk.gemcolony.potion.ModPotions;
 import com.fodk.gemcolony.sound.ModSounds;
 import com.fodk.gemcolony.villager.ModVillagers;
+import com.geckolib.GeckoLib;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -53,10 +56,12 @@ public class GemColony {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModEntities.register(modEventBus);
         ModSounds.register(modEventBus);
         ModEffects.register(modEventBus);
         ModPotions.register(modEventBus);
         ModVillagers.register(modEventBus);
+        ModMenus.register(modEventBus);
 
         ModCreativeModeTabs.register(modEventBus);
         ModDataComponents.register(modEventBus);

@@ -1,20 +1,13 @@
 package com.fodk.gemcolony.block.custom;
 
-import com.fodk.gemcolony.util.ColorToIndex;
+import com.fodk.gemcolony.util.ColorUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.unimi.dsi.fastutil.doubles.DoubleList;
-import net.minecraft.client.color.item.MapColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -29,10 +22,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.Tags;
-
-import java.awt.*;
-import java.util.Random;
 
 public class ChromaDeposit extends FaceAttachedHorizontalDirectionalBlock implements SimpleWaterloggedBlock {
 
@@ -62,7 +51,7 @@ public class ChromaDeposit extends FaceAttachedHorizontalDirectionalBlock implem
         registerDefaultState(stateDefinition.any().setValue(FACE, AttachFace.FLOOR).setValue(WATERLOGGED, false));
 
         this.colorIndex = colorIndex;
-        colorInt = ColorToIndex.colorToInt(ColorToIndex.colorFromIndex(colorIndex));
+        colorInt = ColorUtil.colorToInt(ColorUtil.colorFromIndex(colorIndex));
     }
 
     @Override

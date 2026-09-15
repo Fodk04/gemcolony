@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.block.custom;
 
 import com.fodk.gemcolony.block.ModBlocks;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -26,8 +27,8 @@ public enum BlockToColoredChroma {
     MAGENTA(ModBlocks.MAGENTA_CHROMA_DEPOSIT, Blocks.PURPUR_BLOCK),
     PINK(ModBlocks.PINK_CHROMA_DEPOSIT, Blocks.GRANITE);
 
-    Block growthBlock;
-    DeferredBlock<Block> coloredChromaDeposit;
+    final Block growthBlock;
+    final DeferredBlock<Block> coloredChromaDeposit;
 
     BlockToColoredChroma(DeferredBlock<Block> coloredChromaDeposit, Block growthBlock) {
         this.growthBlock = growthBlock;
@@ -35,21 +36,15 @@ public enum BlockToColoredChroma {
     }
 
     public static DeferredBlock<Block> depositFromGrowthBlock(Block block) {
-        DeferredBlock<Block> chromaDepositToGrow = null;
+        BlockToColoredChroma[] blockToColoredChromas = BlockToColoredChroma.values();
+        DeferredBlock<Block> chromaDepositToGrow = blockToColoredChromas[RandomSource.create().nextInt(blockToColoredChromas.length)].coloredChromaDeposit;
 
         for (BlockToColoredChroma value : values()) {
             if (block == value.growthBlock) {
                 return value.coloredChromaDeposit;
-            } else if (chromaDepositToGrow == null) {
-                Random random = new Random();
-                if(random.nextInt(15) == 0){
-                    chromaDepositToGrow = value.coloredChromaDeposit;
-                }
             }
         }
-        if (chromaDepositToGrow == null) {
-            chromaDepositToGrow = ModBlocks.WHITE_CHROMA_DEPOSIT;
-        }
+
         return chromaDepositToGrow;
     }
 }

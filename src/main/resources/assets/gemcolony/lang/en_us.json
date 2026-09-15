@@ -124,5 +124,6 @@
 
   "entity.minecraft.villager.gemcolony.gemologist": "Gemologist",
 
-  "key.gemcolony.bubble_gem": "Bubble Gem"
+  "key.gemcolony.bubble_gem": "Bubble Gem",
+  "entity.gemcolony.ruby": "Ruby"
 }
