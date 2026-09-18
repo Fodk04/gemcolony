@@ -1,5 +1,6 @@
 package com.fodk.gemcolony.entity.custom;
 
+import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
@@ -13,7 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 public record GemStateData(
-        int reformProgress, int quality, boolean emerged, boolean cracked, String ownerUUID, List<ItemStack> inventory
+        int reformProgress, int quality, boolean emerged, boolean cracked, String ownerUUID, List<ItemStack> inventory,
+        List<GemAbility> abilities
 ) {
     public static final Codec<GemStateData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("reformProgress").forGetter(GemStateData::reformProgress),
@@ -21,7 +23,8 @@ public record GemStateData(
             Codec.BOOL.fieldOf("emerged").forGetter(GemStateData::emerged),
             Codec.BOOL.fieldOf("cracked").forGetter(GemStateData::cracked),
             Codec.STRING.fieldOf("owner").forGetter(GemStateData::ownerUUID),
-            ItemStack.OPTIONAL_CODEC.listOf().fieldOf("inventory").forGetter(GemStateData::inventory)
+            ItemStack.OPTIONAL_CODEC.listOf().fieldOf("inventory").forGetter(GemStateData::inventory),
+            GemAbility.CODEC.listOf().fieldOf("abilities").forGetter(GemStateData::abilities)
 
     ).apply(instance, GemStateData::new));
 
@@ -33,6 +36,7 @@ public record GemStateData(
                     ByteBufCodecs.BOOL, GemStateData::cracked,
                     ByteBufCodecs.STRING_UTF8, GemStateData::ownerUUID,
                     ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list()), GemStateData::inventory,
+                    ByteBufCodecs.STRING_UTF8.map(GemAbility::valueOf, GemAbility::name).apply(ByteBufCodecs.list()), GemStateData::abilities,
                     GemStateData::new
             );
 }

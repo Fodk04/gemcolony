@@ -3,6 +3,7 @@ package com.fodk.gemcolony.entity.custom;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.data.FacetRegistryData;
 import com.fodk.gemcolony.data.ModDataComponents;
+import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.menu.GemMenu;
 import com.fodk.gemcolony.sound.ModSounds;
@@ -46,12 +47,17 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public abstract class GemEntity extends Monster implements GeoEntity, Container, MenuProvider {
 
     public static final EntityDataAccessor<String> NAME = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> NICKNAME = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> GEM_COLOR = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> OUTFIT = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> INSIGNIA = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
@@ -73,6 +79,8 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     private NonNullList<ItemStack> inventory;
 
+    private final Set<GemAbility> abilities = new HashSet<>();
+
     public GemEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
         this.setPersistenceRequired();
@@ -84,6 +92,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     protected void defineSynchedData(SynchedEntityData.Builder entityData) {
         super.defineSynchedData(entityData);
         entityData.define(NAME, "");
+        entityData.define(NICKNAME, "");
         entityData.define(GEM_COLOR,0xFFFFFF);
         entityData.define(OUTFIT, -1);
         entityData.define(INSIGNIA, -1);
@@ -135,6 +144,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             //for testing
             entityData.set(QUALITY, random.nextInt(3));
             applyQualityModifiers();
+            initializeAbilities();
             entityData.set(REFORM_PROGRESS, 0);
             this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
         }
@@ -144,7 +154,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     public void initializeGem(int reformProgress){
         applyQualityModifiers();
-        setCustomName(Component.literal(entityData.get(NAME)));
+        UpdateDisplayedName();
         entityData.set(REFORM_PROGRESS, reformProgress);
     }
 
@@ -158,9 +168,22 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         String facetSuffix = level.dimension() == Level.NETHER ? "N" : level.dimension() == Level.END ? "E" : "";
         String cut = computeCutString(assignment.gemCountInRegion());
 
-        String name = "Facet-" + assignment.facetNumber() + facetSuffix + " Cut-" + cut;
+        String name = getGemTypeName() + " Facet-" + assignment.facetNumber() + facetSuffix + " Cut-" + cut;
         this.entityData.set(NAME, name);
         setCustomName(Component.literal(name));
+    }
+
+    public void setNickname(String nickname) {
+        entityData.set(NICKNAME, nickname);
+        UpdateDisplayedName();
+    }
+
+    private void UpdateDisplayedName(){
+        if(entityData.get(NICKNAME).isBlank()){
+            setCustomName(Component.literal(entityData.get(NAME)));
+        }else{
+            setCustomName(Component.literal(entityData.get(NICKNAME)));
+        }
     }
 
     private static String computeCutString(int gemCountInRegion) {
@@ -212,7 +235,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     public GemAppearanceData toSavedAppearance(){
         return new GemAppearanceData(
-                entityData.get(NAME),
+                entityData.get(NAME), entityData.get(NICKNAME),
                 entityData.get(GEM_COLOR), entityData.get(OUTFIT), entityData.get(OUTFIT_COLOR),
                 entityData.get(INSIGNIA), entityData.get(INSIGNIA_COLOR),
                 entityData.get(HAIRSTYLE), entityData.get(HAIR_COLOR), entityData.get(GEM_PLACEMENT),
@@ -224,7 +247,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public GemStateData toSavedState(){
         return new GemStateData(
                 entityData.get(REFORM_PROGRESS), entityData.get(QUALITY), entityData.get(EMERGED),
-                entityData.get(CRACKED), entityData.get(OWNER_UUID), List.copyOf(inventory)
+                entityData.get(CRACKED), entityData.get(OWNER_UUID), List.copyOf(inventory), List.copyOf(abilities)
         );
     }
 
@@ -235,6 +258,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     public void applySavedAppearance(GemAppearanceData data){
         entityData.set(NAME, data.name());
+        entityData.set(NICKNAME, data.nickname());
         entityData.set(GEM_COLOR, data.color());
         entityData.set(OUTFIT, data.outfit());
         entityData.set(OUTFIT_COLOR, data.outfitColor());
@@ -263,6 +287,9 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         for (int i = 0; i < copySize; i++) {
             inventory.set(i, data.inventory().get(i).copy());
         }
+
+        abilities.clear();
+        abilities.addAll(data.abilities());
     }
 
     @Override
@@ -277,9 +304,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         input.read("GemData", GemSaveData.CODEC).ifPresent(this::applySaveData);
     }
 
-    protected Item getGemItem(){
-        return ModItems.PEBBLE_GEM.get();
-    }
+    public abstract Item getGemItem();
 
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
@@ -397,6 +422,10 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return usedColors;
     }
 
+    public int getGemColor(){
+        return entityData.get(GEM_COLOR);
+    }
+
     void setOutfitColor(int color){
         entityData.set(OUTFIT_COLOR, color);
     }
@@ -413,9 +442,41 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return entityData.get(INSIGNIA_COLOR);
     }
 
-    protected int getInventorySize(){
-        return 5;
+    public int getOutfit(){
+        return entityData.get(OUTFIT);
     }
+
+    public int getInsignia(){
+        return entityData.get(INSIGNIA);
+    }
+
+    public int getVisor(){
+        return entityData.get(VISOR);
+    }
+
+    public int getHairstyle(){
+        return entityData.get(HAIRSTYLE);
+    }
+
+    public void setOutfit(int outfit){
+        entityData.set(OUTFIT, outfit);
+    }
+    public void setInsignia(int insignia){
+        entityData.set(INSIGNIA, insignia);
+    }
+    public void setVisor(int visor){
+        entityData.set(VISOR, visor);
+    }
+    public void setHairstyle(int hairstyle){
+        entityData.set(HAIRSTYLE, hairstyle);
+    }
+
+    public abstract int getMaxOutfits();
+    public abstract int getMaxInsignias();
+    public abstract int getMaxHairstyles();
+    public abstract int getMaxVisors();
+
+    protected abstract int getInventorySize();
 
     @Override
     public int getContainerSize() {
@@ -470,5 +531,30 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     @Override
     public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
         return new GemMenu(containerId, inventory, this);
+    }
+
+    protected abstract String getGemTypeName();
+
+    public String getCurrentName(){
+        return getCustomName().getString();
+    }
+
+    public Set<GemAbility> getAbilities() {
+        return Collections.unmodifiableSet(abilities);
+    }
+
+    public boolean hasAbility(GemAbility ability) {
+        return abilities.contains(ability);
+    }
+
+    public void addAbility(GemAbility ability) {
+        abilities.add(ability);
+    }
+
+    public void removeAbility(GemAbility ability) {
+        abilities.remove(ability);
+    }
+
+    protected void initializeAbilities() {
     }
 }

@@ -5,6 +5,9 @@ import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
 import com.fodk.gemcolony.entity.custom.GemEntity;
 import com.geckolib.model.GeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.base.RenderPassInfo;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 import javax.annotation.Nullable;
@@ -43,5 +46,21 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
     @Override
     public R createRenderState(T animatable, @Nullable Void relatedObject) {
         return (R) new GemRenderState();
+    }
+
+    @Override
+    public void adjustRenderPose(RenderPassInfo<R> renderPassInfo) {
+        super.adjustRenderPose(renderPassInfo);
+
+        GemRenderState state = (GemRenderState) renderPassInfo.renderState();
+        PoseStack poseStack = renderPassInfo.poseStack();
+
+        float pivotY = state.reformCenter;
+
+        poseStack.translate(0, pivotY, 0);
+
+        poseStack.mulPose(Axis.XP.rotationDegrees(state.previewPitch));
+
+        poseStack.translate(0, -pivotY, 0);
     }
 }

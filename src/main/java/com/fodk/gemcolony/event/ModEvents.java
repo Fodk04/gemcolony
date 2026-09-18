@@ -6,6 +6,8 @@ import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.item.custom.GemItem;
 import com.fodk.gemcolony.networking.ClientPayloadHandler;
 import com.fodk.gemcolony.networking.packet.BubblingPacketC2S;
+import com.fodk.gemcolony.networking.packet.SetAppearancePacketC2S;
+import com.fodk.gemcolony.networking.packet.SetNicknamePacketC2S;
 import com.fodk.gemcolony.potion.ModPotions;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.alchemy.PotionBrewing;
@@ -37,6 +39,8 @@ public class ModEvents {
                 .executesOn(HandlerThread.MAIN);
 
         registrar.playToServer(BubblingPacketC2S.TYPE, BubblingPacketC2S.STREAM_CODEC, ClientPayloadHandler::handleBubblingPacket);
+        registrar.playToServer(SetNicknamePacketC2S.TYPE, SetNicknamePacketC2S.STREAM_CODEC, ClientPayloadHandler::handleSetNicknamePacket);
+        registrar.playToServer(SetAppearancePacketC2S.TYPE, SetAppearancePacketC2S.STREAM_CODEC, ClientPayloadHandler::handleSetAppearancePacket);
     }
 
     @SubscribeEvent

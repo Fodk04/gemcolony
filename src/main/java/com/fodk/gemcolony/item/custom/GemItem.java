@@ -46,7 +46,13 @@ public class GemItem extends Item {
     public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
         if(itemStack.has(ModDataComponents.GEM_SAVE_DATA)){
             GemSaveData gemSaveData = itemStack.get(ModDataComponents.GEM_SAVE_DATA);
-            String fullName = name + " " + gemSaveData.gemAppearanceData().name();
+            String fullName;
+
+            if(gemSaveData.gemAppearanceData().nickname().isBlank()){
+                fullName = gemSaveData.gemAppearanceData().name();
+            }else{
+                fullName = name + " " + gemSaveData.gemAppearanceData().nickname();
+            }
             builder.accept(Component.literal(fullName));
         }
     }

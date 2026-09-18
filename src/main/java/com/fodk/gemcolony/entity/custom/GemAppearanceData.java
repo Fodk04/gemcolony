@@ -7,7 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 public record GemAppearanceData(
-        String name,
+        String name, String nickname,
         int color, int outfit, int outfitColor,
         int insignia, int insigniaColor,
         int hairstyle, int hairColor, int gemPlacement,
@@ -16,6 +16,7 @@ public record GemAppearanceData(
 ) {
     public static final Codec<GemAppearanceData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("name").forGetter(GemAppearanceData::name),
+            Codec.STRING.fieldOf("nickname").forGetter(GemAppearanceData::nickname),
             Codec.INT.fieldOf("color").forGetter(GemAppearanceData::color),
             Codec.INT.fieldOf("outfit").forGetter(GemAppearanceData::outfit),
             Codec.INT.fieldOf("outfitColor").forGetter(GemAppearanceData::outfitColor),
@@ -35,6 +36,7 @@ public record GemAppearanceData(
             StreamCodec.of(
                     (buf, data) -> {
                         ByteBufCodecs.STRING_UTF8.encode(buf, data.name());
+                        ByteBufCodecs.STRING_UTF8.encode(buf, data.nickname());
 
                         ByteBufCodecs.VAR_INT.encode(buf, data.color());
                         ByteBufCodecs.VAR_INT.encode(buf, data.outfit());
@@ -56,6 +58,7 @@ public record GemAppearanceData(
                         ByteBufCodecs.VAR_INT.encode(buf, data.visorColor());
                     },
                     buf -> new GemAppearanceData(
+                            ByteBufCodecs.STRING_UTF8.decode(buf),
                             ByteBufCodecs.STRING_UTF8.decode(buf),
 
                             ByteBufCodecs.VAR_INT.decode(buf),

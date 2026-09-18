@@ -83,4 +83,30 @@ public enum ColorUtil {
 
         return colorToInt(new Color((int)averageR, (int)averageG, (int)averageB));
     }
+
+    public static int multiplyColors(int colorInt1, int colorInt2){
+        Color color1 = colorFromInt(colorInt1);
+        Color color2 = colorFromInt(colorInt2);
+
+        float r = (float)color1.getRed() / 255f * (float)color2.getRed() / 255f;
+        float g = (float)color1.getGreen() / 255f * (float)color2.getGreen() / 255f;
+        float b = (float)color1.getBlue() / 255f * (float)color2.getBlue() / 255f;
+
+        return colorToInt(new Color(r, g, b));
+    }
+
+    public static int getContrastingTextColor(int color) {
+        int red = (color >> 16) & 0xFF;
+        int green = (color >> 8) & 0xFF;
+        int blue = color & 0xFF;
+
+        float brightness =
+                0.299f * red +
+                        0.587f * green +
+                        0.114f * blue;
+
+        return brightness < 128
+                ? 0x80FFFFFF
+                : 0x80000000;
+    }
 }
