@@ -2,7 +2,11 @@ package com.fodk.gemcolony.entity.client.screen;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
+import com.fodk.gemcolony.entity.client.screen.ability.KindergartnerUI;
 import com.fodk.gemcolony.entity.custom.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
+import com.fodk.gemcolony.entity.client.screen.ability.GemAbilityUI;
+import com.fodk.gemcolony.entity.client.screen.ability.GenericAbilityUI;
 import com.fodk.gemcolony.menu.GemMenu;
 import com.fodk.gemcolony.util.ColorUtil;
 import com.geckolib.constant.DataTickets;
@@ -27,6 +31,8 @@ import net.minecraft.world.item.Items;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.awt.*;
 
@@ -44,11 +50,17 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
     private static final Identifier APPEARANCE_BACKGROUND = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/gem_appearance.png");
     private static final Identifier APPEARANCE_MODEL_VIEW = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/gem_appearance_model_view.png");
     private static final Identifier STATS_BACKGROUND = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/gem_appearance.png");
+    private static final Identifier ABILITIES_BACKGROUND = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/gem_appearance.png");
 
     private static final Identifier TAB_SELECTED = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/gem_tab_selected.png");
     private static final Identifier TAB_UNSELECTED = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/gem_tab_unselected.png");
 
+    private final List<GemButton> gemButtons = new ArrayList<>();
+
     private GemTabs selectedTab = GemTabs.INVENTORY;
+    private GemAbility selectedAbility = null;
+    private GemAbilityUI selectedAbilityUI;
+
     private EditBox nameBox;
 
     private Button outfitLeft;
@@ -81,6 +93,14 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
         setInventorySlotsActive(true);
         gemColor = menu.getGemEntity().getGemColor();
         textColor = ColorUtil.getContrastingTextColor(gemColor);
+    }
+
+    public int getLeftPos() {
+        return this.leftPos;
+    }
+
+    public int getTopPos() {
+        return this.topPos;
     }
 
     @Override
@@ -256,6 +276,32 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
                     textColor
             );
         }
+        //ABILITIES
+        if(selectedTab == GemTabs.ABILITIES){
+            graphics.blit(
+                    RenderPipelines.GUI_TEXTURED,
+                    ABILITIES_BACKGROUND,
+                    this.leftPos,
+                    this.topPos,
+                    0,
+                    0,
+                    this.imageWidth,
+                    this.imageHeight,
+                    256,
+                    256,
+                    gemColor
+            );
+
+            drawSelectedAbility(graphics);
+            if (selectedAbilityUI != null) {
+                selectedAbilityUI.render(
+                        graphics,
+                        mouseX,
+                        mouseY,
+                        partialTick
+                );
+            }
+        }
 
         for(int i = 0; i < GemTabs.values().length; i++){
             drawTab(graphics, GemTabs.values()[i], this.leftPos - 31, this.topPos + 20 + i * 26, gemColor);
@@ -318,6 +364,7 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
                 selectedTab = GemTabs.values()[i];
                 setInventorySlotsActive(selectedTab == GemTabs.INVENTORY);
                 setAppearanceWidgetsVisible(selectedTab == GemTabs.APPEARANCE);
+                setAbilityWidgetsVisible(selectedTab == GemTabs.ABILITIES);
                 return true;
             }
         }
@@ -529,6 +576,9 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
 
         this.addRenderableWidget(visorLeft);
         this.addRenderableWidget(visorRight);
+
+        createAbilityButtons();
+        setAbilityWidgetsVisible(selectedTab == GemTabs.ABILITIES);
     }
 
     private void drawSelector(GuiGraphicsExtractor graphics, String label, int value, int y, int textColor) {
@@ -723,5 +773,101 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
                 modelX + 84,
                 modelY + 102
         );
+    }
+
+    private void createAbilityButtons() {
+        gemButtons.clear();
+
+        GemEntity gem = menu.getGemEntity();
+
+        int x = this.leftPos + 8;
+        int y = this.topPos + 25;
+
+        for (GemAbility ability : gem.getAbilities()) {
+
+            GemButton button = new GemButton(
+                    x,
+                    y,
+                    80,
+                    20,
+                    Component.literal(ability.getName()),
+                    textColor,
+                    gemColor,
+                    () -> selectAbility(ability)
+            );
+
+            gemButtons.add(button);
+            this.addRenderableWidget(button);
+
+            y += 26;
+        }
+    }
+
+    private void selectAbility(GemAbility ability) {
+        if (selectedAbilityUI != null) {
+            selectedAbilityUI.clear();
+        }
+
+        selectedAbility = ability;
+
+        selectedAbilityUI = switch (ability) {
+            case KINDERGARTNER -> new KindergartnerUI();
+            default -> new GenericAbilityUI();
+        };
+
+        selectedAbilityUI.init(this, textColor, gemColor);
+    }
+
+    private void setAbilityWidgetsVisible(boolean visible) {
+        for (GemButton button : gemButtons) {
+            button.visible = visible;
+        }
+    }
+
+    private void drawSelectedAbility(GuiGraphicsExtractor graphics) {
+        if (selectedAbility == null) {
+            return;
+        }
+
+        graphics.pose().pushMatrix();
+
+        graphics.pose().scale(0.75f, 0.75f);
+
+        graphics.text(
+                this.font,
+                Component.literal(selectedAbility.getName())
+                        .withStyle(ChatFormatting.BOLD),
+                (int) ((this.leftPos + 105) / 0.75f),
+                (int) ((this.topPos + 30) / 0.75f),
+                textColor,
+                false
+        );
+
+        graphics.pose().popMatrix();
+
+        // Description
+        Component description = Component.literal(selectedAbility.getDescription());
+
+        float scale = 0.55f;
+
+        graphics.pose().pushMatrix();
+
+        graphics.pose().scale(scale, scale);
+
+        graphics.textWithWordWrap(
+                this.font,
+                description,
+                (int) ((this.leftPos + 105) / scale),
+                (int) ((this.topPos + 48) / scale),
+                (int) (65 / scale),
+                textColor
+        );
+
+        graphics.pose().popMatrix();
+    }
+
+    public void addAbilityWidget(GemButton gemButton) {
+        gemButtons.add(gemButton);
+        this.addRenderableWidget(gemButton);
     }
 }

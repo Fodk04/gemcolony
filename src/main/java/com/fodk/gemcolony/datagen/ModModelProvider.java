@@ -93,6 +93,8 @@ public class ModModelProvider extends ModelProvider {
 
         itemModels.generateFlatItem(ModItems.PEBBLE_GEM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.PERIDOT_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.RUBY_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SAPPHIRE_GEM.get(), ModelTemplates.FLAT_ITEM);
 
         //tools
         itemModels.generateFlatItem(ModItems.CHROMA_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);

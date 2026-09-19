@@ -5,6 +5,7 @@ import com.fodk.gemcolony.creativemodtab.ModCreativeModeTabs;
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.effect.ModEffects;
 import com.fodk.gemcolony.entity.ModEntities;
+import com.fodk.gemcolony.entity.custom.ModEntityDataSerializers;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.menu.ModMenus;
 import com.fodk.gemcolony.potion.ModPotions;
@@ -65,6 +66,7 @@ public class GemColony {
 
         ModCreativeModeTabs.register(modEventBus);
         ModDataComponents.register(modEventBus);
+        ModEntityDataSerializers.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
 

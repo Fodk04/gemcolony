@@ -11,19 +11,21 @@ import com.fodk.gemcolony.util.ColorUtil;
 import com.geckolib.animatable.GeoEntity;
 import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.constant.DefaultAnimations;
 import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.*;
 import net.minecraft.world.Container;
@@ -76,6 +78,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public static final EntityDataAccessor<Integer> REFORM_PROGRESS = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> EMERGED = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> OWNER_UUID = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<List<Integer>> ABILITIES = SynchedEntityData.defineId(GemEntity.class, ModEntityDataSerializers.INT_LIST.get());
 
     private NonNullList<ItemStack> inventory;
 
@@ -111,6 +114,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.define(REFORM_PROGRESS, maxReformProgress);
         entityData.define(EMERGED, false);
         entityData.define(OWNER_UUID, "");
+        entityData.define(ABILITIES, List.of());
     }
 
     @Override
@@ -131,6 +135,14 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
                 }
 
                 inventory = newInventory;
+            }
+        }
+
+        if (ABILITIES.equals(key)) {
+            abilities.clear();
+
+            for (int id : entityData.get(ABILITIES)) {
+                abilities.add(GemAbility.fromId(id));
             }
         }
     }
@@ -290,6 +302,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
         abilities.clear();
         abilities.addAll(data.abilities());
+        syncAbilities();
     }
 
     @Override
@@ -315,7 +328,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-
+        controllers.add(DefaultAnimations.genericWalkIdleController());
     }
 
     @Override
@@ -533,7 +546,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return new GemMenu(containerId, inventory, this);
     }
 
-    protected abstract String getGemTypeName();
+    public abstract String getGemTypeName();
 
     public String getCurrentName(){
         return getCustomName().getString();
@@ -548,11 +561,19 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     }
 
     public void addAbility(GemAbility ability) {
-        abilities.add(ability);
+        if (abilities.add(ability)) {
+            syncAbilities();
+        }
     }
 
     public void removeAbility(GemAbility ability) {
-        abilities.remove(ability);
+        if (abilities.remove(ability)) {
+            syncAbilities();
+        }
+    }
+
+    private void syncAbilities() {
+        entityData.set(ABILITIES, abilities.stream().map(GemAbility::getId).toList());
     }
 
     protected void initializeAbilities() {

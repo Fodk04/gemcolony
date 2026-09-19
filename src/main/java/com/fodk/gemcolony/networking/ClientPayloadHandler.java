@@ -2,10 +2,10 @@ package com.fodk.gemcolony.networking;
 
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.entity.custom.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
 import com.fodk.gemcolony.item.custom.GemItem;
-import com.fodk.gemcolony.networking.packet.BubblingPacketC2S;
-import com.fodk.gemcolony.networking.packet.SetAppearancePacketC2S;
-import com.fodk.gemcolony.networking.packet.SetNicknamePacketC2S;
+import com.fodk.gemcolony.networking.packet.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -74,6 +74,29 @@ public class ClientPayloadHandler {
                         }
                     }
                 }
+            }
+        });
+    }
+
+    public static void handleStartAnalysisPacket(StartAnalysisPacketC2S packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            ServerPlayer player = (ServerPlayer) context.player();
+
+            if (player.level().getEntity(packet.entityId()) instanceof PeridotEntity peridot) {
+                peridot.startAnalysis();
+            }
+        });
+    }
+
+    public static void handleAnalysisResultsPacket(AnalysisResultsPacketS2C packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (Minecraft.getInstance().level == null) {
+                return;
+            }
+
+            if (Minecraft.getInstance().level.getEntity(packet.entityId()) instanceof PeridotEntity peridot) {
+
+                peridot.setAnalysisResults(packet.results());
             }
         });
     }

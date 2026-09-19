@@ -116,6 +116,10 @@ public class ModItems {
 
     public static final DeferredItem<Item> PERIDOT_GEM = ITEMS.registerItem("peridot_gem",
             properties -> new GemItem(properties, "Peridot", ModEntities.PERIDOT.get()));
+    public static final DeferredItem<Item> RUBY_GEM = ITEMS.registerItem("ruby_gem",
+            properties -> new GemItem(properties, "Ruby", ModEntities.PERIDOT.get()));
+    public static final DeferredItem<Item> SAPPHIRE_GEM = ITEMS.registerItem("sapphire_gem",
+            properties -> new GemItem(properties, "Sapphire", ModEntities.PERIDOT.get()));
 
     public static final DeferredItem<Item> CHROMA_BOW = ITEMS.registerItem("chroma_bow",
             properties -> new BowItem(properties.durability(600)));

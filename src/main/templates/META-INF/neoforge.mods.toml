@@ -37,7 +37,7 @@ displayName="${mod_name}" #mandatory
 
 # The authors of the mod, displayed in the mod UI (optional)
 authors="Fodk"
-credits = "3D Models by bunnybini"
+credits = "3D Models by bunnybini, SmhSebby"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
