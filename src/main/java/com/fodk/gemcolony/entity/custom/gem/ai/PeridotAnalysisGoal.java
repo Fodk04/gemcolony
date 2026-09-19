@@ -1,6 +1,8 @@
 package com.fodk.gemcolony.entity.custom.gem.ai;
 
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animation.AnimationController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -8,9 +10,13 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import java.util.EnumSet;
 
 public class PeridotAnalysisGoal extends Goal {
-
     private final PeridotEntity peridot;
     private final double speed;
+
+    private boolean sampling = false;
+
+    private int samplingTicks = 0;
+    private static final int SAMPLING_DURATION = 20;
 
     public PeridotAnalysisGoal(PeridotEntity peridot, double speed) {
         this.peridot = peridot;
@@ -31,20 +37,41 @@ public class PeridotAnalysisGoal extends Goal {
 
     @Override
     public void start() {
+        sampling = false;
         chooseNewDestination();
     }
 
     @Override
     public void tick() {
+        if (sampling) {
+            samplingTicks++;
+
+            if (samplingTicks >= SAMPLING_DURATION) {
+                sampling = false;
+                samplingTicks = 0;
+
+                peridot.sampleAnalysisPosition(
+                        peridot.blockPosition()
+                );
+
+                chooseNewDestination();
+            }
+
+            return;
+        }
+
         if (peridot.getNavigation().isDone()) {
-            chooseNewDestination();
+            sampling = true;
+            samplingTicks = 0;
+
+            peridot.getNavigation().stop();
+
+            peridot.triggerAnim("sampling_controller", "sample");
         }
     }
 
     @Override
-    public void stop() {
-        peridot.getNavigation().stop();
-    }
+    public void stop() {peridot.getNavigation().stop();sampling = false;}
 
     private void chooseNewDestination() {
         BlockPos center = peridot.getAnalysisCenter();
@@ -63,6 +90,12 @@ public class PeridotAnalysisGoal extends Goal {
 
         BlockPos target = new BlockPos(x, y, z);
 
-        peridot.getNavigation().moveTo(target.getX(), target.getY(), target.getZ(), speed);
+        peridot.getNavigation().moveTo(
+                target.getX(),
+                target.getY(),
+                target.getZ(),
+                speed
+        );
+
     }
 }

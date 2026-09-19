@@ -12,7 +12,9 @@ import com.fodk.gemcolony.networking.packet.AnalysisResultsPacketS2C;
 import com.fodk.gemcolony.util.ColorUtil;
 import com.fodk.gemcolony.util.GemEnvironmentUtil;
 import com.geckolib.animatable.manager.AnimatableManager;
-import com.geckolib.constant.DefaultAnimations;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -25,7 +27,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -54,8 +55,7 @@ public class PeridotEntity extends GemEntity {
     private static final EntityDataAccessor<Integer> ANALYSIS_DURATION = SynchedEntityData.defineId(PeridotEntity.class, EntityDataSerializers.INT);
 
     private static final int BASE_ANALYSIS_DURATION = 200;
-    private static final int ANALYSIS_RADIUS = 16;
-    private static final int ANALYSIS_SAMPLE_INTERVAL = 10;
+    private static final int ANALYSIS_RADIUS = 7;
 
     private BlockPos analysisCenter;
     private float analysisTemperatureTotal = 0.0f;
@@ -230,41 +230,18 @@ public class PeridotEntity extends GemEntity {
         analysisCenter = null;
     }
 
-    private BlockPos getRandomAnalysisPosition() {
-        if (analysisCenter == null) {
-            return blockPosition();
-        }
-
-        int x = analysisCenter.getX()
-                + random.nextIntBetweenInclusive(
-                -ANALYSIS_RADIUS,
-                ANALYSIS_RADIUS
-        );
-
-        int z = analysisCenter.getZ()
-                + random.nextIntBetweenInclusive(
-                -ANALYSIS_RADIUS,
-                ANALYSIS_RADIUS
-        );
-
-        int y = level().getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-
-        return new BlockPos(x, y, z);
-    }
-
     private void resetAnalysisSamples() {
         analysisTemperatureTotal = 0.0f;
         analysisHumidityTotal = 0.0f;
         analysisSamples = 0;
     }
 
-    private void sampleAnalysisPosition(BlockPos pos) {
+    public void sampleAnalysisPosition(BlockPos pos) {
         analysisTemperatureTotal += GemEnvironmentUtil.getTemperature(level(), pos);
-
         analysisHumidityTotal += GemEnvironmentUtil.getHumidity(level(), pos);
-
         analysisSamples++;
     }
+
 
     private float getAverageAnalysisTemperature() {
         if (analysisSamples == 0) {
@@ -330,16 +307,12 @@ public class PeridotEntity extends GemEntity {
         if (!level().isClientSide() && isAnalysing()) {
             entityData.set(ANALYSIS_TICKS, entityData.get(ANALYSIS_TICKS) + 1);
 
-            if (entityData.get(ANALYSIS_TICKS) % ANALYSIS_SAMPLE_INTERVAL == 0) {
-                BlockPos samplePos = getRandomAnalysisPosition();
-                sampleAnalysisPosition(samplePos);
-            }
-
             if (entityData.get(ANALYSIS_TICKS) >= entityData.get(ANALYSIS_DURATION)) {
                 finishAnalysis();
             }
         }
     }
+
 
     @Override
     protected void addAdditionalSaveData(ValueOutput output) {
@@ -388,4 +361,13 @@ public class PeridotEntity extends GemEntity {
         analysisResults = new ArrayList<>(data.results());
     }
 
+    private static final RawAnimation SAMPLE_ANIMATION = RawAnimation.begin().thenPlay("misc.sample");
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        super.registerControllers(controllers);
+
+        controllers.add(new AnimationController<>("sampling_controller", 0,
+                state -> PlayState.STOP).triggerableAnim("sample", SAMPLE_ANIMATION));
+    }
 }
