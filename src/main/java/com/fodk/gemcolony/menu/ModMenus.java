@@ -16,6 +16,9 @@ public class ModMenus {
     public static final DeferredHolder<MenuType<?>, MenuType<GemMenu>> GEM_MENU = MENUS.register("gem_menu",
             () -> IMenuTypeExtension.create(GemMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<InjectorMenu>> INJECTOR_MENU = MENUS.register("injector_menu",
+                    () -> IMenuTypeExtension.create(InjectorMenu::new));
+
     public static void register(IEventBus eventBus){
         MENUS.register(eventBus);
     }

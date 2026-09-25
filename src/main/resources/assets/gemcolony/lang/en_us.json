@@ -17,6 +17,7 @@
   "item.gemcolony.pink_chroma": "Pink Chroma",
 
   "item.gemcolony.gem_shards": "Gem Shards",
+  "item.gemcolony.gem_seed": "Gem Seed",
 
   "item.gemcolony.chroma_sword": "Chroma Sword",
   "item.gemcolony.chroma_pickaxe": "Chroma Pickaxe",
@@ -41,9 +42,15 @@
   "item.gemcolony.yellow_essence_bottle": "Bottle of Yellow Essence",
   "item.gemcolony.white_essence_bottle": "Bottle of White Essence",
 
+  "item.gemcolony.pink_essence_bucket": "Bucket of Pink Essence",
+  "item.gemcolony.blue_essence_bucket": "Bucket of Blue Essence",
+  "item.gemcolony.yellow_essence_bucket": "Bucket of Yellow Essence",
+  "item.gemcolony.white_essence_bucket": "Bucket of White Essence",
+
   "item.gemcolony.chroma_seed": "Chroma Seed",
 
   "item.gemcolony.pebble_gem": "Pebble Gem",
+  "item.gemcolony.peridot_gem": "Peridot Gem",
 
   "item.minecraft.potion.effect.sadness_potion": "Sadness Potion",
   "item.minecraft.splash_potion.effect.sadness_potion": "Sadness Splash Potion",
@@ -79,6 +86,16 @@
   "block.gemcolony.purple_chroma_deposit": "Purple Chroma Deposit",
   "block.gemcolony.magenta_chroma_deposit": "Magenta Chroma Deposit",
   "block.gemcolony.pink_chroma_deposit": "Pink Chroma Deposit",
+
+  "block.gemcolony.leg": "Injector Leg",
+  "block.gemcolony.drill": "Injector Drill",
+  "block.gemcolony.tank": "Injector Tank",
+  "block.gemcolony.crystal": "Injector Crystal",
+
+  "block.gemcolony.blue_essence": "Blue Essence",
+  "block.gemcolony.yellow_essence": "Yellow Essence",
+  "block.gemcolony.white_essence": "White Essence",
+  "block.gemcolony.pink_essence": "Pink Essence",
 
   "block.gemcolony.chroma_crop": "Growing Chroma Deposit",
   "block.gemcolony.strawberry_bush": "Strawberry Bush",
@@ -125,5 +142,10 @@
   "entity.minecraft.villager.gemcolony.gemologist": "Gemologist",
 
   "key.gemcolony.bubble_gem": "Bubble Gem",
-  "entity.gemcolony.ruby": "Ruby"
+  "entity.gemcolony.ruby": "Ruby",
+
+  "fluid_type.gemcolony.blue_essence": "Blue Essence",
+  "fluid_type.gemcolony.yellow_essence": "Yellow Essence",
+  "fluid_type.gemcolony.white_essence": "White Essence",
+  "fluid_type.gemcolony.pink_essence": "Pink Essence"
 }

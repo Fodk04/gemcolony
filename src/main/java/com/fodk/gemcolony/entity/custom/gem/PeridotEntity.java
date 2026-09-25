@@ -4,7 +4,7 @@ import com.fodk.gemcolony.data.GemAnalysisResult;
 import com.fodk.gemcolony.data.GemConditionsRegistry;
 import com.fodk.gemcolony.entity.custom.GemConditions;
 import com.fodk.gemcolony.entity.custom.GemEntity;
-import com.fodk.gemcolony.entity.custom.PeridotAnalysisData;
+import com.fodk.gemcolony.entity.custom.savedata.PeridotAnalysisData;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
 import com.fodk.gemcolony.entity.custom.gem.ai.PeridotAnalysisGoal;
 import com.fodk.gemcolony.item.ModItems;
@@ -369,5 +369,10 @@ public class PeridotEntity extends GemEntity {
 
         controllers.add(new AnimationController<>("sampling_controller", 0,
                 state -> PlayState.STOP).triggerableAnim("sample", SAMPLE_ANIMATION));
+    }
+
+    @Override
+    public float getModelSize() {
+        return 0.9f;
     }
 }

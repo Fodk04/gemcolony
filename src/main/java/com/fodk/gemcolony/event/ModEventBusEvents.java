@@ -3,6 +3,7 @@ package com.fodk.gemcolony.event;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
+import com.fodk.gemcolony.entity.custom.gem.starter.PebbleEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -18,5 +19,6 @@ public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(ModEntities.PERIDOT.get(), PeridotEntity.createAttributes().build());
+        event.put(ModEntities.PEBBLE.get(), PebbleEntity.createAttributes().build());
     }
 }

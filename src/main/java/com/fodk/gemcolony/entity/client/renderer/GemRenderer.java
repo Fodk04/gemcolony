@@ -17,9 +17,9 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
     public GemRenderer(EntityRendererProvider.Context context, GeoModel<T> model, String name) {
         super(context, model);
         withRenderLayer(new GemBodyLayer<>(this, name, 1));
-        withRenderLayer(new GemOutfitLayer<>(this, name, 2));
-        withRenderLayer(new GemInsigniaLayer<>(this, name, 3));
-        withRenderLayer(new GemFaceLayer<>(this, name, 4));
+        withRenderLayer(new GemFaceLayer<>(this, name, 2));
+        withRenderLayer(new GemOutfitLayer<>(this, name, 3));
+        withRenderLayer(new GemInsigniaLayer<>(this, name, 4));
         withRenderLayer(new GemHairLayer<>(this, name, 5));
         withRenderLayer(new GemVisorLayer<>(this, name, 6));
     }
@@ -41,6 +41,7 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
         gemState.reformProgress = GemEntity.getReformProgressPercentage(entity.getEntityData().get(GemEntity.REFORM_PROGRESS));
         gemState.reformCenter = entity.getReformCenter();
         gemState.qualityModifier = entity.getEntityData().get(GemEntity.QUALITY) == 0 ? 0.8f : entity.getEntityData().get(GemEntity.QUALITY) == 2 ? 1.1f : 1f;
+        gemState.modelSize = entity.getModelSize();
     }
 
     @Override

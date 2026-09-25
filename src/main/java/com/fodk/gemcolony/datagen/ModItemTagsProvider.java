@@ -6,6 +6,7 @@ import com.fodk.gemcolony.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.ItemTags;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
@@ -54,5 +55,11 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         tag(ItemTags.CREEPER_DROP_MUSIC_DISCS)
                 .add(ModItems.getRK(ModItems.LOVE_LIKE_YOU_MUSIC_DISC))
                 .add(ModItems.getRK(ModItems.ITS_OVER_ISNT_IT_MUSIC_DISC));
+
+        tag(Tags.Items.BUCKETS)
+                .add(ModItems.getRK(ModItems.BLUE_ESSENCE_BUCKET))
+                .add(ModItems.getRK(ModItems.YELLOW_ESSENCE_BUCKET))
+                .add(ModItems.getRK(ModItems.WHITE_ESSENCE_BUCKET))
+                .add(ModItems.getRK(ModItems.PINK_ESSENCE_BUCKET));
     }
 }

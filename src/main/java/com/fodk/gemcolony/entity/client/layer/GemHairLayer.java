@@ -54,4 +54,9 @@ public class GemHairLayer<T extends GeoAnimatable, R extends GemRenderState> ext
     protected float getQualityModifier(R renderState) {
         return renderState.qualityModifier;
     }
+
+    @Override
+    protected float getModelSize(R renderState) {
+        return renderState.modelSize;
+    }
 }

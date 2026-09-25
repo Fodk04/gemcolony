@@ -1,14 +1,16 @@
 package com.fodk.gemcolony.block;
 
 import com.fodk.gemcolony.GemColony;
-import com.fodk.gemcolony.block.custom.ChromaCrop;
-import com.fodk.gemcolony.block.custom.ChromaDeposit;
-import com.fodk.gemcolony.block.custom.DestabilizerWallGenerator;
-import com.fodk.gemcolony.block.custom.StrawberryBushBlock;
+import com.fodk.gemcolony.block.custom.*;
+import com.fodk.gemcolony.block.custom.DrillBlock;
+import com.fodk.gemcolony.block.custom.TankBlock;
+import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.util.ColorUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -179,6 +181,101 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> STRAWBERRY_BUSH = BLOCKS.registerBlock("strawberry_bush",
             properties -> new StrawberryBushBlock(properties));
+
+    //custom size
+    public static final DeferredBlock<Block> LEG = registerBlock(
+            "leg",
+            properties -> new LegBlock(
+                    properties
+                            .strength(2F)
+                            .noLootTable()
+                            .sound(SoundType.METAL)
+                            .noOcclusion()
+            )
+    );
+
+    public static final DeferredBlock<Block> CRYSTAL = registerBlock(
+            "crystal",
+            properties -> new CrystalBlock(
+                    properties
+                            .strength(2F)
+                            .noLootTable()
+                            .sound(SoundType.GLASS)
+                            .noOcclusion()
+            )
+    );
+
+    //block entities
+    public static final DeferredBlock<Block> DRILL = registerBlock(
+            "drill",
+            properties -> new DrillBlock(
+                    properties
+                            .strength(2F)
+                            .noLootTable()
+                            .sound(SoundType.METAL)
+                            .noOcclusion()
+            )
+    );
+
+    public static final DeferredBlock<Block> TANK = registerBlock(
+            "tank",
+            properties -> new TankBlock(
+                    properties
+                            .strength(2F)
+                            .noLootTable()
+                            .sound(SoundType.METAL)
+                            .noOcclusion()
+            )
+    );
+
+    public static final DeferredBlock<Block> GEM_SEED = registerBlock(
+            "gem_seed_block",
+            properties -> new GemSeedBlock(
+                    properties
+                            .strength(1F)
+                            .noLootTable()
+                            .sound(SoundType.MOSS)
+                            .noOcclusion()
+            )
+    );
+
+    //fluids
+    public static final DeferredBlock<LiquidBlock> BLUE_ESSENCE =
+            BLOCKS.registerBlock(
+                    "blue_essence",
+                    properties -> new LiquidBlock(
+                            ModFluids.FLOWING_BLUE_ESSENCE.get(),
+                            BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "blue_essence")))
+                    )
+            );
+    public static final DeferredBlock<LiquidBlock> YELLOW_ESSENCE =
+            BLOCKS.registerBlock(
+                    "yellow_essence",
+                    properties -> new LiquidBlock(
+                            ModFluids.FLOWING_YELLOW_ESSENCE.get(),
+                            BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "yellow_essence")))
+                    )
+            );
+    public static final DeferredBlock<LiquidBlock> WHITE_ESSENCE =
+            BLOCKS.registerBlock(
+                    "white_essence",
+                    properties -> new LiquidBlock(
+                            ModFluids.FLOWING_WHITE_ESSENCE.get(),
+                            BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "white_essence")))
+                    )
+            );
+    public static final DeferredBlock<LiquidBlock> PINK_ESSENCE =
+            BLOCKS.registerBlock(
+                    "pink_essence",
+                    properties -> new LiquidBlock(
+                            ModFluids.FLOWING_PINK_ESSENCE.get(),
+                            BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                                    .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pink_essence")))
+                    )
+            );
 
     //get resource key for tags
     public static ResourceKey<Block> getRK(DeferredBlock deferredBlock){

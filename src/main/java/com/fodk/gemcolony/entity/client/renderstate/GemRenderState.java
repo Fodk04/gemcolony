@@ -18,6 +18,9 @@ public class GemRenderState extends EntityRenderState implements GeoRenderState 
     public float reformCenter;
     public float qualityModifier;
 
+    //modelsize
+    public float modelSize;
+
     //for screen
     public float previewPitch;
 }

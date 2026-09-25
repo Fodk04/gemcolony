@@ -2,6 +2,7 @@ package com.fodk.gemcolony.entity.client.screen;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
+import com.fodk.gemcolony.entity.client.screen.ability.ConstructorUI;
 import com.fodk.gemcolony.entity.client.screen.ability.KindergartnerUI;
 import com.fodk.gemcolony.entity.custom.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
@@ -812,6 +813,7 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
 
         selectedAbilityUI = switch (ability) {
             case KINDERGARTNER -> new KindergartnerUI();
+            case CONSTRUCTOR -> new ConstructorUI();
             default -> new GenericAbilityUI();
         };
 

@@ -1,15 +1,12 @@
 package com.fodk.gemcolony.item.custom;
 
 import com.fodk.gemcolony.data.ModDataComponents;
-import com.fodk.gemcolony.data.ReformRegistryData;
 import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.custom.GemEntity;
 import com.fodk.gemcolony.entity.custom.GemRisingItemEntity;
-import com.fodk.gemcolony.entity.custom.GemSaveData;
-import net.minecraft.core.BlockPos;
+import com.fodk.gemcolony.entity.custom.savedata.GemSaveData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -20,10 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class GemItem extends Item {

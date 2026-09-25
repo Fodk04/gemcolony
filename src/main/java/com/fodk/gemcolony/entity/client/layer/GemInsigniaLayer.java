@@ -54,4 +54,9 @@ public class GemInsigniaLayer<T extends GeoAnimatable, R extends GemRenderState>
     protected float getReformCenter(R renderState) {
         return renderState.reformCenter;
     }
+
+    @Override
+    protected float getModelSize(R renderState) {
+        return renderState.modelSize;
+    }
 }

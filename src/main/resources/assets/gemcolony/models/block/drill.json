@@ -1,0 +1,90 @@
+{
+	"format_version": "26.3",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "gemcolony:block/drill",
+		"particle": "gemcolony:block/drill"
+	},
+	"elements": [
+		{
+			"from": [-16, 26, -16],
+			"to": [32, 32, 32],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-23, 26, -23]},
+			"faces": {
+				"north": {"uv": [9, 5.75, 10.5, 5.9375], "texture": "#1"},
+				"east": {"uv": [9, 5.9375, 10.5, 6.125], "texture": "#1"},
+				"south": {"uv": [9, 6.125, 10.5, 6.3125], "texture": "#1"},
+				"west": {"uv": [9, 6.3125, 10.5, 6.5], "texture": "#1"},
+				"up": {"uv": [4.5, 1.5, 6, 3], "texture": "#1"},
+				"down": {"uv": [3, 4.5, 4.5, 6], "texture": "#1"}
+			}
+		},
+		{
+			"from": [-8, 16, -8],
+			"to": [24, 26, 24],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 6.5, 8]},
+			"faces": {
+				"north": {"uv": [8.75, 0, 9.75, 0.3125], "texture": "#1"},
+				"east": {"uv": [8.75, 0.3125, 9.75, 0.625], "texture": "#1"},
+				"south": {"uv": [8.75, 0.625, 9.75, 0.9375], "texture": "#1"},
+				"west": {"uv": [8.75, 0.9375, 9.75, 1.25], "texture": "#1"},
+				"up": {"uv": [6.9375, 8.28125, 7.9375, 9.28125], "texture": "#1"},
+				"down": {"uv": [7.9375, 8.28125, 8.9375, 9.28125], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [9, 6.5, 9.5, 7], "texture": "#1"},
+				"east": {"uv": [9.125, 1.25, 9.625, 1.75], "texture": "#1"},
+				"south": {"uv": [9.125, 1.75, 9.625, 2.25], "texture": "#1"},
+				"west": {"uv": [9.125, 2.25, 9.625, 2.75], "texture": "#1"},
+				"up": {"uv": [9.125, 8.03125, 9.625, 8.53125], "texture": "#1"},
+				"down": {"uv": [9.125, 8.53125, 9.625, 9.03125], "texture": "#1"}
+			}
+		},
+		{
+			"from": [4, -16, 4],
+			"to": [12, 0, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -8, 8]},
+			"faces": {
+				"north": {"uv": [8.5625, 9.28125, 8.8125, 9.78125], "texture": "#1"},
+				"east": {"uv": [9.375, 9.21875, 9.625, 9.71875], "texture": "#1"},
+				"south": {"uv": [5.0625, 9.40625, 5.3125, 9.90625], "texture": "#1"},
+				"west": {"uv": [5.3125, 9.40625, 5.5625, 9.90625], "texture": "#1"},
+				"up": {"uv": [9.8125, 6.75, 10.0625, 7], "texture": "#1"},
+				"down": {"uv": [9.8125, 7.4375, 10.0625, 7.6875], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		0,
+		{
+			"name": "drill1",
+			"origin": [-7, 16, -7],
+			"scope": 0,
+			"color": 0,
+			"children": [
+				1,
+				{
+					"name": "drill2",
+					"origin": [1, 0, 1],
+					"scope": 0,
+					"color": 0,
+					"children": [
+						2,
+						{
+							"name": "drill3",
+							"origin": [5, -16, 5],
+							"scope": 0,
+							"color": 0,
+							"children": [3]
+						}
+					]
+				}
+			]
+		}
+	]
+}

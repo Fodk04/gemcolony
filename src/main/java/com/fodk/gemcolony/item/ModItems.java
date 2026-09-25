@@ -3,6 +3,7 @@ package com.fodk.gemcolony.item;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.entity.ModEntities;
+import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.food.ModFoods;
 import com.fodk.gemcolony.item.custom.ChromaItem;
 import com.fodk.gemcolony.item.custom.EssenceBottle;
@@ -72,6 +73,9 @@ public class ModItems {
                 }
             });
 
+    public static final DeferredItem<Item> GEM_SEED = ITEMS.registerItem("gem_seed",
+            properties -> new Item(properties.stacksTo(16)));
+
     //TOOLS AND WEAPONS
     public static final DeferredItem<Item> CHROMA_SWORD = ITEMS.registerItem("chroma_sword",
             properties -> new Item(properties.sword(ModToolTiers.CHROMA, 3, -2.4f)));
@@ -112,10 +116,11 @@ public class ModItems {
 
     //GEMS
     public static final DeferredItem<Item> PEBBLE_GEM = ITEMS.registerItem("pebble_gem",
-            properties -> new GemItem(properties, "Pebble", ModEntities.PERIDOT.get()));
+            properties -> new GemItem(properties, "Pebble", ModEntities.PEBBLE.get()));
 
     public static final DeferredItem<Item> PERIDOT_GEM = ITEMS.registerItem("peridot_gem",
             properties -> new GemItem(properties, "Peridot", ModEntities.PERIDOT.get()));
+
     public static final DeferredItem<Item> RUBY_GEM = ITEMS.registerItem("ruby_gem",
             properties -> new GemItem(properties, "Ruby", ModEntities.PERIDOT.get()));
     public static final DeferredItem<Item> SAPPHIRE_GEM = ITEMS.registerItem("sapphire_gem",
@@ -131,6 +136,16 @@ public class ModItems {
             properties -> new Item(properties.jukeboxPlayable(ModSounds.LOVE_LIKE_YOU_KEY).rarity(Rarity.EPIC).stacksTo(1)));
     public static final DeferredItem<Item> ITS_OVER_ISNT_IT_MUSIC_DISC = ITEMS.registerItem("its_over_isnt_it_music_disc",
             properties -> new Item(properties.jukeboxPlayable(ModSounds.ITS_OVER_ISNT_IT_KEY).rarity(Rarity.RARE).stacksTo(1)));
+
+    //Buckets
+    public static final DeferredItem<BucketItem> BLUE_ESSENCE_BUCKET = ITEMS.registerItem("blue_essence_bucket",
+            props -> new BucketItem(ModFluids.BLUE_ESSENCE.get(), props.stacksTo(1)));
+    public static final DeferredItem<BucketItem> YELLOW_ESSENCE_BUCKET = ITEMS.registerItem("yellow_essence_bucket",
+            props -> new BucketItem(ModFluids.YELLOW_ESSENCE.get(), props.stacksTo(1)));
+    public static final DeferredItem<BucketItem> WHITE_ESSENCE_BUCKET = ITEMS.registerItem("white_essence_bucket",
+            props -> new BucketItem(ModFluids.WHITE_ESSENCE.get(), props.stacksTo(1)));
+    public static final DeferredItem<BucketItem> PINK_ESSENCE_BUCKET = ITEMS.registerItem("pink_essence_bucket",
+            props -> new BucketItem(ModFluids.PINK_ESSENCE.get(), props.stacksTo(1)));
 
     //get resource key for item tags
     public static ResourceKey<Item> getRK(DeferredItem deferredItem){

@@ -33,6 +33,7 @@ public abstract class GemTintedTextureLayer<T extends GeoAnimatable, R extends G
     }
     protected abstract float getReformCenter(R renderState);
     protected abstract float getQualityModifier(R renderState);
+    protected abstract float getModelSize(R renderState);
 
     @Override
     public void submitRenderTask(RenderPassInfo<R> renderPassInfo, SubmitNodeCollector renderTasks) {
@@ -49,8 +50,8 @@ public abstract class GemTintedTextureLayer<T extends GeoAnimatable, R extends G
         int myColor = getTintColor(renderState);
         BakedGeoModel model = renderPassInfo.model();
         Vec3 reformScale = getReformScale(renderState, 1, 0, 1);
-        float qualityModifier = getQualityModifier(renderState);
-        Vec3 qualityScale = new Vec3(qualityModifier, qualityModifier,qualityModifier);
+        float scale = getQualityModifier(renderState) * getModelSize(renderState);
+        Vec3 qualityScale = new Vec3(scale, scale,scale) ;
 
         renderTasks.order(order).submitCustomGeometry(renderPassInfo.poseStack(), renderType, (pose, vertexConsumer) -> {
             PoseStack poseStack = renderPassInfo.poseStack();

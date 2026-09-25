@@ -3,6 +3,7 @@ package com.fodk.gemcolony.entity;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.custom.GemRisingItemEntity;
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
+import com.fodk.gemcolony.entity.custom.gem.starter.PebbleEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -20,10 +21,16 @@ public class ModEntities {
             DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, GemColony.MOD_ID);
 
     public static final Supplier<EntityType<PeridotEntity>> PERIDOT = ENTITY_TYPES.register("peridot", () -> EntityType.Builder.of(PeridotEntity::new, MobCategory.CREATURE)
-            .sized(0.6f,2.2f)
+            .sized(0.6f,1.8f)
             .fireImmune()
             .immuneTo(BlockTags.STRAY_IMMUNE_TO)
             .build(getRK("peridot")));
+
+    public static final Supplier<EntityType<PebbleEntity>> PEBBLE = ENTITY_TYPES.register("pebble", () -> EntityType.Builder.of(PebbleEntity::new, MobCategory.CREATURE)
+            .sized(0.2f,0.4f)
+            .fireImmune()
+            .immuneTo(BlockTags.STRAY_IMMUNE_TO)
+            .build(getRK("pebble")));
 
     public static final Supplier<EntityType<GemRisingItemEntity>> GEM_RISING_ITEM = ENTITY_TYPES.register("gem_rising_item",
             () -> EntityType.Builder.of(GemRisingItemEntity::new, MobCategory.MISC)

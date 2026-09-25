@@ -2,10 +2,8 @@ package com.fodk.gemcolony.datagen;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
-import com.fodk.gemcolony.block.custom.ChromaCrop;
-import com.fodk.gemcolony.block.custom.ChromaDeposit;
-import com.fodk.gemcolony.block.custom.DestabilizerWallGenerator;
-import com.fodk.gemcolony.block.custom.StrawberryBushBlock;
+import com.fodk.gemcolony.block.custom.*;
+import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.item.ModArmorMaterials;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.util.ColorUtil;
@@ -22,6 +20,8 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import java.util.Map;
@@ -82,12 +82,18 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.PINK_CHROMA.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.GEM_SHARDS.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.GEM_SEED.get(), ModelTemplates.FLAT_ITEM);
         blockModels.createCropBlock(ModBlocks.STRAWBERRY_BUSH.get(), StrawberryBushBlock.AGE, 0, 1, 2, 3);
 
         itemModels.generateFlatItem(ModItems.PINK_ESSENCE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.BLUE_ESSENCE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.YELLOW_ESSENCE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.WHITE_ESSENCE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
+
+        itemModels.generateFlatItem(ModItems.PINK_ESSENCE_BUCKET.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.BLUE_ESSENCE_BUCKET.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.YELLOW_ESSENCE_BUCKET.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.WHITE_ESSENCE_BUCKET.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.CHROMA_SEED.get(), ModelTemplates.FLAT_ITEM);
 
@@ -134,7 +140,9 @@ public class ModModelProvider extends ModelProvider {
 
         blockModels.createTrivialCube(ModBlocks.DRAINED_STONE.get());
 
-        //custom 3d model blocks
+        blockModels.createNonTemplateModelBlock(ModBlocks.GEM_SEED.get());
+
+        //custom 3d model blocks with facing 6direc and age
 
         for (ColorUtil color : ColorUtil.values()) {
             Block depositBlock = CHROMA_DEPOSITS.get(color).get();
@@ -175,6 +183,55 @@ public class ModModelProvider extends ModelProvider {
             );
         }
 
+        //custom 3d model no rot
+        blockModels.createNonTemplateModelBlock(ModBlocks.DRILL.get());
+        blockModels.createNonTemplateModelBlock(ModBlocks.CRYSTAL.get());
+
+        //custom blocks with 4 direcs
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.LEG.get())
+                        .with(PropertyDispatch.initial(BlockStateProperties.HORIZONTAL_FACING)
+                                .generate(facing -> {
+                                    Quadrant yRot = switch (facing) {
+                                        case NORTH -> Quadrant.R0;
+                                        case EAST -> Quadrant.R90;
+                                        case SOUTH -> Quadrant.R180;
+                                        case WEST -> Quadrant.R270;
+                                        default -> Quadrant.R0;
+                                    };
+
+                                    return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/leg"))
+                                            .with(VariantMutator.Y_ROT.withValue(yRot));
+                                })
+                        )
+        );
+
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.TANK.get())
+                        .with(
+                                PropertyDispatch.initial(TankBlock.HALF, BlockStateProperties.HORIZONTAL_FACING)
+                                        .generate((half, facing) -> {
+
+                                            Quadrant yRot = switch (facing) {
+                                                case NORTH -> Quadrant.R0;
+                                                case EAST -> Quadrant.R90;
+                                                case SOUTH -> Quadrant.R180;
+                                                case WEST -> Quadrant.R270;
+                                                default -> Quadrant.R0;
+                                            };
+
+                                            String model = switch (half) {
+                                                case TANK_BOTTOM -> "tank_bottom";
+                                                case TANK_TOP -> "tank_top";
+                                            };
+
+                                            return BlockModelGenerators.plainVariant(
+                                                    Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model)
+                                            ).with(VariantMutator.Y_ROT.withValue(yRot));
+                                        })
+                        )
+        );
+
         //chroma crop
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(ModBlocks.CHROMA_CROP.get())
@@ -206,6 +263,12 @@ public class ModModelProvider extends ModelProvider {
                                         )))
                         )
         );
+
+        //fluids
+        blockModels.createNonTemplateModelBlock(ModBlocks.YELLOW_ESSENCE.get());
+        blockModels.createNonTemplateModelBlock(ModBlocks.WHITE_ESSENCE.get());
+        blockModels.createNonTemplateModelBlock(ModBlocks.PINK_ESSENCE.get());
+        blockModels.createNonTemplateModelBlock(ModBlocks.BLUE_ESSENCE.get());
 
         //on/off blocks
         blockModels.blockStateOutput.accept(

@@ -14,6 +14,12 @@ public final class GemRenderPipelines {
             .withShaderDefine("EMISSIVE")
             .build();
 
+    public static final RenderPipeline CONSTRUCTOR_GHOST = RenderPipeline
+            .builder(RenderPipelines.BLOCK_SNIPPET)
+            .withLocation(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pipeline/constructor_ghost"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "core/constructor_ghost"))
+            .build();
+
     private GemRenderPipelines() {
     }
 }

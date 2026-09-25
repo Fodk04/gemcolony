@@ -4,7 +4,10 @@ import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.data.FacetRegistryData;
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
-import com.fodk.gemcolony.item.ModItems;
+import com.fodk.gemcolony.entity.custom.savedata.GemAppearanceData;
+import com.fodk.gemcolony.entity.custom.savedata.GemSaveData;
+import com.fodk.gemcolony.entity.custom.savedata.GemStateData;
+import com.fodk.gemcolony.entity.custom.savedata.ModEntityDataSerializers;
 import com.fodk.gemcolony.menu.GemMenu;
 import com.fodk.gemcolony.sound.ModSounds;
 import com.fodk.gemcolony.util.ColorUtil;
@@ -18,9 +21,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
@@ -53,7 +54,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public abstract class GemEntity extends Monster implements GeoEntity, Container, MenuProvider {
@@ -153,9 +153,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             assignOrigin(level.getLevel(), blockPosition());
             generateAppearance(Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK);
             entityData.set(EMERGED, true);
-            //for testing
-            entityData.set(QUALITY, random.nextInt(3));
-            applyQualityModifiers();
+            setQuality(random.nextInt(3));
             initializeAbilities();
             entityData.set(REFORM_PROGRESS, 0);
             this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
@@ -168,6 +166,11 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         applyQualityModifiers();
         UpdateDisplayedName();
         entityData.set(REFORM_PROGRESS, reformProgress);
+    }
+
+    public void setQuality(int quality){
+        entityData.set(QUALITY, quality);
+        applyQualityModifiers();
     }
 
     public void assignOrigin(ServerLevel level, BlockPos pos) {
@@ -230,14 +233,18 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     }
 
     protected void generateAppearance(Color gemColor, int maxOutfits, Color outfitColor, int maxInsignias, Color insigniaColor, int maxHairstyles, Color hairColor, int maxVisors, Color visorColor) {
+        int outfitIndex = maxOutfits > 0 ? random.nextInt(maxOutfits) : -1;
+        int insigniaIndex = maxInsignias > 0 ? random.nextInt(maxInsignias) : -1;
+        int hairstyleIndex = maxHairstyles > 0 ? random.nextInt(maxHairstyles) : -1;
+        int visorIndex = maxVisors > 0 ? random.nextInt(maxVisors) : -1;
         this.entityData.set(GEM_COLOR, ColorUtil.colorToInt(gemColor));
-        this.entityData.set(OUTFIT, random.nextInt(maxOutfits));
+        this.entityData.set(OUTFIT, outfitIndex);
         this.entityData.set(OUTFIT_COLOR, ColorUtil.colorToInt(outfitColor));
-        this.entityData.set(INSIGNIA, random.nextInt(maxInsignias));
+        this.entityData.set(INSIGNIA, insigniaIndex);
         this.entityData.set(INSIGNIA_COLOR, ColorUtil.colorToInt(insigniaColor));
-        this.entityData.set(HAIRSTYLE, random.nextInt(maxHairstyles));
+        this.entityData.set(HAIRSTYLE, hairstyleIndex);
         this.entityData.set(HAIR_COLOR, ColorUtil.colorToInt(hairColor));
-        this.entityData.set(VISOR, random.nextInt(maxVisors));
+        this.entityData.set(VISOR, visorIndex);
         this.entityData.set(VISOR_COLOR, ColorUtil.colorToInt(visorColor));
     }
 
@@ -576,6 +583,9 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.set(ABILITIES, abilities.stream().map(GemAbility::getId).toList());
     }
 
-    protected void initializeAbilities() {
+    protected abstract void initializeAbilities();
+
+    public float getModelSize(){
+        return 1f;
     }
 }

@@ -43,13 +43,20 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.CHROMA_SEED);
 
                         output.accept(ModItems.GEM_SHARDS);
+                        output.accept(ModItems.GEM_SEED);
 
                         output.accept(ModItems.PINK_ESSENCE_BOTTLE);
                         output.accept(ModItems.BLUE_ESSENCE_BOTTLE);
                         output.accept(ModItems.YELLOW_ESSENCE_BOTTLE);
                         output.accept(ModItems.WHITE_ESSENCE_BOTTLE);
 
+                        output.accept(ModItems.PINK_ESSENCE_BUCKET);
+                        output.accept(ModItems.BLUE_ESSENCE_BUCKET);
+                        output.accept(ModItems.YELLOW_ESSENCE_BUCKET);
+                        output.accept(ModItems.WHITE_ESSENCE_BUCKET);
+
                         output.accept(ModItems.PEBBLE_GEM);
+                        output.accept(ModItems.PERIDOT_GEM);
                     })
                     .build());
 

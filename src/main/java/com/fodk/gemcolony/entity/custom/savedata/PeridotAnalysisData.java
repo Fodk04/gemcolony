@@ -1,4 +1,4 @@
-package com.fodk.gemcolony.entity.custom;
+package com.fodk.gemcolony.entity.custom.savedata;
 
 import com.fodk.gemcolony.data.GemAnalysisResult;
 import com.mojang.serialization.Codec;

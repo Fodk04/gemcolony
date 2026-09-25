@@ -1,15 +1,12 @@
 package com.fodk.gemcolony.data;
 
 import com.fodk.gemcolony.GemColony;
-import com.fodk.gemcolony.entity.custom.GemEntity;
-import com.fodk.gemcolony.entity.custom.GemSaveData;
+import com.fodk.gemcolony.entity.custom.savedata.GemSaveData;
 import com.mojang.serialization.Codec;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.world.entity.EntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;

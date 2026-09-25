@@ -49,4 +49,9 @@ public class GemVisorLayer<T extends GeoAnimatable, R extends GemRenderState> ex
     protected float getQualityModifier(R renderState) {
         return renderState.qualityModifier;
     }
+
+    @Override
+    protected float getModelSize(R renderState) {
+        return renderState.modelSize;
+    }
 }

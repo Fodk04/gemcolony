@@ -51,4 +51,9 @@ public class GemPlacementLayer<T extends GeoAnimatable, R extends GemRenderState
     protected float getQualityModifier(R renderState) {
         return renderState.qualityModifier;
     }
+
+    @Override
+    protected float getModelSize(R renderState) {
+        return renderState.modelSize;
+    }
 }
