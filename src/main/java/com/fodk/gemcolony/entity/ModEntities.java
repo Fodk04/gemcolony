@@ -3,7 +3,11 @@ package com.fodk.gemcolony.entity;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.custom.GemRisingItemEntity;
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
+import com.fodk.gemcolony.entity.custom.gem.quartz.QuartzEntity;
+import com.fodk.gemcolony.entity.custom.gem.starter.MicaEntity;
+import com.fodk.gemcolony.entity.custom.gem.starter.NacreEntity;
 import com.fodk.gemcolony.entity.custom.gem.starter.PebbleEntity;
+import com.fodk.gemcolony.entity.custom.gem.starter.ShaleEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -31,6 +35,27 @@ public class ModEntities {
             .fireImmune()
             .immuneTo(BlockTags.STRAY_IMMUNE_TO)
             .build(getRK("pebble")));
+    public static final Supplier<EntityType<ShaleEntity>> SHALE = ENTITY_TYPES.register("shale", () -> EntityType.Builder.of(ShaleEntity::new, MobCategory.CREATURE)
+            .sized(0.2f,0.4f)
+            .fireImmune()
+            .immuneTo(BlockTags.STRAY_IMMUNE_TO)
+            .build(getRK("shale")));
+    public static final Supplier<EntityType<MicaEntity>> MICA = ENTITY_TYPES.register("mica", () -> EntityType.Builder.of(MicaEntity::new, MobCategory.CREATURE)
+            .sized(0.2f,0.4f)
+            .fireImmune()
+            .immuneTo(BlockTags.STRAY_IMMUNE_TO)
+            .build(getRK("mica")));
+    public static final Supplier<EntityType<NacreEntity>> NACRE = ENTITY_TYPES.register("nacre", () -> EntityType.Builder.of(NacreEntity::new, MobCategory.CREATURE)
+            .sized(0.2f,0.4f)
+            .fireImmune()
+            .immuneTo(BlockTags.STRAY_IMMUNE_TO)
+            .build(getRK("nacre")));
+
+    public static final Supplier<EntityType<QuartzEntity>> QUARTZ = ENTITY_TYPES.register("quartz", () -> EntityType.Builder.of(QuartzEntity::new, MobCategory.CREATURE)
+            .sized(0.9f,2.2f)
+            .fireImmune()
+            .immuneTo(BlockTags.STRAY_IMMUNE_TO)
+            .build(getRK("quartz")));
 
     public static final Supplier<EntityType<GemRisingItemEntity>> GEM_RISING_ITEM = ENTITY_TYPES.register("gem_rising_item",
             () -> EntityType.Builder.of(GemRisingItemEntity::new, MobCategory.MISC)

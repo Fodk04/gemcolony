@@ -5,6 +5,7 @@ import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.custom.GemEntity;
 import com.fodk.gemcolony.entity.custom.GemRisingItemEntity;
 import com.fodk.gemcolony.entity.custom.savedata.GemSaveData;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 
@@ -25,6 +27,7 @@ public class GemItem extends Item {
 
     private final String name;
     public final EntityType<? extends GemEntity> entityType;
+    private int variant = -1;
 
     public GemItem(Properties properties, String name, EntityType<? extends GemEntity> entityType) {
         super(properties.fireResistant().stacksTo(1));
@@ -32,8 +35,26 @@ public class GemItem extends Item {
         this.entityType = entityType;
     }
 
+    public GemItem(Properties properties, String name, EntityType<? extends GemEntity> entityType, int variant) {
+        super(properties.fireResistant().stacksTo(1));
+        this.name = name;
+        this.entityType = entityType;
+        this.variant = variant;
+    }
+
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult useOn(UseOnContext context) {
+        Level level = context.getLevel();
+        if(!level.isClientSide()){
+            BlockPos pos = context.getClickedPos().above(1);
+            GemEntity gem = entityType.create((ServerLevel) level, null, pos, EntitySpawnReason.NATURAL, false, false);
+            gem.initializeGem(variant);
+            level.addFreshEntity(gem);
+
+            if(!context.getPlayer().isCreative()){
+                context.getItemInHand().shrink(1);
+            }
+        }
         return InteractionResult.SUCCESS;
     }
 

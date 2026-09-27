@@ -149,7 +149,8 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, @Nullable SpawnGroupData groupData) {
-        if (spawnReason != EntitySpawnReason.SPAWN_ITEM_USE) {
+        if (spawnReason == EntitySpawnReason.COMMAND) {
+            setVariant(getRandomVariant());
             assignOrigin(level.getLevel(), blockPosition());
             generateAppearance(Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK);
             entityData.set(EMERGED, true);
@@ -162,7 +163,41 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return super.finalizeSpawn(level, difficulty, spawnReason, groupData);
     }
 
-    public void initializeGem(int reformProgress){
+    public int getRandomVariant(){
+        return -1;
+    }
+
+    public void setVariant(int variant){
+        entityData.set(VARIANT, variant);
+    }
+
+    public int getVariantFromChroma(int chromaIndex){
+        return -1;
+    }
+
+    public void initializeGem(int variant){
+        setVariant(variant);
+        assignOrigin((ServerLevel) level(), blockPosition());
+        generateAppearance(Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK);
+        entityData.set(EMERGED, true);
+        setQuality(random.nextInt(3));
+        initializeAbilities();
+        entityData.set(REFORM_PROGRESS, 0);
+        this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
+    }
+
+    public void initializeGemFromChroma(int chromaIndex){
+        setVariant(getVariantFromChroma(chromaIndex));
+        assignOrigin((ServerLevel) level(), blockPosition());
+        generateAppearance(Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK);
+        entityData.set(EMERGED, true);
+        setQuality(random.nextInt(3));
+        initializeAbilities();
+        entityData.set(REFORM_PROGRESS, 0);
+        this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
+    }
+
+    public void initializeGemFromReform(int reformProgress){
         applyQualityModifiers();
         UpdateDisplayedName();
         entityData.set(REFORM_PROGRESS, reformProgress);
@@ -236,7 +271,19 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         int outfitIndex = maxOutfits > 0 ? random.nextInt(maxOutfits) : -1;
         int insigniaIndex = maxInsignias > 0 ? random.nextInt(maxInsignias) : -1;
         int hairstyleIndex = maxHairstyles > 0 ? random.nextInt(maxHairstyles) : -1;
-        int visorIndex = maxVisors > 0 ? random.nextInt(maxVisors) : -1;
+        int visorIndex;
+        if(alwaysHasVisor()){
+            // always "TRY" to set a visor
+            visorIndex = maxVisors > 0 ? random.nextInt(maxVisors) : -1;
+        }else{
+            if(random.nextFloat() < 0.10f){
+                // 10% chance it has a visor
+                visorIndex = maxVisors > 0 ? random.nextInt(maxVisors) : -1;
+            }else{
+                // 90% chance it doesnt have a visor
+                visorIndex = -1;
+            }
+        }
         this.entityData.set(GEM_COLOR, ColorUtil.colorToInt(gemColor));
         this.entityData.set(OUTFIT, outfitIndex);
         this.entityData.set(OUTFIT_COLOR, ColorUtil.colorToInt(outfitColor));
@@ -246,6 +293,10 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.entityData.set(HAIR_COLOR, ColorUtil.colorToInt(hairColor));
         this.entityData.set(VISOR, visorIndex);
         this.entityData.set(VISOR_COLOR, ColorUtil.colorToInt(visorColor));
+    }
+
+    protected boolean alwaysHasVisor(){
+        return false;
     }
 
     public GemSaveData toSaveData() {
@@ -368,7 +419,9 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return 1f - (float)reformProgress/(float)maxReformProgress;
     }
 
-    public abstract float getReformCenter();
+    public float getReformCenter(){
+        return (float) (getHitbox().getYsize() / 2f);
+    }
 
     protected int getReformTime(){
         float modifier = entityData.get(QUALITY) == 0 ? 0.9f : entityData.get(QUALITY) == 1 ? 1f : 1.1f;

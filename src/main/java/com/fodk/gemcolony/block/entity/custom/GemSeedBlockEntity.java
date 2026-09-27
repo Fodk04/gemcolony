@@ -5,6 +5,7 @@ import com.fodk.gemcolony.block.entity.ModBlockEntities;
 import com.fodk.gemcolony.data.GemAnalysisResult;
 import com.fodk.gemcolony.entity.custom.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.GemDefinitions;
+import com.fodk.gemcolony.item.custom.ChromaItem;
 import com.fodk.gemcolony.tags.ModTags;
 import com.fodk.gemcolony.util.GemEnvironmentUtil;
 import net.minecraft.core.BlockPos;
@@ -31,10 +32,10 @@ public class GemSeedBlockEntity extends BlockEntity {
 
     private ItemStack chroma = ItemStack.EMPTY;
     private String selectedGemId = null;
-    private int totalDrainable = 0;
     private int drained = 0;
 
-    private static final int DRAIN_RADIUS = 2;
+    private static final int DRAIN_RADIUS = 4;
+    private static final int BLOCKS_NEEDED = 450;
     private static final int MAX_TUNNEL_LENGTH = 32;
 
     public GemSeedBlockEntity(BlockPos pos, BlockState state) {
@@ -62,7 +63,6 @@ public class GemSeedBlockEntity extends BlockEntity {
             output.putString("SelectedGemId", selectedGemId);
         }
 
-        output.putInt("TotalDrainable", totalDrainable);
         output.putInt("Drained", drained);
     }
 
@@ -72,13 +72,7 @@ public class GemSeedBlockEntity extends BlockEntity {
 
         chroma = input.read("Chroma", ItemStack.CODEC).orElse(ItemStack.EMPTY);
         selectedGemId = input.getString("SelectedGemId").orElse(null);
-        totalDrainable = input.getInt("TotalDrainable").orElse(0);
         drained = input.getInt("Drained").orElse(0);
-    }
-
-    public void initializeDrain() {
-        totalDrainable = countDrainableBlocks();
-        setChanged();
     }
 
     public void determineGem() {
@@ -106,42 +100,14 @@ public class GemSeedBlockEntity extends BlockEntity {
         selectedGemId = results.get(results.size() - 1).gemId();
     }
 
-    private int countDrainableBlocks() {
-        if (level == null) {
-            return 0;
+    private int determineQuality(int drained) {
+        float drainagePercentage = (float) drained / BLOCKS_NEEDED * 100.0F;
+
+        if (drainagePercentage < 30.0F) {
+            return level.getRandom().nextFloat() < 0.20F ? 0 : 1;
         }
 
-        int totalDrainable = 0;
-
-        for (int x = -DRAIN_RADIUS; x <= DRAIN_RADIUS; x++) {
-            for (int y = -DRAIN_RADIUS; y <= DRAIN_RADIUS; y++) {
-                for (int z = -DRAIN_RADIUS; z <= DRAIN_RADIUS; z++) {
-
-                    BlockPos pos = worldPosition.offset(x, y, z);
-
-                    if (level.getBlockState(pos).is(ModTags.Blocks.GEM_DRAINABLES)) {
-
-                        totalDrainable++;
-                    }
-                }
-            }
-        }
-
-        return totalDrainable;
-    }
-
-    private int determineQuality(int totalDrainable, int drained) {
-        if (totalDrainable <= 5) {
-            return 0;
-        }
-
-        float drainagePercentage = (float) drained / totalDrainable * 100.0F;
-
-        if (drainagePercentage <= 40.0F) {
-            return 0;
-        }
-
-        if (drainagePercentage < 85.0F) {
+        if (drainagePercentage < 75.0F) {
             return level.getRandom().nextFloat() < 0.1F ? 0 : 1;
         }
 
@@ -153,51 +119,72 @@ public class GemSeedBlockEntity extends BlockEntity {
             return;
         }
 
-        int quality = determineQuality(totalDrainable, drained);
+        int quality = determineQuality(drained);
 
         GemEntity gem = GemDefinitions.get(selectedGemId).gem().create((ServerLevel) level, null, getBlockPos(), EntitySpawnReason.NATURAL, false, false);
 
         gem.setQuality(quality);
+        gem.initializeGemFromChroma(((ChromaItem) chroma.getItem()).colorIndex);
+
         int height = (int) Math.ceil(gem.getHitbox().getYsize());
         digTunnel(findShortestTunnel(height), height);
-
-        level.addFreshEntity(gem);
 
         for(int y = height - 1; y >= 0; y--){
             BlockPos pos = worldPosition.above(y);
             level.removeBlock(pos, false);
         }
+
+        level.addFreshEntity(gem);
     }
 
-    public void randomTick(RandomSource random) {
+    private int drainTimer = 0;
+    private static final int DRAIN_INTERVAL = 20; // 1 second
+    private final List<BlockPos> drainableBlocks = new ArrayList<>();
+
+    public void tick() {
+        if (level == null || level.isClientSide()) {
+            return;
+        }
+
+        drainTimer++;
+
+        if (drainTimer < DRAIN_INTERVAL) {
+            return;
+        }
+
+        drainTimer = 0;
+
         if (level == null) {
             return;
         }
 
-        List<BlockPos> drainableBlocks = new ArrayList<>();
+        if(drainableBlocks.isEmpty()){
+            for (int x = -DRAIN_RADIUS; x <= DRAIN_RADIUS; x++) {
+                for (int y = -DRAIN_RADIUS; y <= DRAIN_RADIUS; y++) {
+                    for (int z = -DRAIN_RADIUS; z <= DRAIN_RADIUS; z++) {
+                        BlockPos pos = worldPosition.offset(x, y, z);
 
-        for (int x = -DRAIN_RADIUS; x <= DRAIN_RADIUS; x++) {
-            for (int y = -DRAIN_RADIUS; y <= DRAIN_RADIUS; y++) {
-                for (int z = -DRAIN_RADIUS; z <= DRAIN_RADIUS; z++) {
-
-                    BlockPos pos = worldPosition.offset(x, y, z);
-
-                    if (level.getBlockState(pos).is(ModTags.Blocks.GEM_DRAINABLES)) {
-
-                        drainableBlocks.add(pos);
+                        if (level.getBlockState(pos).is(ModTags.Blocks.GEM_DRAINABLES) && !isPotentialSeedPosition(pos)) {
+                            drainableBlocks.add(pos);
+                        }
                     }
                 }
             }
         }
 
-        if (drainableBlocks.isEmpty()) {
+        if (drainableBlocks.isEmpty() || drained >= BLOCKS_NEEDED) {
             generateGem();
             return;
         }
 
-        BlockPos target = drainableBlocks.get(random.nextInt(drainableBlocks.size()));
+        BlockPos target = drainableBlocks.get(level.getRandom().nextInt(drainableBlocks.size()));
+        if (!level.getBlockState(target).is(ModTags.Blocks.GEM_DRAINABLES)) {
+            drainableBlocks.remove(target);
+            return;
+        }
 
         level.setBlock(target, ModBlocks.DRAINED_STONE.get().defaultBlockState(), 3);
+        drainableBlocks.remove(target);
         drained++;
         setChanged();
     }
@@ -219,19 +206,16 @@ public class GemSeedBlockEntity extends BlockEntity {
         for (Direction direction : directions) {
 
             for (int distance = 1; distance <= MAX_TUNNEL_LENGTH; distance++) {
-
                 BlockPos center = worldPosition.relative(direction, distance);
                 BlockPos top = center.above(tunnelHeight - 1);
 
                 // found an opening large enough for the Gem
                 if (level.getBlockState(center).isAir() && level.getBlockState(top).isAir()) {
-
                     BlockPos skyCheck = center.above(tunnelHeight / 2);
 
                     if (level.canSeeSky(skyCheck)) {
 
                         if (shortest == null || distance < shortest.distance()) {
-
                             shortest = new TunnelPath(direction, distance);
                         }
 
@@ -250,14 +234,31 @@ public class GemSeedBlockEntity extends BlockEntity {
         }
 
         for (int distance = 1; distance < path.distance(); distance++) {
-
             BlockPos tunnelPos = worldPosition.relative(path.direction(), distance);
 
             for (int y = 0; y < tunnelHeight; y++) {
-
                 BlockPos pos = tunnelPos.above(y);
-                level.removeBlock(pos, false);
+                BlockState blockState = level.getBlockState(pos);
+                if (blockState.is(ModTags.Blocks.GEM_DRAINABLES) || blockState.is(ModTags.Blocks.GEM_DRAINED)) {
+                    level.removeBlock(pos, false);
+                }
             }
         }
+    }
+
+    private boolean isPotentialSeedPosition(BlockPos pos) {
+        int xSpacing = InjectorBlockEntity.SLOT_SPACING;
+        int ySpacing = InjectorBlockEntity.ROW_SPACING;
+
+        int dx = pos.getX() - worldPosition.getX();
+        int dy = pos.getY() - worldPosition.getY();
+        int dz = pos.getZ() - worldPosition.getZ();
+
+        return Math.abs(dx) <= xSpacing
+                && Math.abs(dz) <= xSpacing
+                && Math.abs(dy) <= ySpacing
+                && dx % xSpacing == 0
+                && dy % ySpacing == 0
+                && dz % xSpacing == 0;
     }
 }

@@ -91,7 +91,17 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(Tags.Blocks.ORES)
                 .addTag(Tags.Blocks.STONES)
                 .addTag(Tags.Blocks.SANDS)
-                .addTag(Tags.Blocks.NATURAL_LOGS);
+                .addTag(Tags.Blocks.NATURAL_LOGS)
+                .addTag(Tags.Blocks.GRAVELS)
+                .addTag(Tags.Blocks.COBBLESTONES)
+                .addTag(BlockTags.GRASS_BLOCKS)
+                .addTag(Tags.Blocks.SANDSTONE_BLOCKS)
+                .addTag(BlockTags.SUBSTRATE_OVERWORLD)
+                .addTag(BlockTags.TERRACOTTA)
+                .addTag(BlockTags.BASE_STONE_NETHER);
+
+        tag(ModTags.Blocks.GEM_DRAINED)
+                .add(ModBlocks.getRK(ModBlocks.DRAINED_STONE));
 
         tag(ModTags.Blocks.CHROMA_DEPOSITS)
                 .add(ModBlocks.getRK(ModBlocks.WHITE_CHROMA_DEPOSIT))

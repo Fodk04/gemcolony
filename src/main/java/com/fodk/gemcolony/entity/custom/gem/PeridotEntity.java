@@ -39,16 +39,16 @@ import java.util.List;
 
 public class PeridotEntity extends GemEntity {
 
-    private static final Color darkSkin = new Color(0, 100, 0);
-    private static final Color lightSkin = new Color(0, 180,0);
-    private static final Color darkOutfit = new Color(20, 80, 0);
-    private static final Color lightOutfit = new Color(40, 160, 0);
-    private static final Color darkInsignia = new Color(75, 100, 0);
-    private static final Color lightInsignia = new Color(150, 200, 0);
-    private static final Color darkHair = new Color(150, 160, 0);
-    private static final Color lightHair = new Color(220, 240, 0);
-    private static final Color darkVisor = new Color(180, 180, 0);
-    private static final Color lightVisor = new Color(230, 230, 0);
+    private static final Color darkSkin = new Color(88, 172, 57);
+    private static final Color lightSkin = new Color(90, 255, 117);
+    private static final Color darkOutfit = new Color(20, 42, 39);
+    private static final Color lightOutfit = new Color(22, 156, 87);
+    private static final Color darkInsignia = new Color(165, 150, 79);
+    private static final Color lightInsignia = new Color(251, 233, 147);
+    private static final Color darkHair = new Color(60, 91, 3);
+    private static final Color lightHair = new Color(234, 254, 159);
+    private static final Color darkVisor = new Color(198, 198, 106);
+    private static final Color lightVisor = new Color(255, 255, 168);
 
     private static final EntityDataAccessor<Boolean> ANALYSING = SynchedEntityData.defineId(PeridotEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> ANALYSIS_TICKS = SynchedEntityData.defineId(PeridotEntity.class, EntityDataSerializers.INT);
@@ -160,11 +160,6 @@ public class PeridotEntity extends GemEntity {
     }
 
     @Override
-    public float getReformCenter() {
-        return 1.15f;
-    }
-
-    @Override
     public int getMaxOutfits() {
         return 3;
     }
@@ -182,6 +177,11 @@ public class PeridotEntity extends GemEntity {
     @Override
     public int getMaxVisors() {
         return 2;
+    }
+
+    @Override
+    protected boolean alwaysHasVisor() {
+        return true;
     }
 
     @Override

@@ -10,35 +10,24 @@ public class GemConditionsRegistry {
             new GemConditions(
                     "peridot",
                     0.8f,
-                    0.8f,
+                    1.2f,
                     0.3f,
                     0.3f,
                     1.0f
             );
 
-    public static final GemConditions RUBY =
+    public static final GemConditions QUARTZ =
             new GemConditions(
-                    "ruby",
-                    0.5f,
-                    0.5f,
+                    "quartz",
+                    1f,
+                    1f,
                     0.3f,
                     0.3f,
                     1.0f
-            );
-
-    public static final GemConditions SAPPHIRE =
-            new GemConditions(
-                    "sapphire",
-                    0.8f,
-                    0.8f,
-                    0.3f,
-                    0.3f,
-                    0.5f
             );
 
     public static final List<GemConditions> ALL = List.of(
             PERIDOT,
-            RUBY,
-            SAPPHIRE
+            QUARTZ
     );
 }

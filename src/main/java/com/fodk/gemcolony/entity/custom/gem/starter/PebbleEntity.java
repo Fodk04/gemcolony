@@ -26,19 +26,11 @@ public class PebbleEntity extends StarterGemEntity{
 
     @Override
     public List<Assembly> getConstructableAssemblies() {
-        return List.of(Assemblies.WORKSTATION, Assemblies.INJECTOR);
+        return List.of(Assemblies.WORKSTATION);
     }
 
     public PebbleEntity(EntityType<? extends StarterGemEntity> entityType, Level level) {
         super(entityType, level);
-    }
-
-    public static AttributeSupplier.Builder createAttributes(){
-        return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 4D)
-                .add(Attributes.MOVEMENT_SPEED, 0.2D)
-                .add(Attributes.ATTACK_DAMAGE, 0.0D)
-                .add(Attributes.ATTACK_SPEED, 0.0D);
     }
 
     @Override
@@ -55,11 +47,6 @@ public class PebbleEntity extends StarterGemEntity{
     @Override
     public Item getGemItem() {
         return ModItems.PEBBLE_GEM.get();
-    }
-
-    @Override
-    public float getReformCenter() {
-        return 0;
     }
 
     @Override

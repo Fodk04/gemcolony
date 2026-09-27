@@ -12,10 +12,10 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class GemFaceLayer<T extends GeoAnimatable, R extends GemRenderState> extends GemTintedTextureLayer<T, R> {
+public class GemEyesLayer<T extends GeoAnimatable, R extends GemRenderState> extends GemTintedTextureLayer<T, R> {
     private final String gemName;
 
-    public GemFaceLayer(GeoRenderer<T, Void, R> renderer, String gemName, int order) {
+    public GemEyesLayer(GeoRenderer<T, Void, R> renderer, String gemName, int order) {
         super(renderer,order);
         this.gemName = gemName;
     }

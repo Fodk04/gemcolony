@@ -14,6 +14,7 @@ public class ModTags {
 
     public static class Blocks{
         public static final TagKey<Block> GEM_DRAINABLES = createTag("gem_drainables");
+        public static final TagKey<Block> GEM_DRAINED = createTag("gem_drained");
         public static final TagKey<Block> CHROMA_DEPOSITS = createTag("chroma_deposits");
         public static final TagKey<Block> CHROMA_PLANTABLE = createTag("chroma_plantable");
 

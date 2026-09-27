@@ -56,7 +56,27 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.WHITE_ESSENCE_BUCKET);
 
                         output.accept(ModItems.PEBBLE_GEM);
+                        output.accept(ModItems.SHALE_GEM);
+                        output.accept(ModItems.MICA_GEM);
+                        output.accept(ModItems.NACRE_GEM);
                         output.accept(ModItems.PERIDOT_GEM);
+
+                        output.accept(ModItems.MILKY_QUARTZ_GEM);
+                        output.accept(ModItems.PHANTOM_QUARTZ_GEM);
+                        output.accept(ModItems.FLINT_QUARTZ_GEM);
+                        output.accept(ModItems.ONYX_QUARTZ_GEM);
+                        output.accept(ModItems.SMOKY_QUARTZ_GEM);
+                        output.accept(ModItems.CARNELIAN_QUARTZ_GEM);
+                        output.accept(ModItems.CHERT_QUARTZ_GEM);
+                        output.accept(ModItems.LEMON_QUARTZ_GEM);
+                        output.accept(ModItems.PRASEOLITE_QUARTZ_GEM);
+                        output.accept(ModItems.AVENTURINE_QUARTZ_GEM);
+                        output.accept(ModItems.ANGEL_AURA_QUARTZ_GEM);
+                        output.accept(ModItems.DUMORTIERITE_QUARTZ_GEM);
+                        output.accept(ModItems.BLUE_QUARTZ_GEM);
+                        output.accept(ModItems.AMETHYST_QUARTZ_GEM);
+                        output.accept(ModItems.CHERRY_QUARTZ_GEM);
+                        output.accept(ModItems.ROSE_QUARTZ_GEM);
                     })
                     .build());
 

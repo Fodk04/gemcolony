@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 
@@ -55,9 +56,9 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
 
     private final EssenceResourceHandler essenceHandler;
 
-    private static final int SLOTS_PER_ROW = 3;
-    private static final int SLOT_SPACING = 4;
-    private static final int ROW_SPACING = 4;
+    public static final int SLOTS_PER_ROW = 3;
+    public static final int SLOT_SPACING = 4;
+    public static final int ROW_SPACING = 4;
     private static final int MIN_Y = -40;
 
     private InjectionOrientation injectionOrientation = InjectionOrientation.EAST_WEST;
@@ -465,7 +466,6 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
         if (level.getBlockEntity(injectionPos) instanceof GemSeedBlockEntity gemSeed) {
             gemSeed.setChroma(chroma);
             gemSeed.determineGem();
-            gemSeed.initializeDrain();
         }
 
         setChanged();
@@ -554,7 +554,7 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
 
         int centerIndex = SLOTS_PER_ROW / 2;
 
-        for (int y = worldPosition.getY(); y >= MIN_Y; y -= ROW_SPACING) {
+        for (int y = worldPosition.below(5).getY(); y >= MIN_Y; y -= ROW_SPACING) {
 
             for (int slot = 0; slot < SLOTS_PER_ROW; slot++) {
                 int offset = (slot - centerIndex) * SLOT_SPACING;
@@ -570,7 +570,7 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
 
                 BlockPos pos = new BlockPos(x, y, z);
 
-                if (level.getBlockState(pos).is(ModTags.Blocks.GEM_DRAINABLES)) {
+                if (level.getBlockState(pos).is(ModTags.Blocks.GEM_DRAINABLES) && level.getBlockState(pos.below()).isSolid()) {
                     return pos;
                 }
             }

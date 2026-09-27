@@ -17,11 +17,12 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
     public GemRenderer(EntityRendererProvider.Context context, GeoModel<T> model, String name) {
         super(context, model);
         withRenderLayer(new GemBodyLayer<>(this, name, 1));
-        withRenderLayer(new GemFaceLayer<>(this, name, 2));
-        withRenderLayer(new GemOutfitLayer<>(this, name, 3));
-        withRenderLayer(new GemInsigniaLayer<>(this, name, 4));
-        withRenderLayer(new GemHairLayer<>(this, name, 5));
-        withRenderLayer(new GemVisorLayer<>(this, name, 6));
+        withRenderLayer(new GemEyesLayer<>(this, name, 2));
+        withRenderLayer(new GemEyesWhitesLayer<>(this, name, 3));
+        withRenderLayer(new GemOutfitLayer<>(this, name, 4));
+        withRenderLayer(new GemInsigniaLayer<>(this, name, 5));
+        withRenderLayer(new GemHairLayer<>(this, name, 6));
+        withRenderLayer(new GemVisorLayer<>(this, name, 7));
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.fodk.gemcolony.datagen;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.custom.*;
-import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.item.ModArmorMaterials;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.util.ColorUtil;
@@ -20,7 +19,6 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
@@ -98,7 +96,28 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.CHROMA_SEED.get(), ModelTemplates.FLAT_ITEM);
 
         itemModels.generateFlatItem(ModItems.PEBBLE_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SHALE_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.MICA_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.NACRE_GEM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.PERIDOT_GEM.get(), ModelTemplates.FLAT_ITEM);
+
+        itemModels.generateFlatItem(ModItems.MILKY_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.PHANTOM_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.FLINT_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.ONYX_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.SMOKY_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.CARNELIAN_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.CHERT_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.LEMON_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.PRASEOLITE_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.AVENTURINE_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.ANGEL_AURA_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.DUMORTIERITE_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.BLUE_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.AMETHYST_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.CHERRY_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.ROSE_QUARTZ_GEM.get(), ModelTemplates.FLAT_ITEM);
+
         itemModels.generateFlatItem(ModItems.RUBY_GEM.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.SAPPHIRE_GEM.get(), ModelTemplates.FLAT_ITEM);
 

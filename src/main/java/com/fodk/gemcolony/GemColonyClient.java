@@ -5,9 +5,7 @@ import com.fodk.gemcolony.construction.Constructor;
 import com.fodk.gemcolony.construction.ConstructorManager;
 import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.client.render.GemRenderPipelines;
-import com.fodk.gemcolony.entity.client.renderer.ConstructorRenderer;
-import com.fodk.gemcolony.entity.client.renderer.PebbleRenderer;
-import com.fodk.gemcolony.entity.client.renderer.PeridotRenderer;
+import com.fodk.gemcolony.entity.client.renderer.*;
 import com.fodk.gemcolony.entity.client.screen.GemScreen;
 import com.fodk.gemcolony.entity.custom.gem.starter.StarterGemEntity;
 import com.fodk.gemcolony.fluid.ModFluidTypes;
@@ -73,7 +71,11 @@ public class GemColonyClient {
     @SubscribeEvent // on the mod event bus only on the physical client
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.PERIDOT.get(), context -> new PeridotRenderer(context));
-        event.registerEntityRenderer(ModEntities.PEBBLE.get(), context -> new PebbleRenderer(context));
+        event.registerEntityRenderer(ModEntities.QUARTZ.get(), context -> new QuartzRenderer(context));
+        event.registerEntityRenderer(ModEntities.PEBBLE.get(), context -> new StarterGemRenderer(context));
+        event.registerEntityRenderer(ModEntities.SHALE.get(), context -> new StarterGemRenderer(context));
+        event.registerEntityRenderer(ModEntities.MICA.get(), context -> new StarterGemRenderer(context));
+        event.registerEntityRenderer(ModEntities.NACRE.get(), context -> new StarterGemRenderer(context));
         event.registerEntityRenderer(ModEntities.GEM_RISING_ITEM.get(), ItemEntityRenderer::new);
     }
 

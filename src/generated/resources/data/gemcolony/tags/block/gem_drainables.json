@@ -3,6 +3,13 @@
     "#c:ores",
     "#c:stones",
     "#c:sands",
-    "#c:natural_logs"
+    "#c:natural_logs",
+    "#c:gravels",
+    "#c:cobblestones",
+    "#minecraft:grass_blocks",
+    "#c:sandstone/blocks",
+    "#minecraft:substrate_overworld",
+    "#minecraft:terracotta",
+    "#minecraft:base_stone_nether"
   ]
 }

@@ -3,6 +3,7 @@ package com.fodk.gemcolony.item;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.entity.ModEntities;
+import com.fodk.gemcolony.entity.custom.gem.variant.QuartzVariants;
 import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.food.ModFoods;
 import com.fodk.gemcolony.item.custom.ChromaItem;
@@ -117,9 +118,49 @@ public class ModItems {
     //GEMS
     public static final DeferredItem<Item> PEBBLE_GEM = ITEMS.registerItem("pebble_gem",
             properties -> new GemItem(properties, "Pebble", ModEntities.PEBBLE.get()));
+    public static final DeferredItem<Item> SHALE_GEM = ITEMS.registerItem("shale_gem",
+            properties -> new GemItem(properties, "Shale", ModEntities.SHALE.get()));
+    public static final DeferredItem<Item> MICA_GEM = ITEMS.registerItem("mica_gem",
+            properties -> new GemItem(properties, "Mica", ModEntities.MICA.get()));
+    public static final DeferredItem<Item> NACRE_GEM = ITEMS.registerItem("nacre_gem",
+            properties -> new GemItem(properties, "Nacre", ModEntities.NACRE.get()));
 
     public static final DeferredItem<Item> PERIDOT_GEM = ITEMS.registerItem("peridot_gem",
             properties -> new GemItem(properties, "Peridot", ModEntities.PERIDOT.get()));
+
+    //QUARTZES
+    public static final DeferredItem<Item> MILKY_QUARTZ_GEM = ITEMS.registerItem("milky_quartz_gem",
+            properties -> new GemItem(properties, "Milky Quartz", ModEntities.QUARTZ.get(), 0));
+    public static final DeferredItem<Item> PHANTOM_QUARTZ_GEM = ITEMS.registerItem("phantom_quartz_gem",
+            properties -> new GemItem(properties, "Phantom Quartz", ModEntities.QUARTZ.get(), 1));
+    public static final DeferredItem<Item> FLINT_QUARTZ_GEM = ITEMS.registerItem("flint_quartz_gem",
+            properties -> new GemItem(properties, "Flint Quartz", ModEntities.QUARTZ.get(), 2));
+    public static final DeferredItem<Item> ONYX_QUARTZ_GEM = ITEMS.registerItem("onyx_quartz_gem",
+            properties -> new GemItem(properties, "Onyx Quartz", ModEntities.QUARTZ.get(), 3));
+    public static final DeferredItem<Item> SMOKY_QUARTZ_GEM = ITEMS.registerItem("smoky_quartz_gem",
+            properties -> new GemItem(properties, "Smoky Quartz", ModEntities.QUARTZ.get(), 4));
+    public static final DeferredItem<Item> CARNELIAN_QUARTZ_GEM = ITEMS.registerItem("carnelian_quartz_gem",
+            properties -> new GemItem(properties, "Carnelian Quartz", ModEntities.QUARTZ.get(), 5));
+    public static final DeferredItem<Item> CHERT_QUARTZ_GEM = ITEMS.registerItem("chert_quartz_gem",
+            properties -> new GemItem(properties, "Chert Quartz", ModEntities.QUARTZ.get(), 6));
+    public static final DeferredItem<Item> LEMON_QUARTZ_GEM = ITEMS.registerItem("lemon_quartz_gem",
+            properties -> new GemItem(properties, "Lemon Quartz", ModEntities.QUARTZ.get(), 7));
+    public static final DeferredItem<Item> PRASEOLITE_QUARTZ_GEM = ITEMS.registerItem("praseolite_quartz_gem",
+            properties -> new GemItem(properties, "Praseolite Quartz", ModEntities.QUARTZ.get(), 8));
+    public static final DeferredItem<Item> AVENTURINE_QUARTZ_GEM = ITEMS.registerItem("aventurine_quartz_gem",
+            properties -> new GemItem(properties, "Aventurine Quartz", ModEntities.QUARTZ.get(), 9));
+    public static final DeferredItem<Item> ANGEL_AURA_QUARTZ_GEM = ITEMS.registerItem("angel_aura_quartz_gem",
+            properties -> new GemItem(properties, "Angel Aura Quartz", ModEntities.QUARTZ.get(), 10));
+    public static final DeferredItem<Item> DUMORTIERITE_QUARTZ_GEM = ITEMS.registerItem("dumortierite_quartz_gem",
+            properties -> new GemItem(properties, "Dumortierite Quartz", ModEntities.QUARTZ.get(), 11));
+    public static final DeferredItem<Item> BLUE_QUARTZ_GEM = ITEMS.registerItem("blue_quartz_gem",
+            properties -> new GemItem(properties, "Blue Quartz", ModEntities.QUARTZ.get(), 12));
+    public static final DeferredItem<Item> AMETHYST_QUARTZ_GEM = ITEMS.registerItem("amethyst_quartz_gem",
+            properties -> new GemItem(properties, "Amethyst Quartz", ModEntities.QUARTZ.get(), 13));
+    public static final DeferredItem<Item> CHERRY_QUARTZ_GEM = ITEMS.registerItem("cherry_quartz_gem",
+            properties -> new GemItem(properties, "Cherry Quartz", ModEntities.QUARTZ.get(), 14));
+    public static final DeferredItem<Item> ROSE_QUARTZ_GEM = ITEMS.registerItem("rose_quartz_gem",
+            properties -> new GemItem(properties, "Rose Quartz", ModEntities.QUARTZ.get(), 15));
 
     public static final DeferredItem<Item> RUBY_GEM = ITEMS.registerItem("ruby_gem",
             properties -> new GemItem(properties, "Ruby", ModEntities.PERIDOT.get()));

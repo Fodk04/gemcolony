@@ -46,6 +46,10 @@ public class KindergartnerUI implements GemAbilityUI {
         screen.addAbilityWidget(gemButton);
     }
 
+    private static final long CYCLE_TIME_MS = 1000;
+    private long lastCycleTime = System.currentTimeMillis();
+    private int currentCycleIndex = 0;
+
     @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         if (peridot == null || gemButton == null) {
@@ -127,11 +131,25 @@ public class KindergartnerUI implements GemAbilityUI {
             graphics.pose().translate(screen.getLeftPos(), screen.getTopPos());
             graphics.pose().scale(0.45f, 0.45f);
 
+            long currentTime = System.currentTimeMillis();
+
+            if (currentTime - lastCycleTime >= CYCLE_TIME_MS) {
+                currentCycleIndex++;
+                if(currentCycleIndex >= 100){
+                    currentCycleIndex = 0;
+                }
+                lastCycleTime = currentTime;
+            }
+
             for (int i = 0; i < peridot.getAnalysisResults().size(); i++) {
                 GemAnalysisResult result = peridot.getAnalysisResults().get(i);
                 GemDefinition currentGemDefinition = GemDefinitions.get(result.gemId());
 
-                graphics.item(new ItemStack(currentGemDefinition.item()), resultX + 64, resultY + i * 16 + 106);
+                if(currentGemDefinition.items().size() == 1){
+                    graphics.item(new ItemStack(currentGemDefinition.items().get(0)), resultX + 64, resultY + i * 16 + 106);
+                }else{
+                    graphics.item(new ItemStack(currentGemDefinition.items().get(currentCycleIndex % currentGemDefinition.items().size())), resultX + 64, resultY + i * 16 + 106);
+                }
             }
             graphics.pose().popMatrix();
         }
