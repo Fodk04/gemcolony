@@ -39,7 +39,7 @@ public class TankBlock extends Block implements ConstructedMultiblock {
                 .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
                 .setValue(PART, TankPart.CENTER)
                 .setValue(HALF, TankHalf.TANK_BOTTOM)
-                .setValue(CONSTRUCTION_STAGE, 0));
+                .setValue(CONSTRUCTION_STAGE, 1));
     }
 
     @Override

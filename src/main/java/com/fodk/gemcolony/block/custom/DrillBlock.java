@@ -39,7 +39,7 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
 
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(PART, DrillPart.CENTER)
-                .setValue(CONSTRUCTION_STAGE, 0));
+                .setValue(CONSTRUCTION_STAGE, 1));
     }
 
     @Override

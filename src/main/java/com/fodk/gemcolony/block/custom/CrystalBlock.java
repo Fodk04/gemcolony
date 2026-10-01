@@ -37,7 +37,7 @@ public class CrystalBlock extends Block implements ConstructedMultiblock {
         this.registerDefaultState(
                 this.stateDefinition.any()
                         .setValue(PART, CrystalPart.CENTER)
-                        .setValue(CONSTRUCTION_STAGE, 0));
+                        .setValue(CONSTRUCTION_STAGE, 1));
     }
 
     @Override

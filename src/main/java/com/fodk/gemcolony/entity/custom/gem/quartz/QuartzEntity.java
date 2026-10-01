@@ -21,7 +21,7 @@ public class QuartzEntity extends QuartzFamilyEntity {
     public static AttributeSupplier.Builder createAttributes(){
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 80D)
-                .add(Attributes.MOVEMENT_SPEED, 0.4D)
+                .add(Attributes.MOVEMENT_SPEED, 0.28D)
                 .add(Attributes.ATTACK_DAMAGE, 6.0D)
                 .add(Attributes.ATTACK_SPEED, 1.4D);
     }
@@ -69,6 +69,13 @@ public class QuartzEntity extends QuartzFamilyEntity {
     @Override
     protected int getInventorySize() {
         return 6;
+    }
+
+    //1 MIN
+    @Override
+    protected int getReformTime(){
+        float modifier = entityData.get(QUALITY) == 0 ? 0.9f : entityData.get(QUALITY) == 1 ? 1f : 1.1f;
+        return (int)(1200f * modifier);
     }
 
     @Override

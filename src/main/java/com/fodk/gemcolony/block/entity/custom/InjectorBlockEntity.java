@@ -15,6 +15,9 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -56,7 +59,7 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
 
     private final EssenceResourceHandler essenceHandler;
 
-    public static final int SLOTS_PER_ROW = 3;
+    public static final int SLOTS_PER_ROW = 5;
     public static final int SLOT_SPACING = 4;
     public static final int ROW_SPACING = 4;
     private static final int MIN_Y = -40;
@@ -138,6 +141,13 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
             return InteractionResult.SUCCESS;
         }
 
+        // Normal Injector interaction
+        if (!isComplete()) {
+            player.sendSystemMessage(Component.literal("Injector is incomplete."));
+
+            return InteractionResult.SUCCESS;
+        }
+
         // Essence bucket/bo'ole interaction hehehe get it
         if (isEssenceBucket(stack) || isEssenceBottle(stack)) {
             int amount = isEssenceBucket(stack) ? 1000 : 250;
@@ -184,13 +194,6 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
             syncEssence();
 
             level.playSound(null, worldPosition, amount == 1000 ? SoundEvents.BUCKET_EMPTY : SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-
-            return InteractionResult.SUCCESS;
-        }
-
-        // Normal Injector interaction
-        if (isComplete()) {
-            player.sendSystemMessage(Component.literal("Injector is incomplete."));
 
             return InteractionResult.SUCCESS;
         }
@@ -316,6 +319,11 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
     }
 
     @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
     public void onDataPacket(Connection net, ValueInput input) {
         super.onDataPacket(net, input);
 
@@ -416,6 +424,10 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
 
     public void handleRedstoneSignal(boolean powered) {
         if (level == null || level.isClientSide()) {
+            return;
+        }
+
+        if(!isComplete()){
             return;
         }
 

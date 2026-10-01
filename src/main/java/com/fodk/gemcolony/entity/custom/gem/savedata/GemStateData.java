@@ -1,0 +1,114 @@
+package com.fodk.gemcolony.entity.custom.gem.savedata;
+
+import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
+import java.util.Optional;
+
+public record GemStateData(
+        int reformProgress,
+        int quality,
+        boolean emerged,
+        boolean cracked,
+        String ownerUUID,
+        int behavior,
+        BlockPos workPos,
+        List<ItemStack> inventory,
+        List<GemAbility> abilities,
+        String shapeshift
+) {
+
+    public static final Codec<GemStateData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("reformProgress").forGetter(GemStateData::reformProgress),
+            Codec.INT.fieldOf("quality").forGetter(GemStateData::quality),
+            Codec.BOOL.fieldOf("emerged").forGetter(GemStateData::emerged),
+            Codec.BOOL.fieldOf("cracked").forGetter(GemStateData::cracked),
+            Codec.STRING.fieldOf("owner").forGetter(GemStateData::ownerUUID),
+            Codec.INT.fieldOf("behavior").forGetter(GemStateData::behavior),
+            BlockPos.CODEC.optionalFieldOf("workPos").forGetter(data -> Optional.ofNullable(data.workPos())),
+            ItemStack.OPTIONAL_CODEC.listOf().fieldOf("inventory").forGetter(GemStateData::inventory),
+            GemAbility.CODEC.listOf().fieldOf("abilities").forGetter(GemStateData::abilities),
+            Codec.STRING.fieldOf("shapeshift").forGetter(GemStateData::shapeshift)
+    ).apply(instance, (
+            reformProgress,
+            quality,
+            emerged,
+            cracked,
+            ownerUUID,
+            behavior,
+            workPos,
+            inventory,
+            abilities,
+            shapeshift
+    ) -> new GemStateData(
+            reformProgress,
+            quality,
+            emerged,
+            cracked,
+            ownerUUID,
+            behavior,
+            workPos.orElse(null),
+            inventory,
+            abilities,
+            shapeshift
+    )));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, GemStateData> STREAM_CODEC =
+            StreamCodec.composite(
+                    ByteBufCodecs.VAR_INT,
+                    GemStateData::reformProgress,
+
+                    ByteBufCodecs.VAR_INT,
+                    GemStateData::quality,
+
+                    ByteBufCodecs.BOOL,
+                    GemStateData::emerged,
+
+                    ByteBufCodecs.BOOL,
+                    GemStateData::cracked,
+
+                    ByteBufCodecs.STRING_UTF8,
+                    GemStateData::ownerUUID,
+
+                    ByteBufCodecs.VAR_INT,
+                    GemStateData::behavior,
+
+                    ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                    GemStateData::inventory,
+
+                    ByteBufCodecs.STRING_UTF8.map(GemAbility::valueOf, GemAbility::name).apply(ByteBufCodecs.list()),
+                    GemStateData::abilities,
+
+                    ByteBufCodecs.STRING_UTF8,
+                    GemStateData::shapeshift,
+
+                    (reformProgress,
+                     quality,
+                     emerged,
+                     cracked,
+                     ownerUUID,
+                     behavior,
+                     inventory,
+                     abilities,
+                     shapeshift
+                    ) -> new GemStateData(
+                            reformProgress,
+                            quality,
+                            emerged,
+                            cracked,
+                            ownerUUID,
+                            behavior,
+                            null,
+                            inventory,
+                            abilities,
+                            shapeshift
+                    )
+            );
+}

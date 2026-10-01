@@ -1,5 +1,7 @@
 package com.fodk.gemcolony;
 
+import com.fodk.gemcolony.block.entity.ModBlockEntities;
+import com.fodk.gemcolony.block.entity.renderer.InjectorRenderer;
 import com.fodk.gemcolony.block.entity.screen.InjectorScreen;
 import com.fodk.gemcolony.construction.Constructor;
 import com.fodk.gemcolony.construction.ConstructorManager;
@@ -76,7 +78,11 @@ public class GemColonyClient {
         event.registerEntityRenderer(ModEntities.SHALE.get(), context -> new StarterGemRenderer(context));
         event.registerEntityRenderer(ModEntities.MICA.get(), context -> new StarterGemRenderer(context));
         event.registerEntityRenderer(ModEntities.NACRE.get(), context -> new StarterGemRenderer(context));
+
         event.registerEntityRenderer(ModEntities.GEM_RISING_ITEM.get(), ItemEntityRenderer::new);
+        event.registerEntityRenderer(ModEntities.BUBBLE.get(), BubbleRenderer::new);
+
+        event.registerBlockEntityRenderer(ModBlockEntities.INJECTOR_BE.get(), InjectorRenderer::new);
     }
 
     @SubscribeEvent

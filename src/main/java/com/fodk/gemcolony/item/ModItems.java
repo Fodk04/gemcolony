@@ -3,7 +3,6 @@ package com.fodk.gemcolony.item;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.entity.ModEntities;
-import com.fodk.gemcolony.entity.custom.gem.variant.QuartzVariants;
 import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.food.ModFoods;
 import com.fodk.gemcolony.item.custom.ChromaItem;
@@ -143,8 +142,8 @@ public class ModItems {
             properties -> new GemItem(properties, "Carnelian Quartz", ModEntities.QUARTZ.get(), 5));
     public static final DeferredItem<Item> CHERT_QUARTZ_GEM = ITEMS.registerItem("chert_quartz_gem",
             properties -> new GemItem(properties, "Chert Quartz", ModEntities.QUARTZ.get(), 6));
-    public static final DeferredItem<Item> LEMON_QUARTZ_GEM = ITEMS.registerItem("lemon_quartz_gem",
-            properties -> new GemItem(properties, "Lemon Quartz", ModEntities.QUARTZ.get(), 7));
+    public static final DeferredItem<Item> CITRINE = ITEMS.registerItem("citrine_quartz_gem",
+            properties -> new GemItem(properties, "Citrine Quartz", ModEntities.QUARTZ.get(), 7));
     public static final DeferredItem<Item> PRASEOLITE_QUARTZ_GEM = ITEMS.registerItem("praseolite_quartz_gem",
             properties -> new GemItem(properties, "Praseolite Quartz", ModEntities.QUARTZ.get(), 8));
     public static final DeferredItem<Item> AVENTURINE_QUARTZ_GEM = ITEMS.registerItem("aventurine_quartz_gem",

@@ -1,6 +1,6 @@
 package com.fodk.gemcolony.data;
 
-import com.fodk.gemcolony.entity.custom.GemConditions;
+import com.fodk.gemcolony.entity.custom.gem.base.GemConditions;
 
 import java.util.List;
 

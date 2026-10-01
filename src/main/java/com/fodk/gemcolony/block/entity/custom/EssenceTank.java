@@ -5,7 +5,7 @@ import com.fodk.gemcolony.util.ColorUtil;
 
 public class EssenceTank {
 
-    private static final int CAPACITY = 2_500;
+    private static final int CAPACITY = 7_500;
 
     private final EssenceType type;
     private int amount = 0;

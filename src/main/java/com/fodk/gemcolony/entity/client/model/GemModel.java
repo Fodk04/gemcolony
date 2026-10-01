@@ -1,8 +1,7 @@
 package com.fodk.gemcolony.entity.client.model;
 
 import com.fodk.gemcolony.GemColony;
-import com.fodk.gemcolony.entity.custom.GemEntity;
-import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.base.GeoRenderState;
 import net.minecraft.resources.Identifier;

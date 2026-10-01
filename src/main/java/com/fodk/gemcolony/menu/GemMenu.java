@@ -2,7 +2,7 @@ package com.fodk.gemcolony.menu;
 
 import com.fodk.gemcolony.networking.AppearanceChange;
 import com.fodk.gemcolony.entity.client.screen.GemSlot;
-import com.fodk.gemcolony.entity.custom.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.networking.packet.SetAppearancePacketC2S;
 import com.fodk.gemcolony.networking.packet.SetNicknamePacketC2S;
 import net.minecraft.network.RegistryFriendlyByteBuf;

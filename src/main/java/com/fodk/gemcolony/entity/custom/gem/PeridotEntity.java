@@ -2,9 +2,9 @@ package com.fodk.gemcolony.entity.custom.gem;
 
 import com.fodk.gemcolony.data.GemAnalysisResult;
 import com.fodk.gemcolony.data.GemConditionsRegistry;
-import com.fodk.gemcolony.entity.custom.GemConditions;
-import com.fodk.gemcolony.entity.custom.GemEntity;
-import com.fodk.gemcolony.entity.custom.savedata.PeridotAnalysisData;
+import com.fodk.gemcolony.entity.custom.gem.base.GemConditions;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.savedata.PeridotAnalysisData;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
 import com.fodk.gemcolony.entity.custom.gem.ai.PeridotAnalysisGoal;
 import com.fodk.gemcolony.item.ModItems;
@@ -121,7 +121,7 @@ public class PeridotEntity extends GemEntity {
     public static AttributeSupplier.Builder createAttributes(){
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 40D)
-                .add(Attributes.MOVEMENT_SPEED, 0.4D)
+                .add(Attributes.MOVEMENT_SPEED, 0.32D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.ATTACK_SPEED, 1.4D);
     }
@@ -138,7 +138,7 @@ public class PeridotEntity extends GemEntity {
     protected void registerGoals() {
         super.registerGoals();
 
-        this.goalSelector.addGoal(1, new PeridotAnalysisGoal(this, 0.6));
+        this.goalSelector.addGoal(1, new PeridotAnalysisGoal(this, 1));
     }
 
     @Override
@@ -188,6 +188,13 @@ public class PeridotEntity extends GemEntity {
     protected int getInventorySize() {
         float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
         return (int) (30 * qualityModifier);
+    }
+
+    //3 MIN
+    @Override
+    protected int getReformTime(){
+        float modifier = entityData.get(QUALITY) == 0 ? 0.9f : entityData.get(QUALITY) == 1 ? 1f : 1.1f;
+        return (int)(3600f * modifier);
     }
 
     @Override

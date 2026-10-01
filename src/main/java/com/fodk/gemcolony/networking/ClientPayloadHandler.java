@@ -3,8 +3,9 @@ package com.fodk.gemcolony.networking;
 import com.fodk.gemcolony.block.custom.ConstructedMultiblock;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.construction.*;
+import com.fodk.gemcolony.data.ModAttachments;
 import com.fodk.gemcolony.data.ModDataComponents;
-import com.fodk.gemcolony.entity.custom.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
 import com.fodk.gemcolony.entity.custom.gem.starter.StarterGemEntity;
 import com.fodk.gemcolony.item.custom.GemItem;
@@ -16,7 +17,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -33,8 +33,17 @@ public class ClientPayloadHandler {
             if(itemInHand.getItem() instanceof GemItem gemItem){
                 if(!player.getCooldowns().isOnCooldown(itemInHand)){
                     player.getCooldowns().addCooldown(itemInHand, 50);
-                    boolean bubbled = itemInHand.has(ModDataComponents.BUBBLED) ? itemInHand.get(ModDataComponents.BUBBLED) : false;
-                    itemInHand.set(ModDataComponents.BUBBLED, !bubbled);
+                    boolean bubbled = itemInHand.getOrDefault(ModDataComponents.BUBBLED, false);
+
+                    if (bubbled) {
+                        itemInHand.remove(ModDataComponents.BUBBLED);
+                        itemInHand.remove(ModDataComponents.BUBBLE_COLOR);
+                    } else {
+                        int bubbleColor = player.getData(ModAttachments.BUBBLE_COLOR);
+
+                        itemInHand.set(ModDataComponents.BUBBLED, true);
+                        itemInHand.set(ModDataComponents.BUBBLE_COLOR, bubbleColor);
+                    }
                 }
             }
         });

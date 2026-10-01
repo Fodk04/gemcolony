@@ -1,9 +1,7 @@
 package com.fodk.gemcolony.entity.custom.gem.starter;
 
 import com.fodk.gemcolony.construction.Assembly;
-import com.fodk.gemcolony.construction.Blueprint;
-import com.fodk.gemcolony.data.FacetRegistryData;
-import com.fodk.gemcolony.entity.custom.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -33,6 +31,12 @@ public abstract class StarterGemEntity extends GemEntity {
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.ATTACK_DAMAGE, 0.0D)
                 .add(Attributes.ATTACK_SPEED, 0.0D);
+    }
+
+    //40 SEC
+    @Override
+    protected int getReformTime(){
+        return 800;
     }
 
     @Override

@@ -2,13 +2,13 @@ package com.fodk.gemcolony.item.custom;
 
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.entity.ModEntities;
-import com.fodk.gemcolony.entity.custom.GemEntity;
-import com.fodk.gemcolony.entity.custom.GemRisingItemEntity;
-import com.fodk.gemcolony.entity.custom.savedata.GemSaveData;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.base.GemRisingItemEntity;
+import com.fodk.gemcolony.entity.custom.gem.bubble.BubbleEntity;
+import com.fodk.gemcolony.entity.custom.gem.savedata.GemSaveData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -46,16 +46,32 @@ public class GemItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         if(!level.isClientSide()){
-            BlockPos pos = context.getClickedPos().above(1);
-            GemEntity gem = entityType.create((ServerLevel) level, null, pos, EntitySpawnReason.NATURAL, false, false);
-            gem.initializeGem(variant);
-            level.addFreshEntity(gem);
+            if(!context.getItemInHand().has(ModDataComponents.GEM_SAVE_DATA)){
+                BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
+                GemEntity gem = entityType.create((ServerLevel) level, null, pos, EntitySpawnReason.NATURAL, false, false);
+                gem.initializeGem(variant);
+                level.addFreshEntity(gem);
 
-            if(!context.getPlayer().isCreative()){
-                context.getItemInHand().shrink(1);
+                if(!context.getPlayer().isCreative()){
+                    context.getItemInHand().shrink(1);
+                }
+                return InteractionResult.SUCCESS;
+            }
+            if(context.getItemInHand().has(ModDataComponents.BUBBLED)){
+                BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
+                BubbleEntity bubble = ModEntities.BUBBLE.get().create((ServerLevel) level, null, pos, EntitySpawnReason.NATURAL, false, false);
+                ItemStack gem = context.getItemInHand().copy();
+                gem.remove(ModDataComponents.BUBBLED);
+                bubble.setItem(gem);
+                level.addFreshEntity(bubble);
+
+                if(!context.getPlayer().isCreative()){
+                    context.getItemInHand().shrink(1);
+                }
+                return InteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -96,6 +112,10 @@ public class GemItem extends Item {
                 }
             }
         }
+        //TO FIX
+        //GEM DUPPING !!
+        //HERE
+
         /*if (!itemStack.has(ModDataComponents.GEM_SAVE_DATA)) return;
 
         UUID itemId = itemStack.get(ModDataComponents.GEM_ITEM_ID);
@@ -144,5 +164,23 @@ public class GemItem extends Item {
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return slotChanged || oldStack.getItem() != newStack.getItem();
+    }
+
+    @Override
+    public boolean onDroppedByPlayer(ItemStack item, Player player) {
+        return super.onDroppedByPlayer(item, player);
+    }
+
+    public void tickInBubble(Level level, ItemStack itemStack){
+        if(!level.isClientSide() && itemStack.has(ModDataComponents.GEM_SAVE_DATA)){
+            long gameTime = level.getGameTime();
+            if(gameTime % periodicCheck == 0){
+                int reformTime = itemStack.has(ModDataComponents.REFORM_TIME) ? itemStack.get(ModDataComponents.REFORM_TIME) : 0;
+                if(reformTime > 0){
+                    reformTime -= periodicCheck;
+                    itemStack.set(ModDataComponents.REFORM_TIME, reformTime);
+                }
+            }
+        }
     }
 }

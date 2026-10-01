@@ -68,7 +68,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SMOKY_QUARTZ_GEM);
                         output.accept(ModItems.CARNELIAN_QUARTZ_GEM);
                         output.accept(ModItems.CHERT_QUARTZ_GEM);
-                        output.accept(ModItems.LEMON_QUARTZ_GEM);
+                        output.accept(ModItems.CITRINE);
                         output.accept(ModItems.PRASEOLITE_QUARTZ_GEM);
                         output.accept(ModItems.AVENTURINE_QUARTZ_GEM);
                         output.accept(ModItems.ANGEL_AURA_QUARTZ_GEM);

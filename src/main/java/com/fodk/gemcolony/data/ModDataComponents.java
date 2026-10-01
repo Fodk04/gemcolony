@@ -1,7 +1,7 @@
 package com.fodk.gemcolony.data;
 
 import com.fodk.gemcolony.GemColony;
-import com.fodk.gemcolony.entity.custom.savedata.GemSaveData;
+import com.fodk.gemcolony.entity.custom.gem.savedata.GemSaveData;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
@@ -27,6 +27,8 @@ public class ModDataComponents {
             builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> BUBBLED = register("bubbled",
             builder -> builder.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> BUBBLE_COLOR = register("bubble_color",
+            builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
     public static final DataComponentType<UUID> GEM_ITEM_ID = DataComponentType.<UUID>builder()
             .persistent(UUIDUtil.CODEC).networkSynchronized(UUIDUtil.STREAM_CODEC).build();
 

@@ -1,6 +1,6 @@
 package com.fodk.gemcolony.entity.client.screen;
 
-import com.fodk.gemcolony.entity.custom.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

@@ -4,7 +4,7 @@ import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
 import com.fodk.gemcolony.entity.client.screen.ability.ConstructorUI;
 import com.fodk.gemcolony.entity.client.screen.ability.KindergartnerUI;
-import com.fodk.gemcolony.entity.custom.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
 import com.fodk.gemcolony.entity.client.screen.ability.GemAbilityUI;
 import com.fodk.gemcolony.entity.client.screen.ability.GenericAbilityUI;
@@ -838,7 +838,7 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
         graphics.text(
                 this.font,
                 Component.literal(selectedAbility.getName())
-                        .withStyle(ChatFormatting.BOLD),
+                        .withStyle(ChatFormatting.BOLD).withoutShadow(),
                 (int) ((this.leftPos + 105) / 0.75f),
                 (int) ((this.topPos + 30) / 0.75f),
                 textColor,
@@ -848,7 +848,7 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
         graphics.pose().popMatrix();
 
         // Description
-        Component description = Component.literal(selectedAbility.getDescription());
+        Component description = Component.literal(selectedAbility.getDescription()).withoutShadow();
 
         float scale = 0.55f;
 

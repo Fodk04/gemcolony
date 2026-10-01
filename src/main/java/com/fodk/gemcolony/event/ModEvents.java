@@ -1,21 +1,19 @@
 package com.fodk.gemcolony.event;
 
 import com.fodk.gemcolony.GemColony;
-import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
-import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
-import com.fodk.gemcolony.entity.custom.GemRisingItemEntity;
-import com.fodk.gemcolony.fluid.ModFluids;
+import com.fodk.gemcolony.entity.custom.gem.base.GemRisingItemEntity;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.item.custom.EssenceType;
 import com.fodk.gemcolony.item.custom.GemItem;
 import com.fodk.gemcolony.networking.ClientPayloadHandler;
 import com.fodk.gemcolony.networking.packet.*;
 import com.fodk.gemcolony.potion.ModPotions;
+import com.fodk.gemcolony.util.GemCombatUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -26,8 +24,6 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -36,13 +32,12 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 @EventBusSubscriber(modid = GemColony.MOD_ID)
 public class ModEvents {
@@ -76,7 +71,11 @@ public class ModEvents {
         if (!(event.getEntity() instanceof ItemEntity itemEntity))
             return;
 
-        if(itemEntity instanceof GemRisingItemEntity)
+        if (itemEntity.getItem().getItem() instanceof GemItem) {
+            itemEntity.setUnlimitedLifetime();
+        }
+
+        if (itemEntity instanceof GemRisingItemEntity)
             return;
 
         if (itemEntity.level().isClientSide())
@@ -84,7 +83,6 @@ public class ModEvents {
 
         if (!(itemEntity.getItem().getItem() instanceof GemItem gemItem))
             return;
-
 
         gemItem.tickReformation(itemEntity);
     }
@@ -168,5 +166,27 @@ public class ModEvents {
                 ModBlockEntities.INJECTOR_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEssenceHandler()
         );
+    }
+
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent.Post event) {
+        if (!(event.getSource().getEntity() instanceof Player player)) {
+            return;
+        }
+
+        GemCombatUtil.alertOwnerGems(player, event.getEntity());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerDamaged(LivingDamageEvent.Post event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) {
+            return;
+        }
+
+        GemCombatUtil.alertOwnerGems(player, attacker);
     }
 }

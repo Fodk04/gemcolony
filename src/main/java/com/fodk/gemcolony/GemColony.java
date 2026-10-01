@@ -2,19 +2,24 @@ package com.fodk.gemcolony;
 
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
-import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
+import com.fodk.gemcolony.command.BubbleColorCommand;
 import com.fodk.gemcolony.creativemodtab.ModCreativeModeTabs;
+import com.fodk.gemcolony.data.ModAttachments;
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.effect.ModEffects;
 import com.fodk.gemcolony.entity.ModEntities;
-import com.fodk.gemcolony.entity.custom.savedata.ModEntityDataSerializers;
+import com.fodk.gemcolony.entity.custom.gem.savedata.ModEntityDataSerializers;
 import com.fodk.gemcolony.fluid.ModFluidTypes;
 import com.fodk.gemcolony.fluid.ModFluids;
+import com.fodk.gemcolony.item.BubbleColorTintSource;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.menu.ModMenus;
 import com.fodk.gemcolony.potion.ModPotions;
 import com.fodk.gemcolony.sound.ModSounds;
 import com.fodk.gemcolony.villager.ModVillagers;
+import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -42,6 +47,7 @@ public class GemColony {
     public GemColony(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for mod loading
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::registerItemTintSources);
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
@@ -57,6 +63,7 @@ public class GemColony {
 
         ModCreativeModeTabs.register(modEventBus);
         ModDataComponents.register(modEventBus);
+        ModAttachments.register(modEventBus);
         ModEntityDataSerializers.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
@@ -81,5 +88,14 @@ public class GemColony {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
 
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        BubbleColorCommand.register(event);
+    }
+
+    public void registerItemTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
+        event.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "bubble_color"), BubbleColorTintSource.MAP_CODEC);
     }
 }
