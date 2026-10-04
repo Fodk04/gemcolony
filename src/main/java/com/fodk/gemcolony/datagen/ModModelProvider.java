@@ -113,7 +113,7 @@ public class ModModelProvider extends ModelProvider {
         generateGemItem(ModItems.SMOKY_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.CARNELIAN_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.CHERT_QUARTZ_GEM.get(), itemModels);
-        generateGemItem(ModItems.CITRINE.get(), itemModels);
+        generateGemItem(ModItems.CITRINE_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.PRASEOLITE_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.AVENTURINE_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.ANGEL_AURA_QUARTZ_GEM.get(), itemModels);
@@ -122,6 +122,23 @@ public class ModModelProvider extends ModelProvider {
         generateGemItem(ModItems.AMETHYST_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.CHERRY_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.ROSE_QUARTZ_GEM.get(), itemModels);
+
+        generateGemItem(ModItems.WHITE_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.SPECTER_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.SILVER_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.ACKEE_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.CHOCOLATE_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.CHERRY_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.APRICOT_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.YELLOW_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.OLIVE_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.FOREST_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.SKY_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.BLUE_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.OCEAN_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.PLUM_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.FUCHSIA_PEARL_GEM.get(), itemModels);
+        generateGemItem(ModItems.PINK_PEARL_GEM.get(), itemModels);
 
         generateGemItem(ModItems.RUBY_GEM.get(), itemModels);
         generateGemItem(ModItems.SAPPHIRE_GEM.get(), itemModels);

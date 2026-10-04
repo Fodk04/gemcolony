@@ -122,7 +122,7 @@ public class PeridotEntity extends GemEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 40D)
                 .add(Attributes.MOVEMENT_SPEED, 0.32D)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.ATTACK_DAMAGE, 0.0D)
                 .add(Attributes.ATTACK_SPEED, 1.4D);
     }
 
@@ -187,7 +187,7 @@ public class PeridotEntity extends GemEntity {
     @Override
     protected int getInventorySize() {
         float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
-        return (int) (30 * qualityModifier);
+        return (int) (14 * qualityModifier);
     }
 
     //3 MIN

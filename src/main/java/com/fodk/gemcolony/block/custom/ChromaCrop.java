@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.CommonHooks;
@@ -35,6 +36,11 @@ public class ChromaCrop extends NetherWartBlock {
                 .lightLevel(state -> 3)
                 .noOcclusion()
                 .pushReaction(PushReaction.DESTROY));
+    }
+
+    @Override
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+        return false;
     }
 
     @Override
@@ -62,13 +68,13 @@ public class ChromaCrop extends NetherWartBlock {
         int age = (Integer)state.getValue(AGE);
         boolean grown = false;
 
-        if (age < MAX_AGE && CommonHooks.canCropGrow(level, pos, state, random.nextInt(10) == 0)) {
+        if (age < MAX_AGE && CommonHooks.canCropGrow(level, pos, state, random.nextInt(2) == 0)) {
             state = (BlockState)state.setValue(AGE, age + 1);
             level.setBlock(pos, state, 2);
             CommonHooks.fireCropGrowPost(level, pos, state);
             grown = true;
         }
-        if(age == MAX_AGE && CommonHooks.canCropGrow(level, pos, state, random.nextInt(10) == 0)){
+        if(age == MAX_AGE){
             Block growthBlock = level.getBlockState(pos.below(1)).getBlock();
             level.setBlockAndUpdate(pos, BlockToColoredChroma.depositFromGrowthBlock(growthBlock).get().defaultBlockState());
             grown = true;

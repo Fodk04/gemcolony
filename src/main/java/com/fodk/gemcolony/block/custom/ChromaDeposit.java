@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -112,5 +113,10 @@ public class ChromaDeposit extends FaceAttachedHorizontalDirectionalBlock implem
         }
         Direction facing = state.getValue(FACING);
         return (facing == Direction.NORTH || facing == Direction.SOUTH) ? WALL_NS_SHAPE : WALL_EW_SHAPE;
+    }
+
+    @Override
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+        return false;
     }
 }

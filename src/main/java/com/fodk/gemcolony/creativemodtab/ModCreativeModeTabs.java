@@ -68,7 +68,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SMOKY_QUARTZ_GEM);
                         output.accept(ModItems.CARNELIAN_QUARTZ_GEM);
                         output.accept(ModItems.CHERT_QUARTZ_GEM);
-                        output.accept(ModItems.CITRINE);
+                        output.accept(ModItems.CITRINE_QUARTZ_GEM);
                         output.accept(ModItems.PRASEOLITE_QUARTZ_GEM);
                         output.accept(ModItems.AVENTURINE_QUARTZ_GEM);
                         output.accept(ModItems.ANGEL_AURA_QUARTZ_GEM);
@@ -77,6 +77,23 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.AMETHYST_QUARTZ_GEM);
                         output.accept(ModItems.CHERRY_QUARTZ_GEM);
                         output.accept(ModItems.ROSE_QUARTZ_GEM);
+
+                        output.accept(ModItems.WHITE_PEARL_GEM);
+                        output.accept(ModItems.SPECTER_PEARL_GEM);
+                        output.accept(ModItems.SILVER_PEARL_GEM);
+                        output.accept(ModItems.ACKEE_PEARL_GEM);
+                        output.accept(ModItems.CHOCOLATE_PEARL_GEM);
+                        output.accept(ModItems.CHERRY_PEARL_GEM);
+                        output.accept(ModItems.APRICOT_PEARL_GEM);
+                        output.accept(ModItems.YELLOW_PEARL_GEM);
+                        output.accept(ModItems.OLIVE_PEARL_GEM);
+                        output.accept(ModItems.FOREST_PEARL_GEM);
+                        output.accept(ModItems.SKY_PEARL_GEM);
+                        output.accept(ModItems.BLUE_PEARL_GEM);
+                        output.accept(ModItems.OCEAN_PEARL_GEM);
+                        output.accept(ModItems.PLUM_PEARL_GEM);
+                        output.accept(ModItems.FUCHSIA_PEARL_GEM);
+                        output.accept(ModItems.PINK_PEARL_GEM);
                     })
                     .build());
 

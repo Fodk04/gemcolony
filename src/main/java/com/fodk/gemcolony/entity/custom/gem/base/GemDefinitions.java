@@ -16,7 +16,7 @@ public class GemDefinitions {
             ModItems.SMOKY_QUARTZ_GEM.get(),
             ModItems.CARNELIAN_QUARTZ_GEM.get(),
             ModItems.CHERT_QUARTZ_GEM.get(),
-            ModItems.CITRINE.get(),
+            ModItems.CITRINE_QUARTZ_GEM.get(),
             ModItems.PRASEOLITE_QUARTZ_GEM.get(),
             ModItems.AVENTURINE_QUARTZ_GEM.get(),
             ModItems.ANGEL_AURA_QUARTZ_GEM.get(),

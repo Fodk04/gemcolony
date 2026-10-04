@@ -142,7 +142,7 @@ public class ModItems {
             properties -> new GemItem(properties, "Carnelian Quartz", ModEntities.QUARTZ.get(), 5));
     public static final DeferredItem<Item> CHERT_QUARTZ_GEM = ITEMS.registerItem("chert_quartz_gem",
             properties -> new GemItem(properties, "Chert Quartz", ModEntities.QUARTZ.get(), 6));
-    public static final DeferredItem<Item> CITRINE = ITEMS.registerItem("citrine_quartz_gem",
+    public static final DeferredItem<Item> CITRINE_QUARTZ_GEM = ITEMS.registerItem("citrine_quartz_gem",
             properties -> new GemItem(properties, "Citrine Quartz", ModEntities.QUARTZ.get(), 7));
     public static final DeferredItem<Item> PRASEOLITE_QUARTZ_GEM = ITEMS.registerItem("praseolite_quartz_gem",
             properties -> new GemItem(properties, "Praseolite Quartz", ModEntities.QUARTZ.get(), 8));
@@ -160,6 +160,40 @@ public class ModItems {
             properties -> new GemItem(properties, "Cherry Quartz", ModEntities.QUARTZ.get(), 14));
     public static final DeferredItem<Item> ROSE_QUARTZ_GEM = ITEMS.registerItem("rose_quartz_gem",
             properties -> new GemItem(properties, "Rose Quartz", ModEntities.QUARTZ.get(), 15));
+
+    //PEARLS
+    public static final DeferredItem<Item> WHITE_PEARL_GEM = ITEMS.registerItem("white_pearl_gem",
+            properties -> new GemItem(properties, "White Pearl", ModEntities.PEARL.get(), 0));
+    public static final DeferredItem<Item> SPECTER_PEARL_GEM = ITEMS.registerItem("specter_pearl_gem",
+            properties -> new GemItem(properties, "Specter Pearl", ModEntities.PEARL.get(), 1));
+    public static final DeferredItem<Item> SILVER_PEARL_GEM = ITEMS.registerItem("silver_pearl_gem",
+            properties -> new GemItem(properties, "Silver Pearl", ModEntities.PEARL.get(), 2));
+    public static final DeferredItem<Item> ACKEE_PEARL_GEM = ITEMS.registerItem("ackee_pearl_gem",
+            properties -> new GemItem(properties, "Ackee Pearl", ModEntities.PEARL.get(), 3));
+    public static final DeferredItem<Item> CHOCOLATE_PEARL_GEM = ITEMS.registerItem("chocolate_pearl_gem",
+            properties -> new GemItem(properties, "Chocolate Pearl", ModEntities.PEARL.get(), 4));
+    public static final DeferredItem<Item> CHERRY_PEARL_GEM = ITEMS.registerItem("cherry_pearl_gem",
+            properties -> new GemItem(properties, "Cherry Pearl", ModEntities.PEARL.get(), 5));
+    public static final DeferredItem<Item> APRICOT_PEARL_GEM = ITEMS.registerItem("apricot_pearl_gem",
+            properties -> new GemItem(properties, "Apricot Pearl", ModEntities.PEARL.get(), 6));
+    public static final DeferredItem<Item> YELLOW_PEARL_GEM = ITEMS.registerItem("yellow_pearl_gem",
+            properties -> new GemItem(properties, "Yellow Pearl", ModEntities.PEARL.get(), 7));
+    public static final DeferredItem<Item> OLIVE_PEARL_GEM = ITEMS.registerItem("olive_pearl_gem",
+            properties -> new GemItem(properties, "Olive Pearl", ModEntities.PEARL.get(), 8));
+    public static final DeferredItem<Item> FOREST_PEARL_GEM = ITEMS.registerItem("forest_pearl_gem",
+            properties -> new GemItem(properties, "Forest Pearl", ModEntities.PEARL.get(), 9));
+    public static final DeferredItem<Item> SKY_PEARL_GEM = ITEMS.registerItem("sky_pearl_gem",
+            properties -> new GemItem(properties, "Sky Pearl", ModEntities.PEARL.get(), 10));
+    public static final DeferredItem<Item> BLUE_PEARL_GEM = ITEMS.registerItem("blue_pearl_gem",
+            properties -> new GemItem(properties, "Blue Pearl", ModEntities.PEARL.get(), 11));
+    public static final DeferredItem<Item> OCEAN_PEARL_GEM = ITEMS.registerItem("ocean_pearl_gem",
+            properties -> new GemItem(properties, "Ocean Pearl", ModEntities.PEARL.get(), 12));
+    public static final DeferredItem<Item> PLUM_PEARL_GEM = ITEMS.registerItem("plum_pearl_gem",
+            properties -> new GemItem(properties, "Plum Pearl", ModEntities.PEARL.get(), 13));
+    public static final DeferredItem<Item> FUCHSIA_PEARL_GEM = ITEMS.registerItem("fuchsia_pearl_gem",
+            properties -> new GemItem(properties, "Fuchsia Pearl", ModEntities.PEARL.get(), 14));
+    public static final DeferredItem<Item> PINK_PEARL_GEM = ITEMS.registerItem("pink_pearl_gem",
+            properties -> new GemItem(properties, "Pink Pearl", ModEntities.PEARL.get(), 15));
 
     public static final DeferredItem<Item> RUBY_GEM = ITEMS.registerItem("ruby_gem",
             properties -> new GemItem(properties, "Ruby", ModEntities.PERIDOT.get()));

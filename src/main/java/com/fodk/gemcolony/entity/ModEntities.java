@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.entity;
 
 import com.fodk.gemcolony.GemColony;
+import com.fodk.gemcolony.entity.custom.gem.PearlEntity;
 import com.fodk.gemcolony.entity.custom.gem.base.GemRisingItemEntity;
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
 import com.fodk.gemcolony.entity.custom.gem.bubble.BubbleEntity;
@@ -64,6 +65,13 @@ public class ModEntities {
             .fireImmune()
             .immuneTo(BlockTags.STRAY_IMMUNE_TO)
             .build(getRK("quartz")));
+
+    public static final Supplier<EntityType<PearlEntity>> PEARL = ENTITY_TYPES.register("pearl",
+            () -> EntityType.Builder.of(PearlEntity::new, MobCategory.CREATURE)
+                    .sized(0.8f,1.7f)
+                    .fireImmune()
+                    .immuneTo(BlockTags.STRAY_IMMUNE_TO)
+                    .build(getRK("pearl")));
 
     public static final Supplier<EntityType<GemRisingItemEntity>> GEM_RISING_ITEM = ENTITY_TYPES.register("gem_rising_item",
             () -> EntityType.Builder.of(GemRisingItemEntity::new, MobCategory.MISC)

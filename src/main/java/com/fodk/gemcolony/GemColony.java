@@ -17,6 +17,9 @@ import com.fodk.gemcolony.menu.ModMenus;
 import com.fodk.gemcolony.potion.ModPotions;
 import com.fodk.gemcolony.sound.ModSounds;
 import com.fodk.gemcolony.villager.ModVillagers;
+import com.fodk.gemcolony.worldgen.blockstateprovider.ModStateProviders;
+import com.fodk.gemcolony.worldgen.placement.ModPlacementModifiers;
+import com.fodk.gemcolony.worldgen.structure.ModStructurePoolElementTypes;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -65,6 +68,9 @@ public class GemColony {
         ModDataComponents.register(modEventBus);
         ModAttachments.register(modEventBus);
         ModEntityDataSerializers.register(modEventBus);
+        ModStateProviders.register(modEventBus);
+        ModPlacementModifiers.register(modEventBus);
+        ModStructurePoolElementTypes.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
 

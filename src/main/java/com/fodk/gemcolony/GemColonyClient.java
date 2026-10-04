@@ -6,6 +6,10 @@ import com.fodk.gemcolony.block.entity.screen.InjectorScreen;
 import com.fodk.gemcolony.construction.Constructor;
 import com.fodk.gemcolony.construction.ConstructorManager;
 import com.fodk.gemcolony.entity.ModEntities;
+import com.fodk.gemcolony.entity.client.model.PearlModel;
+import com.fodk.gemcolony.entity.client.model.PeridotModel;
+import com.fodk.gemcolony.entity.client.model.QuartzModel;
+import com.fodk.gemcolony.entity.client.model.StarterGemModel;
 import com.fodk.gemcolony.entity.client.render.GemRenderPipelines;
 import com.fodk.gemcolony.entity.client.renderer.*;
 import com.fodk.gemcolony.entity.client.screen.GemScreen;
@@ -72,12 +76,13 @@ public class GemColonyClient {
 
     @SubscribeEvent // on the mod event bus only on the physical client
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(ModEntities.PERIDOT.get(), context -> new PeridotRenderer(context));
-        event.registerEntityRenderer(ModEntities.QUARTZ.get(), context -> new QuartzRenderer(context));
-        event.registerEntityRenderer(ModEntities.PEBBLE.get(), context -> new StarterGemRenderer(context));
-        event.registerEntityRenderer(ModEntities.SHALE.get(), context -> new StarterGemRenderer(context));
-        event.registerEntityRenderer(ModEntities.MICA.get(), context -> new StarterGemRenderer(context));
-        event.registerEntityRenderer(ModEntities.NACRE.get(), context -> new StarterGemRenderer(context));
+        event.registerEntityRenderer(ModEntities.PERIDOT.get(), context -> new GemRenderer(context, new PeridotModel(), "peridot") {});
+        event.registerEntityRenderer(ModEntities.QUARTZ.get(), context -> new GemRenderer(context, new QuartzModel(), "quartz") {});
+        event.registerEntityRenderer(ModEntities.PEARL.get(), context -> new GemRenderer(context, new PearlModel(), "pearl") {});
+        event.registerEntityRenderer(ModEntities.PEBBLE.get(), context -> new GemRenderer(context, new StarterGemModel(), "pebble") {});
+        event.registerEntityRenderer(ModEntities.SHALE.get(), context -> new GemRenderer(context, new StarterGemModel(), "pebble") {});
+        event.registerEntityRenderer(ModEntities.MICA.get(), context -> new GemRenderer(context, new StarterGemModel(), "pebble") {});
+        event.registerEntityRenderer(ModEntities.NACRE.get(), context -> new GemRenderer(context, new StarterGemModel(), "pebble") {});
 
         event.registerEntityRenderer(ModEntities.GEM_RISING_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(ModEntities.BUBBLE.get(), BubbleRenderer::new);
