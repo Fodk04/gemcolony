@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 public class GemAttackGoal extends MeleeAttackGoal {
 
     private final GemEntity gem;
+    private int pathCheckCooldown;
 
     public GemAttackGoal(GemEntity gem, double speed) {
         super(gem, speed, true);
@@ -21,17 +22,12 @@ public class GemAttackGoal extends MeleeAttackGoal {
             return false;
         }
 
-        LivingEntity target = gem.getAggroTarget();
+        LivingEntity target = gem.getTarget();
 
         if (target == null || !target.isAlive()) {
             return false;
         }
 
-        if (!GemCombatUtil.canReachTarget(gem, target)) {
-            return false;
-        }
-
-        gem.setTarget(target);
         return super.canUse();
     }
 
@@ -41,17 +37,24 @@ public class GemAttackGoal extends MeleeAttackGoal {
             return false;
         }
 
-        LivingEntity target = gem.getAggroTarget();
+        LivingEntity target = gem.getTarget();
 
         if (target == null || !target.isAlive()) {
             return false;
         }
 
-        if (!GemCombatUtil.canReachTarget(gem, target)) {
+        if (!GemCombatUtil.canAttack(gem, target)) {
             return false;
         }
 
-        gem.setTarget(target);
+        if (pathCheckCooldown-- <= 0) {
+            pathCheckCooldown = 10;
+
+            if (!GemCombatUtil.canReachTarget(gem, target)) {
+                return false;
+            }
+        }
+
         return super.canContinueToUse();
     }
 
@@ -63,7 +66,7 @@ public class GemAttackGoal extends MeleeAttackGoal {
 
     @Override
     public void tick() {
-        LivingEntity target = gem.getAggroTarget();
+        LivingEntity target = gem.getTarget();
 
         if (target == null || !target.isAlive()) {
             gem.getNavigation().stop();

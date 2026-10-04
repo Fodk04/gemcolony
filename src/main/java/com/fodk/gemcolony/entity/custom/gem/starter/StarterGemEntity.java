@@ -6,8 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 
@@ -35,7 +37,7 @@ public abstract class StarterGemEntity extends GemEntity {
 
     //40 SEC
     @Override
-    protected int getReformTime(){
+    public int getReformTime(){
         return 800;
     }
 
@@ -44,5 +46,16 @@ public abstract class StarterGemEntity extends GemEntity {
         String name = getGemTypeName();
         this.entityData.set(NAME, name);
         setCustomName(Component.literal(name));
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class,
+                16.0F,
+                1.0D,
+                1.2D,
+                entity -> entity == this.getTarget()));
     }
 }

@@ -22,8 +22,10 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -138,7 +140,12 @@ public class PeridotEntity extends GemEntity {
     protected void registerGoals() {
         super.registerGoals();
 
-        this.goalSelector.addGoal(1, new PeridotAnalysisGoal(this, 1));
+        this.goalSelector.addGoal(3, new PeridotAnalysisGoal(this, 2));
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class,
+                16.0F,
+                1.0D,
+                1.2D,
+                entity -> entity == this.getTarget()));
     }
 
     @Override
@@ -192,7 +199,7 @@ public class PeridotEntity extends GemEntity {
 
     //3 MIN
     @Override
-    protected int getReformTime(){
+    public int getReformTime(){
         float modifier = entityData.get(QUALITY) == 0 ? 0.9f : entityData.get(QUALITY) == 1 ? 1f : 1.1f;
         return (int)(3600f * modifier);
     }

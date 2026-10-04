@@ -26,7 +26,7 @@ public class GemRisingItemEntity extends ItemEntity {
         GemItem gemItem = (GemItem) item.getItem();
         int reformProgress = item.has(ModDataComponents.REFORM_PROGRESS) ? item.get(ModDataComponents.REFORM_PROGRESS) : 0;
         if(!level.isClientSide()){
-            if(GemEntity.getReformProgressPercentage(reformProgress) >= 0.55f){
+            if(GemEntity.getReformProgressPercentage(reformProgress) >= GemEntity.getPercentageToReform()){
                 GemEntity gem = gemItem.entityType.create((ServerLevel) level, null, blockPosition(), EntitySpawnReason.SPAWN_ITEM_USE, false, false);
                 gem.applySaveData(item.get(ModDataComponents.GEM_SAVE_DATA));
                 gem.initializeGemFromReform(reformProgress);

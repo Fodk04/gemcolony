@@ -58,7 +58,7 @@ import java.util.*;
 import java.util.List;
 
 
-public abstract class GemEntity extends Monster implements GeoEntity, Container, MenuProvider {
+public abstract class GemEntity extends Monster implements GeoEntity, Container, MenuProvider, NeutralMob {
 
     public static final EntityDataAccessor<String> NAME = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<String> NICKNAME = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.STRING);
@@ -88,9 +88,10 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     @Nullable
     private BlockPos workPos;
     private final Set<GemAbility> abilities = new HashSet<>();
+
+    private long persistentAngerEndTime = NeutralMob.NO_ANGER_END_TIME;
     @Nullable
-    private LivingEntity aggroTarget;
-    private static final double MAX_AGGRO_DISTANCE = 64.0D;
+    private EntityReference<LivingEntity> persistentAngerTarget;
 
     public GemEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -383,12 +384,16 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     protected void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
         output.store("GemData", GemSaveData.CODEC, this.toSaveData());
+        System.out.println("SAVING GEM TARGET: " + getPersistentAngerTarget());
+        addPersistentAngerSaveData(output);
     }
 
     @Override
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
         input.read("GemData", GemSaveData.CODEC).ifPresent(this::applySaveData);
+        readPersistentAngerSaveData(level(), input);
+        System.out.println("LOADING GEM TARGET: " + getPersistentAngerTarget());
     }
 
     public abstract Item getGemItem();
@@ -426,7 +431,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
                     1.0F - (0.4F * random.nextFloat())
             );
 
-            spawnAtLocation((ServerLevel) this.level(), gem).setUnlimitedLifetime();
+            spawnAtLocation((ServerLevel) this.level(), gem);
         }
         super.die(source);
     }
@@ -435,14 +440,15 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return 1f - (float)reformProgress/(float)maxReformProgress;
     }
 
+    public static float getPercentageToReform(){
+        return 0.55f;
+    }
+
     public float getReformCenter(){
         return (float) (getHitbox().getYsize() / 2f);
     }
 
-    protected int getReformTime(){
-        float modifier = entityData.get(QUALITY) == 0 ? 0.9f : entityData.get(QUALITY) == 1 ? 1f : 1.1f;
-        return (int)(10000f * modifier);
-    }
+    public abstract int getReformTime();
 
     @Override
     public void tick() {
@@ -456,7 +462,17 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             setDeltaMovement(new Vec3(0, -0.01, 0));
         }
 
-        tickAggro();
+        if (!level().isClientSide() && getTarget() == null && getPersistentAngerTarget() != null) {
+            LivingEntity target = EntityReference.getLivingEntity(getPersistentAngerTarget(), level());
+
+            if (target != null) {
+                setTarget(target);
+            }
+        }
+
+        if (!level().isClientSide() && level() instanceof ServerLevel serverLevel) {
+            updatePersistentAnger(serverLevel, true);
+        }
     }
 
     @Override
@@ -816,45 +832,15 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.workPos = null;
     }
 
-    @Nullable
-    public LivingEntity getAggroTarget() {
-        return aggroTarget;
-    }
-
-    public void setAggroTarget(@Nullable LivingEntity target) {
-        this.aggroTarget = target;
-    }
-
-    public void clearAggroTarget() {
-        this.aggroTarget = null;
-    }
-
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(3, new GemTargetGoal(this, 16.0D));
-        this.goalSelector.addGoal(5, new GemFollowGoal(this, 1, 7.0F, 5.5F));
-        this.goalSelector.addGoal(6, new GemStayGoal(this));
-        this.goalSelector.addGoal(7, new GemWanderGoal(this, 1.0D));
-    }
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.targetSelector.addGoal(2, new GemTargetGoal(this, 16.0D));
 
-    public void tickAggro() {
-        LivingEntity target = getAggroTarget();
+        this.goalSelector.addGoal(4, new GemStayGoal(this));
 
-        if (target == null) {
-            return;
-        }
-
-        if (!target.isAlive() || !GemCombatUtil.canAttack(this, target)) {
-            clearAggroTarget();
-            return;
-        }
-
-        double distance = distanceToSqr(target);
-
-        if (distance > MAX_AGGRO_DISTANCE * MAX_AGGRO_DISTANCE) {
-            clearAggroTarget();
-        }
+        this.goalSelector.addGoal(9, new GemFollowGoal(this, 1.1D, 7.0F, 5.5F));
+        this.goalSelector.addGoal(10, new GemWanderGoal(this, 1.0D));
     }
 
     @Override
@@ -862,7 +848,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         boolean hurt = super.hurtServer(level, source, amount);
 
         if (hurt && source.getEntity() instanceof LivingEntity attacker) {
-            GemCombatUtil.setAggroTarget(this, attacker);
+            GemCombatUtil.setTargetIfAllowed(this, attacker);
 
             UUID ownerUUID = getOwnerUUID();
 
@@ -872,6 +858,31 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         }
 
         return hurt;
+    }
+
+    @Override
+    public long getPersistentAngerEndTime() {
+        return persistentAngerEndTime;
+    }
+
+    @Override
+    public void setPersistentAngerEndTime(long time) {
+        this.persistentAngerEndTime = time;
+    }
+
+    @Override
+    public @Nullable EntityReference<LivingEntity> getPersistentAngerTarget() {
+        return persistentAngerTarget;
+    }
+
+    @Override
+    public void setPersistentAngerTarget(@Nullable EntityReference<LivingEntity> target) {
+        this.persistentAngerTarget = target;
+    }
+
+    @Override
+    public void startPersistentAngerTimer() {
+        setTimeToRemainAngry(20L * 60L * 5L);
     }
 
     //TO DO

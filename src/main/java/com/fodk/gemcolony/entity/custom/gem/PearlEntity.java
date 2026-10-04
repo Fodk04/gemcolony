@@ -1,12 +1,15 @@
 package com.fodk.gemcolony.entity.custom.gem;
 
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
+import com.fodk.gemcolony.entity.custom.gem.ai.PeridotAnalysisGoal;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.variant.PearlVariants;
 import com.fodk.gemcolony.util.GemVariantUtil;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -75,7 +78,7 @@ public class PearlEntity extends GemEntity {
 
     //2 MIN
     @Override
-    protected int getReformTime(){
+    public int getReformTime(){
         float modifier = entityData.get(QUALITY) == 0 ? 0.9f : entityData.get(QUALITY) == 1 ? 1f : 1.1f;
         return (int)(2400f * modifier);
     }
@@ -99,5 +102,16 @@ public class PearlEntity extends GemEntity {
     @Override
     public int getVariantFromChroma(int chromaIndex) {
         return GemVariantUtil.getVariantFromChromaColor(PearlVariants.class, chromaIndex);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class,
+                16.0F,
+                1.0D,
+                1.2D,
+                entity -> entity == this.getTarget()));
     }
 }

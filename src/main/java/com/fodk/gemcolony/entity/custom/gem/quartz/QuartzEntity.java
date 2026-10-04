@@ -74,7 +74,7 @@ public class QuartzEntity extends QuartzFamilyEntity {
 
     //1 MIN
     @Override
-    protected int getReformTime(){
+    public int getReformTime(){
         float modifier = entityData.get(QUALITY) == 0 ? 0.9f : entityData.get(QUALITY) == 1 ? 1f : 1.1f;
         return (int)(1200f * modifier);
     }

@@ -2,6 +2,7 @@ package com.fodk.gemcolony.event;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.base.GemRisingItemEntity;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.item.custom.EssenceType;
@@ -14,7 +15,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -32,6 +35,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -188,5 +192,18 @@ public class ModEvents {
         }
 
         GemCombatUtil.alertOwnerGems(player, attacker);
+    }
+
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        if (!(event.getEntity() instanceof Monster monster)) {
+            return;
+        }
+
+        if (monster instanceof GemEntity) {
+            return;
+        }
+
+        monster.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(monster, GemEntity.class, true));
     }
 }

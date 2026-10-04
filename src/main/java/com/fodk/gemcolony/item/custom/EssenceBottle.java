@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.item.custom;
 
 import com.fodk.gemcolony.data.ModDataComponents;
+import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -12,6 +13,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,9 +45,6 @@ public class EssenceBottle extends Item {
 
         if(!level.isClientSide()){
             if(checkGemStarterSpawnable(level, positionClicked)){
-                player.sendSystemMessage(Component.literal(essenceType.getGem() + " has spawned at: "
-                        + positionClicked.getX() + "," + positionClicked.getY() + "," + positionClicked.getZ()));
-
                 //consume and return bottle / durability
                 context.getItemInHand().consume(1, player);
                 if(context.getItemInHand().isEmpty()){
@@ -54,8 +55,21 @@ public class EssenceBottle extends Item {
                 //particles
                 spawnGemStarterParticles(level, positionClicked);
                 //add a gem_item with the corresponding data to player
-                ItemStack gemItem = new ItemStack(ModItems.PEBBLE_GEM.get());
-                player.getInventory().add(gemItem);
+                EntityType<? extends GemEntity> entityType = essenceType.getEntityType();
+                GemEntity gem = entityType.create((ServerLevel) level, null, positionClicked, EntitySpawnReason.NATURAL, false, false);
+                gem.initializeGem(-1);
+                ItemStack gemItem = new ItemStack(gem.getGemItem());
+                gemItem.set(ModDataComponents.GEM_SAVE_DATA, gem.toSaveData());
+                gemItem.set(ModDataComponents.REFORM_TIME, gem.getReformTime());
+                gemItem.set(ModDataComponents.REFORM_PROGRESS, GemEntity.maxReformProgress);
+
+                gem.discard();
+
+                level.addFreshEntity(new ItemEntity(level,
+                        positionClicked.getX() + 0.5,
+                        positionClicked.getY() + 1.0,
+                        positionClicked.getZ() + 0.5,
+                        gemItem));
             }
         }
 

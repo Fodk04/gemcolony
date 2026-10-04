@@ -45,11 +45,18 @@ public final class GemCombatUtil {
         return true;
     }
 
-    public static void setAggroTarget(GemEntity gem, LivingEntity target) {
-        if (canAttack(gem, target)) {
-            gem.setAggroTarget(target);
-            System.out.println("Gem aggro target: " + target.getName().getString());
+    public static void setTargetIfAllowed(GemEntity gem, LivingEntity target) {
+        if (!canAttack(gem, target)) {
+            return;
         }
+
+        LivingEntity currentTarget = gem.getTarget();
+
+        if (currentTarget != null && currentTarget.isAlive()) {
+            return;
+        }
+
+        gem.setTarget(target);
     }
 
     public static boolean isNaturallyHostile(LivingEntity target) {
@@ -63,7 +70,7 @@ public final class GemCombatUtil {
 
         for (GemEntity gem : owner.level().getEntitiesOfClass(GemEntity.class, owner.getBoundingBox().inflate(32.0D))) {
             if (owner.getUUID().equals(gem.getOwnerUUID())) {
-                setAggroTarget(gem, target);
+                setTargetIfAllowed(gem, target);
             }
         }
     }
@@ -82,7 +89,7 @@ public final class GemCombatUtil {
                 continue;
             }
 
-            setAggroTarget(gem, target);
+            setTargetIfAllowed(gem, target);
         }
     }
 
