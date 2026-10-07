@@ -161,6 +161,40 @@ public class ModItems {
     public static final DeferredItem<Item> ROSE_QUARTZ_GEM = ITEMS.registerItem("rose_quartz_gem",
             properties -> new GemItem(properties, "Rose Quartz", ModEntities.QUARTZ.get(), 15));
 
+    //JASPERS
+    public static final DeferredItem<Item> SPIDERWEB_JASPER_GEM = ITEMS.registerItem("spiderweb_jasper_gem",
+            properties -> new GemItem(properties, "Spiderweb Jasper", ModEntities.JASPER.get(), 0));
+    public static final DeferredItem<Item> PORCELAIN_JASPER_GEM = ITEMS.registerItem("porcelain_jasper_gem",
+            properties -> new GemItem(properties, "Porcelain Jasper", ModEntities.JASPER.get(), 1));
+    public static final DeferredItem<Item> ZEBRA_JASPER_GEM = ITEMS.registerItem("zebra_jasper_gem",
+            properties -> new GemItem(properties, "Zebra Jasper", ModEntities.JASPER.get(), 2));
+    public static final DeferredItem<Item> CHRYSANTHEMUM_JASPER_GEM = ITEMS.registerItem("chrysanthemum_jasper_gem",
+            properties -> new GemItem(properties, "Chrysanthemum Jasper", ModEntities.JASPER.get(), 3));
+    public static final DeferredItem<Item> SNAKESKIN_JASPER_GEM = ITEMS.registerItem("snakeskin_jasper_gem",
+            properties -> new GemItem(properties, "Snakeskin Jasper", ModEntities.JASPER.get(), 4));
+    public static final DeferredItem<Item> BIGGS_JASPER_GEM = ITEMS.registerItem("biggs_jasper_gem",
+            properties -> new GemItem(properties, "Bigs Jasper", ModEntities.JASPER.get(), 5));
+    public static final DeferredItem<Item> NOREENA_JASPER_GEM = ITEMS.registerItem("noreena_jasper_gem",
+            properties -> new GemItem(properties, "Noreena Jasper", ModEntities.JASPER.get(), 6));
+    public static final DeferredItem<Item> HONEY_JASPER_GEM = ITEMS.registerItem("honey_jasper_gem",
+            properties -> new GemItem(properties, "Honey Jasper", ModEntities.JASPER.get(), 7));
+    public static final DeferredItem<Item> MORRISONITE_JASPER_GEM = ITEMS.registerItem("morrisonite_jasper_gem",
+            properties -> new GemItem(properties, "Morrisonite Jasper", ModEntities.JASPER.get(), 8));
+    public static final DeferredItem<Item> RHYOLITE_JASPER_GEM = ITEMS.registerItem("rhyolite_jasper_gem",
+            properties -> new GemItem(properties, "Rhyolite Jasper", ModEntities.JASPER.get(), 9));
+    public static final DeferredItem<Item> KAMBABA_JASPER_GEM = ITEMS.registerItem("kambaba_jasper_gem",
+            properties -> new GemItem(properties, "Kambaba Jasper", ModEntities.JASPER.get(), 10));
+    public static final DeferredItem<Item> OCEAN_JASPER_GEM = ITEMS.registerItem("ocean_jasper_gem",
+            properties -> new GemItem(properties, "Ocean Jasper", ModEntities.JASPER.get(), 11));
+    public static final DeferredItem<Item> SEA_SEDIMENT_JASPER_GEM = ITEMS.registerItem("sea_sediment_jasper_gem",
+            properties -> new GemItem(properties, "Sea Sediment Jasper", ModEntities.JASPER.get(), 12));
+    public static final DeferredItem<Item> ROYAL_PLUME_JASPER_GEM = ITEMS.registerItem("royal_plume_jasper_gem",
+            properties -> new GemItem(properties, "Royal Plume Jasper", ModEntities.JASPER.get(), 13));
+    public static final DeferredItem<Item> MOOKITE_JASPER_GEM = ITEMS.registerItem("mookite_jasper_gem",
+            properties -> new GemItem(properties, "Mookite Jasper", ModEntities.JASPER.get(), 14));
+    public static final DeferredItem<Item> PEACH_PETAL_JASPER_GEM = ITEMS.registerItem("peach_petal_jasper_gem",
+            properties -> new GemItem(properties, "Peach Petal Jasper", ModEntities.JASPER.get(), 15));
+
     //PEARLS
     public static final DeferredItem<Item> WHITE_PEARL_GEM = ITEMS.registerItem("white_pearl_gem",
             properties -> new GemItem(properties, "White Pearl", ModEntities.PEARL.get(), 0));

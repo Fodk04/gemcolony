@@ -34,39 +34,23 @@ public class PebbleEntity extends StarterGemEntity{
     }
 
     @Override
-    protected void generateAppearance(Color gemColor, int maxOutfits, Color outfitColor, int maxInsignias, Color insigniaColor, int maxHairstyles, Color hairColor, int maxVisors, Color visorColor) {
-        gemColor = ColorUtil.lerpColor(lightSkin, darkSkin, random.nextFloat());
-        outfitColor = ColorUtil.lerpColor(lightOutfit, darkOutfit, random.nextFloat());
-        insigniaColor = ColorUtil.lerpColor(lightInsignia, darkInsignia, random.nextFloat());
-        super.generateAppearance(gemColor, getMaxOutfits(), outfitColor,
-                getMaxInsignias(), insigniaColor,
-                getMaxHairstyles(), hairColor,
-                getMaxVisors(), visorColor);
+    public Color generateGemColor() {
+        return ColorUtil.lerpColor(lightSkin, darkSkin, random.nextFloat());
+    }
+
+    @Override
+    public Color generateOutfitColor() {
+        return ColorUtil.lerpColor(lightOutfit, darkOutfit, random.nextFloat());
+    }
+
+    @Override
+    public Color generateInsigniaColor() {
+        return ColorUtil.lerpColor(lightInsignia, darkInsignia, random.nextFloat());
     }
 
     @Override
     public Item getGemItem() {
         return ModItems.PEBBLE_GEM.get();
-    }
-
-    @Override
-    public int getMaxOutfits() {
-        return 3;
-    }
-
-    @Override
-    public int getMaxInsignias() {
-        return 3;
-    }
-
-    @Override
-    public int getMaxHairstyles() {
-        return 0;
-    }
-
-    @Override
-    public int getMaxVisors() {
-        return 0;
     }
 
     @Override

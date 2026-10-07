@@ -14,6 +14,8 @@ public class GemRenderState extends EntityRenderState implements GeoRenderState 
     public int gemPlacement;
     public int visor;
     public int visorColor;
+    public int markings;
+    public int markingsColor;
     public float reformProgress;
     public float reformCenter;
     public float qualityModifier;

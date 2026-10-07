@@ -39,19 +39,4 @@ public class GemVisorLayer<T extends GeoAnimatable, R extends GemRenderState> ex
     protected Vec3 getReformScale(R renderState, float reformProgress, float beginToShow, float endShow) {
         return new Vec3(1,1,1);
     }
-
-    @Override
-    protected float getReformCenter(R renderState) {
-        return renderState.reformCenter;
-    }
-
-    @Override
-    protected float getQualityModifier(R renderState) {
-        return renderState.qualityModifier;
-    }
-
-    @Override
-    protected float getModelSize(R renderState) {
-        return renderState.modelSize;
-    }
 }

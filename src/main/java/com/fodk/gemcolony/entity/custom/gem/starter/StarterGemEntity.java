@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 
+import java.awt.*;
 import java.util.List;
 
 public abstract class StarterGemEntity extends GemEntity {
@@ -33,6 +34,46 @@ public abstract class StarterGemEntity extends GemEntity {
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.ATTACK_DAMAGE, 0.0D)
                 .add(Attributes.ATTACK_SPEED, 0.0D);
+    }
+
+    @Override
+    public int getMaxOutfits() {
+        return 3;
+    }
+
+    @Override
+    public int getMaxInsignias() {
+        return 3;
+    }
+
+    @Override
+    public int getMaxHairstyles() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxMarkings() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxVisors() {
+        return 0;
+    }
+
+    @Override
+    public Color generateHairColor() {
+        return Color.black;
+    }
+
+    @Override
+    public Color generateMarkingsColor() {
+        return Color.black;
+    }
+
+    @Override
+    public Color generateVisorColor() {
+        return Color.black;
     }
 
     //40 SEC

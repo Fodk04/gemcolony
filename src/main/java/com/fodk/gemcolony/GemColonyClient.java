@@ -78,7 +78,9 @@ public class GemColonyClient {
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.PERIDOT.get(), context -> new GemRenderer(context, new PeridotModel(), "peridot") {});
         event.registerEntityRenderer(ModEntities.QUARTZ.get(), context -> new GemRenderer(context, new QuartzModel(), "quartz") {});
+        event.registerEntityRenderer(ModEntities.JASPER.get(), context -> new GemRenderer(context, new QuartzModel(), "quartz") {});
         event.registerEntityRenderer(ModEntities.PEARL.get(), context -> new GemRenderer(context, new PearlModel(), "pearl") {});
+        event.registerEntityRenderer(ModEntities.HOLOPEARL.get(), context -> new GemRenderer(context, new PearlModel(), "pearl") {});
         event.registerEntityRenderer(ModEntities.PEBBLE.get(), context -> new GemRenderer(context, new StarterGemModel(), "pebble") {});
         event.registerEntityRenderer(ModEntities.SHALE.get(), context -> new GemRenderer(context, new StarterGemModel(), "pebble") {});
         event.registerEntityRenderer(ModEntities.MICA.get(), context -> new GemRenderer(context, new StarterGemModel(), "pebble") {});

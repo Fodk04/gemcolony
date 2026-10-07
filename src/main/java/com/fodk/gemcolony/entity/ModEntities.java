@@ -1,10 +1,12 @@
 package com.fodk.gemcolony.entity;
 
 import com.fodk.gemcolony.GemColony;
-import com.fodk.gemcolony.entity.custom.gem.PearlEntity;
+import com.fodk.gemcolony.entity.custom.gem.pearl.HolopearlEntity;
+import com.fodk.gemcolony.entity.custom.gem.pearl.PearlEntity;
 import com.fodk.gemcolony.entity.custom.gem.base.GemRisingItemEntity;
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
 import com.fodk.gemcolony.entity.custom.gem.bubble.BubbleEntity;
+import com.fodk.gemcolony.entity.custom.gem.quartz.JasperEntity;
 import com.fodk.gemcolony.entity.custom.gem.quartz.QuartzEntity;
 import com.fodk.gemcolony.entity.custom.gem.starter.MicaEntity;
 import com.fodk.gemcolony.entity.custom.gem.starter.NacreEntity;
@@ -18,7 +20,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -66,12 +67,26 @@ public class ModEntities {
             .immuneTo(BlockTags.STRAY_IMMUNE_TO)
             .build(getRK("quartz")));
 
+    public static final Supplier<EntityType<JasperEntity>> JASPER = ENTITY_TYPES.register("jasper",
+            () -> EntityType.Builder.of(JasperEntity::new, MobCategory.CREATURE)
+                    .sized(0.9f,2.2f)
+                    .fireImmune()
+                    .immuneTo(BlockTags.STRAY_IMMUNE_TO)
+                    .build(getRK("jasper")));
+
     public static final Supplier<EntityType<PearlEntity>> PEARL = ENTITY_TYPES.register("pearl",
             () -> EntityType.Builder.of(PearlEntity::new, MobCategory.CREATURE)
                     .sized(0.8f,1.7f)
                     .fireImmune()
                     .immuneTo(BlockTags.STRAY_IMMUNE_TO)
                     .build(getRK("pearl")));
+
+    public static final Supplier<EntityType<HolopearlEntity>> HOLOPEARL = ENTITY_TYPES.register("holopearl",
+            () -> EntityType.Builder.of(HolopearlEntity::new, MobCategory.CREATURE)
+                    .sized(0.8f,1.7f)
+                    .fireImmune()
+                    .immuneTo(BlockTags.STRAY_IMMUNE_TO)
+                    .build(getRK("holopearl")));
 
     public static final Supplier<EntityType<GemRisingItemEntity>> GEM_RISING_ITEM = ENTITY_TYPES.register("gem_rising_item",
             () -> EntityType.Builder.of(GemRisingItemEntity::new, MobCategory.MISC)

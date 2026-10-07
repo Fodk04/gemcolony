@@ -1,7 +1,7 @@
 package com.fodk.gemcolony.entity.custom.gem;
 
 import com.fodk.gemcolony.data.GemAnalysisResult;
-import com.fodk.gemcolony.data.GemConditionsRegistry;
+import com.fodk.gemcolony.entity.custom.gem.base.GemConditionsRegistry;
 import com.fodk.gemcolony.entity.custom.gem.base.GemConditions;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.savedata.PeridotAnalysisData;
@@ -149,19 +149,6 @@ public class PeridotEntity extends GemEntity {
     }
 
     @Override
-    protected void generateAppearance(Color gemColor, int maxOutfits, Color outfitColor, int maxInsignias, Color insigniaColor, int maxHairstyles, Color hairColor, int maxVisors, Color visorColor) {
-        gemColor = ColorUtil.lerpColor(lightSkin, darkSkin, random.nextFloat());
-        outfitColor = ColorUtil.lerpColor(lightOutfit, darkOutfit, random.nextFloat());
-        insigniaColor = ColorUtil.lerpColor(lightInsignia, darkInsignia, random.nextFloat());
-        hairColor = ColorUtil.lerpColor(lightHair, darkHair, random.nextFloat());
-        visorColor = ColorUtil.lerpColor(lightVisor, darkVisor, random.nextFloat());
-        super.generateAppearance(gemColor, getMaxOutfits(), outfitColor,
-                getMaxInsignias(), insigniaColor,
-                getMaxHairstyles(), hairColor,
-                getMaxVisors(), visorColor);
-    }
-
-    @Override
     public Item getGemItem() {
         return ModItems.PERIDOT_GEM.get();
     }
@@ -182,6 +169,11 @@ public class PeridotEntity extends GemEntity {
     }
 
     @Override
+    public int getMaxMarkings() {
+        return 0;
+    }
+
+    @Override
     public int getMaxVisors() {
         return 2;
     }
@@ -189,6 +181,36 @@ public class PeridotEntity extends GemEntity {
     @Override
     protected boolean alwaysHasVisor() {
         return true;
+    }
+
+    @Override
+    public Color generateGemColor() {
+        return ColorUtil.lerpColor(lightSkin, darkSkin, random.nextFloat());
+    }
+
+    @Override
+    public Color generateOutfitColor() {
+        return ColorUtil.lerpColor(lightOutfit, darkOutfit, random.nextFloat());
+    }
+
+    @Override
+    public Color generateInsigniaColor() {
+        return ColorUtil.lerpColor(lightInsignia, darkInsignia, random.nextFloat());
+    }
+
+    @Override
+    public Color generateHairColor() {
+        return ColorUtil.lerpColor(lightHair, darkHair, random.nextFloat());
+    }
+
+    @Override
+    public Color generateMarkingsColor() {
+        return Color.black;
+    }
+
+    @Override
+    public Color generateVisorColor() {
+        return ColorUtil.lerpColor(lightVisor, darkVisor, random.nextFloat());
     }
 
     @Override

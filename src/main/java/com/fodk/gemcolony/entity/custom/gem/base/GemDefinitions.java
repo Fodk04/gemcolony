@@ -26,10 +26,29 @@ public class GemDefinitions {
             ModItems.CHERRY_QUARTZ_GEM.get(),
             ModItems.ROSE_QUARTZ_GEM.get()),
             ModEntities.QUARTZ.get());
+    public static final GemDefinition JASPER = new GemDefinition("jasper", "Jasper", List.of(
+            ModItems.SPIDERWEB_JASPER_GEM.get(),
+            ModItems.PORCELAIN_JASPER_GEM.get(),
+            ModItems.ZEBRA_JASPER_GEM.get(),
+            ModItems.CHRYSANTHEMUM_JASPER_GEM.get(),
+            ModItems.SNAKESKIN_JASPER_GEM.get(),
+            ModItems.BIGGS_JASPER_GEM.get(),
+            ModItems.NOREENA_JASPER_GEM.get(),
+            ModItems.HONEY_JASPER_GEM.get(),
+            ModItems.MORRISONITE_JASPER_GEM.get(),
+            ModItems.RHYOLITE_JASPER_GEM.get(),
+            ModItems.KAMBABA_JASPER_GEM.get(),
+            ModItems.OCEAN_JASPER_GEM.get(),
+            ModItems.SEA_SEDIMENT_JASPER_GEM.get(),
+            ModItems.ROYAL_PLUME_JASPER_GEM.get(),
+            ModItems.MOOKITE_JASPER_GEM.get(),
+            ModItems.PEACH_PETAL_JASPER_GEM.get()),
+            ModEntities.JASPER.get());
 
     public static final List<GemDefinition> ALL = List.of(
             PERIDOT,
-            QUARTZ
+            QUARTZ,
+            JASPER
     );
 
     public static GemDefinition get(String id) {

@@ -1,5 +1,8 @@
 package com.fodk.gemcolony.entity.client.layer;
 
+import com.fodk.gemcolony.entity.ModEntities;
+import com.fodk.gemcolony.entity.client.render.GemRenderTypes;
+import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
 import com.geckolib.animatable.GeoAnimatable;
 import com.geckolib.cache.model.BakedGeoModel;
 import com.geckolib.renderer.base.GeoRenderState;
@@ -9,6 +12,7 @@ import com.geckolib.renderer.layer.GeoRenderLayer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
@@ -25,15 +29,30 @@ public abstract class GemTintedTextureLayer<T extends GeoAnimatable, R extends G
 
     protected abstract @Nullable Identifier getTextureResource(R renderState);
     protected abstract int getTintColor(R renderState);
-    protected abstract RenderType getRenderType(R renderState, Identifier texture);
+
+    protected RenderType getRenderType(R renderState, Identifier texture){
+        GemRenderState state = (GemRenderState) renderState;
+        if(state.entityType == ModEntities.HOLOPEARL.get()) return GemRenderTypes.holopearl(texture);
+        if(state.reformProgress < 1f) return GemRenderTypes.whiteEmissive(texture);
+        return RenderTypes.entityCutout(texture);
+    }
     protected Vec3 getReformScale(R renderState, float reformProgress, float beginToShow, float endShow){
         double scale = (reformProgress - beginToShow) / (endShow - beginToShow);
         scale = Math.clamp(scale, 0, 1);
         return new Vec3(scale, scale, scale);
     }
-    protected abstract float getReformCenter(R renderState);
-    protected abstract float getQualityModifier(R renderState);
-    protected abstract float getModelSize(R renderState);
+    protected float getReformCenter(R renderState){
+        GemRenderState state = (GemRenderState) renderState;
+        return state.reformCenter;
+    }
+    protected float getQualityModifier(R renderState){
+        GemRenderState state = (GemRenderState) renderState;
+        return state.qualityModifier;
+    }
+    protected float getModelSize(R renderState){
+        GemRenderState state = (GemRenderState) renderState;
+        return state.modelSize;
+    }
 
     @Override
     public void submitRenderTask(RenderPassInfo<R> renderPassInfo, SubmitNodeCollector renderTasks) {
@@ -58,9 +77,9 @@ public abstract class GemTintedTextureLayer<T extends GeoAnimatable, R extends G
             poseStack.pushPose();
             poseStack.last().set(pose);
             poseStack.scale((float)qualityScale.x, (float)qualityScale.y, (float)qualityScale.z);
-            poseStack.translate(0, 1, 0);
+            poseStack.translate(0, getReformCenter(renderState), 0);
             poseStack.scale((float)reformScale.x, (float)reformScale.y, (float)reformScale.z);
-            poseStack.translate(0, -1, 0);
+            poseStack.translate(0, -getReformCenter(renderState), 0);
             renderPassInfo.renderPosed(() -> model.render(renderPassInfo, vertexConsumer, packedLight, packedOverlay, myColor));
             poseStack.popPose();
         });

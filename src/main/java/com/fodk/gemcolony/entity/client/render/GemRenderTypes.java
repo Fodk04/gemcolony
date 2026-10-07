@@ -18,6 +18,17 @@ public final class GemRenderTypes {
         );
     }
 
+    public static RenderType holopearl(Identifier texture) {
+        return RenderType.create(
+                "holopearl",
+                RenderSetup
+                        .builder(GemRenderPipelines.HOLOPEARL)
+                        .withTexture("Sampler0", texture)
+                        .useLightmap()
+                        .createRenderSetup()
+        );
+    }
+
     public static RenderType constructorGhost(boolean canPlace) {
         return RenderType.create(
                 canPlace ? "constructor_ghost_green" : "constructor_ghost_red",

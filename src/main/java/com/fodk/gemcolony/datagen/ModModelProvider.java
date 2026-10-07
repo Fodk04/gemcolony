@@ -123,6 +123,23 @@ public class ModModelProvider extends ModelProvider {
         generateGemItem(ModItems.CHERRY_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.ROSE_QUARTZ_GEM.get(), itemModels);
 
+        generateGemItem(ModItems.SPIDERWEB_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.PORCELAIN_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.ZEBRA_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.CHRYSANTHEMUM_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.SNAKESKIN_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.BIGGS_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.NOREENA_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.HONEY_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.MORRISONITE_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.RHYOLITE_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.KAMBABA_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.OCEAN_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.SEA_SEDIMENT_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.ROYAL_PLUME_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.MOOKITE_JASPER_GEM.get(), itemModels);
+        generateGemItem(ModItems.PEACH_PETAL_JASPER_GEM.get(), itemModels);
+
         generateGemItem(ModItems.WHITE_PEARL_GEM.get(), itemModels);
         generateGemItem(ModItems.SPECTER_PEARL_GEM.get(), itemModels);
         generateGemItem(ModItems.SILVER_PEARL_GEM.get(), itemModels);

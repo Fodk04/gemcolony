@@ -2,10 +2,10 @@ package com.fodk.gemcolony.event;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.ModEntities;
-import com.fodk.gemcolony.entity.custom.gem.PearlEntity;
+import com.fodk.gemcolony.entity.custom.gem.pearl.PearlEntity;
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
+import com.fodk.gemcolony.entity.custom.gem.quartz.JasperEntity;
 import com.fodk.gemcolony.entity.custom.gem.quartz.QuartzEntity;
-import com.fodk.gemcolony.entity.custom.gem.starter.PebbleEntity;
 import com.fodk.gemcolony.entity.custom.gem.starter.StarterGemEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -24,7 +24,9 @@ public class ModEventBusEvents {
         event.put(ModEntities.PERIDOT.get(), PeridotEntity.createAttributes().build());
 
         event.put(ModEntities.QUARTZ.get(), QuartzEntity.createAttributes().build());
+        event.put(ModEntities.JASPER.get(), JasperEntity.createAttributes().build());
         event.put(ModEntities.PEARL.get(), PearlEntity.createAttributes().build());
+        event.put(ModEntities.HOLOPEARL.get(), PearlEntity.createAttributes().build());
 
         event.put(ModEntities.PEBBLE.get(), StarterGemEntity.createAttributes().build());
         event.put(ModEntities.SHALE.get(), StarterGemEntity.createAttributes().build());

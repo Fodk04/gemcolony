@@ -11,7 +11,7 @@ public record GemAppearanceData(
         int color, int outfit, int outfitColor,
         int insignia, int insigniaColor,
         int hairstyle, int hairColor, int gemPlacement,
-        int variant, int wings, int markings,
+        int variant, int wings, int markings, int markingsColor,
         int visor, int visorColor
 ) {
     public static final Codec<GemAppearanceData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -28,6 +28,7 @@ public record GemAppearanceData(
             Codec.INT.fieldOf("variant").forGetter(GemAppearanceData::variant),
             Codec.INT.fieldOf("wings").forGetter(GemAppearanceData::wings),
             Codec.INT.fieldOf("markings").forGetter(GemAppearanceData::markings),
+            Codec.INT.fieldOf("markingsColor").forGetter(GemAppearanceData::markingsColor),
             Codec.INT.fieldOf("visor").forGetter(GemAppearanceData::visor),
             Codec.INT.fieldOf("visorColor").forGetter(GemAppearanceData::visorColor)
     ).apply(instance, GemAppearanceData::new));
@@ -53,6 +54,7 @@ public record GemAppearanceData(
                         ByteBufCodecs.VAR_INT.encode(buf, data.variant());
                         ByteBufCodecs.VAR_INT.encode(buf, data.wings());
                         ByteBufCodecs.VAR_INT.encode(buf, data.markings());
+                        ByteBufCodecs.VAR_INT.encode(buf, data.markingsColor());
 
                         ByteBufCodecs.VAR_INT.encode(buf, data.visor());
                         ByteBufCodecs.VAR_INT.encode(buf, data.visorColor());
@@ -73,6 +75,7 @@ public record GemAppearanceData(
 
                             ByteBufCodecs.VAR_INT.decode(buf),
 
+                            ByteBufCodecs.VAR_INT.decode(buf),
                             ByteBufCodecs.VAR_INT.decode(buf),
                             ByteBufCodecs.VAR_INT.decode(buf),
                             ByteBufCodecs.VAR_INT.decode(buf),

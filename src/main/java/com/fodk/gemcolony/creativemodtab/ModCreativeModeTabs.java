@@ -78,6 +78,23 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.CHERRY_QUARTZ_GEM);
                         output.accept(ModItems.ROSE_QUARTZ_GEM);
 
+                        output.accept(ModItems.SPIDERWEB_JASPER_GEM);
+                        output.accept(ModItems.PORCELAIN_JASPER_GEM);
+                        output.accept(ModItems.ZEBRA_JASPER_GEM);
+                        output.accept(ModItems.CHRYSANTHEMUM_JASPER_GEM);
+                        output.accept(ModItems.SNAKESKIN_JASPER_GEM);
+                        output.accept(ModItems.BIGGS_JASPER_GEM);
+                        output.accept(ModItems.NOREENA_JASPER_GEM);
+                        output.accept(ModItems.HONEY_JASPER_GEM);
+                        output.accept(ModItems.MORRISONITE_JASPER_GEM);
+                        output.accept(ModItems.RHYOLITE_JASPER_GEM);
+                        output.accept(ModItems.KAMBABA_JASPER_GEM);
+                        output.accept(ModItems.OCEAN_JASPER_GEM);
+                        output.accept(ModItems.SEA_SEDIMENT_JASPER_GEM);
+                        output.accept(ModItems.ROYAL_PLUME_JASPER_GEM);
+                        output.accept(ModItems.MOOKITE_JASPER_GEM);
+                        output.accept(ModItems.PEACH_PETAL_JASPER_GEM);
+
                         output.accept(ModItems.WHITE_PEARL_GEM);
                         output.accept(ModItems.SPECTER_PEARL_GEM);
                         output.accept(ModItems.SILVER_PEARL_GEM);

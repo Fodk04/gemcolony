@@ -1,6 +1,4 @@
-package com.fodk.gemcolony.data;
-
-import com.fodk.gemcolony.entity.custom.gem.base.GemConditions;
+package com.fodk.gemcolony.entity.custom.gem.base;
 
 import java.util.List;
 
@@ -26,8 +24,19 @@ public class GemConditionsRegistry {
                     1.0f
             );
 
+    public static final GemConditions JASPER =
+            new GemConditions(
+                    "quartz",
+                    1.8f,
+                    0.2f,
+                    0.3f,
+                    0.3f,
+                    1.0f
+            );
+
     public static final List<GemConditions> ALL = List.of(
             PERIDOT,
-            QUARTZ
+            QUARTZ,
+            JASPER
     );
 }

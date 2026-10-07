@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
@@ -34,33 +35,38 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
             shapeshiftModels.put(form, form.createModel(context.getModelSet()));
         }
         withRenderLayer(new GemBodyLayer<>(this, name, 1));
-        withRenderLayer(new GemEyesLayer<>(this, name, 2));
-        withRenderLayer(new GemEyesWhitesLayer<>(this, name, 3));
-        withRenderLayer(new GemOutfitLayer<>(this, name, 4));
-        withRenderLayer(new GemInsigniaLayer<>(this, name, 5));
-        withRenderLayer(new GemHairLayer<>(this, name, 6));
-        withRenderLayer(new GemVisorLayer<>(this, name, 7));
+        withRenderLayer(new GemMarkingsLayer<>(this, name, 2));
+        withRenderLayer(new GemEyesLayer<>(this, name, 3));
+        withRenderLayer(new GemEyesWhitesLayer<>(this, name, 4));
+        withRenderLayer(new GemOutfitLayer<>(this, name, 5));
+        withRenderLayer(new GemInsigniaLayer<>(this, name, 6));
+        withRenderLayer(new GemHairLayer<>(this, name, 7));
+        withRenderLayer(new GemVisorLayer<>(this, name, 8));
     }
 
     @Override
     public void extractRenderState(T entity, R state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
         GemRenderState gemState = (GemRenderState) state;
-        gemState.gemColor = entity.getEntityData().get(GemEntity.GEM_COLOR);
-        gemState.outfit = entity.getEntityData().get(GemEntity.OUTFIT);
-        gemState.outfitColor = entity.getEntityData().get(GemEntity.OUTFIT_COLOR);
-        gemState.insignia = entity.getEntityData().get(GemEntity.INSIGNIA);
-        gemState.insigniaColor = entity.getEntityData().get(GemEntity.INSIGNIA_COLOR);
-        gemState.hairstyle = entity.getEntityData().get(GemEntity.HAIRSTYLE);
-        gemState.hairColor = entity.getEntityData().get(GemEntity.HAIR_COLOR);
-        gemState.gemPlacement = entity.getEntityData().get(GemEntity.GEM_PLACEMENT);
-        gemState.visor = entity.getEntityData().get(GemEntity.VISOR);
-        gemState.visorColor = entity.getEntityData().get(GemEntity.VISOR_COLOR);
+        SynchedEntityData synchedEntityData = entity.getEntityData();
+
+        gemState.gemColor = synchedEntityData.get(GemEntity.GEM_COLOR);
+        gemState.outfit = synchedEntityData.get(GemEntity.OUTFIT);
+        gemState.outfitColor = synchedEntityData.get(GemEntity.OUTFIT_COLOR);
+        gemState.insignia = synchedEntityData.get(GemEntity.INSIGNIA);
+        gemState.insigniaColor = synchedEntityData.get(GemEntity.INSIGNIA_COLOR);
+        gemState.hairstyle = synchedEntityData.get(GemEntity.HAIRSTYLE);
+        gemState.hairColor = synchedEntityData.get(GemEntity.HAIR_COLOR);
+        gemState.gemPlacement = synchedEntityData.get(GemEntity.GEM_PLACEMENT);
+        gemState.visor = synchedEntityData.get(GemEntity.VISOR);
+        gemState.visorColor = synchedEntityData.get(GemEntity.VISOR_COLOR);
+        gemState.markings = synchedEntityData.get(GemEntity.MARKINGS);
+        gemState.markingsColor = synchedEntityData.get(GemEntity.MARKINGS_COLOR);
         gemState.reformProgress = GemEntity.getReformProgressPercentage(entity.getEntityData().get(GemEntity.REFORM_PROGRESS));
         gemState.reformCenter = entity.getReformCenter();
-        gemState.qualityModifier = entity.getEntityData().get(GemEntity.QUALITY) == 0 ? 0.8f : entity.getEntityData().get(GemEntity.QUALITY) == 2 ? 1.1f : 1f;
+        gemState.qualityModifier = synchedEntityData.get(GemEntity.QUALITY) == 0 ? 0.8f : synchedEntityData.get(GemEntity.QUALITY) == 2 ? 1.2f : 1f;
         gemState.modelSize = entity.getModelSize();
-        gemState.shapeshift = entity.getEntityData().get(GemEntity.SHAPESHIFT);
+        gemState.shapeshift = synchedEntityData.get(GemEntity.SHAPESHIFT);
     }
 
     @Override

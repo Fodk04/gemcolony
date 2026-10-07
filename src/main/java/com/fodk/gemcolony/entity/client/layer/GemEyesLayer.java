@@ -3,6 +3,7 @@ package com.fodk.gemcolony.entity.client.layer;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.client.render.GemRenderTypes;
 import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
+import com.fodk.gemcolony.util.ColorUtil;
 import com.geckolib.animatable.GeoAnimatable;
 import com.geckolib.renderer.base.GeoRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -11,6 +12,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 public class GemEyesLayer<T extends GeoAnimatable, R extends GemRenderState> extends GemTintedTextureLayer<T, R> {
     private final String gemName;
@@ -27,13 +29,7 @@ public class GemEyesLayer<T extends GeoAnimatable, R extends GemRenderState> ext
 
     @Override
     protected int getTintColor(R state) {
-        return state.gemColor;
-    }
-
-    @Override
-    protected RenderType getRenderType(R state, Identifier texture) {
-        if(state.reformProgress < 1f) return GemRenderTypes.whiteEmissive(texture);
-        return RenderTypes.entityCutout(texture);
+        return ColorUtil.multiplyColors(state.gemColor, ColorUtil.colorToInt(new Color(140, 140, 140)));
     }
 
     final float beginToShow = 0.55f;
@@ -42,20 +38,5 @@ public class GemEyesLayer<T extends GeoAnimatable, R extends GemRenderState> ext
     @Override
     protected Vec3 getReformScale(R renderState, float reformProgress, float beginToShow, float endShow) {
         return super.getReformScale(renderState, renderState.reformProgress, this.beginToShow, this.endShow);
-    }
-
-    @Override
-    protected float getReformCenter(R renderState) {
-        return renderState.reformCenter;
-    }
-
-    @Override
-    protected float getQualityModifier(R renderState) {
-        return renderState.qualityModifier;
-    }
-
-    @Override
-    protected float getModelSize(R renderState) {
-        return renderState.modelSize;
     }
 }

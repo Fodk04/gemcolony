@@ -75,6 +75,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> WINGS = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> MARKINGS = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> MARKINGS_COLOR = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> VISOR = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> VISOR_COLOR = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> REFORM_PROGRESS = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
@@ -118,6 +119,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.define(VARIANT, -1);
         entityData.define(WINGS, -1);
         entityData.define(MARKINGS, -1);
+        entityData.define(MARKINGS_COLOR, 0xFFFFFF);
         entityData.define(VISOR, -1);
         entityData.define(VISOR_COLOR, 0xFFFFFF);
         entityData.define(REFORM_PROGRESS, maxReformProgress);
@@ -163,7 +165,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         if (spawnReason == EntitySpawnReason.COMMAND) {
             setVariant(getRandomVariant());
             assignOrigin(level.getLevel(), blockPosition());
-            generateAppearance(Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK);
+            generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
             entityData.set(EMERGED, true);
             setQuality(random.nextInt(3));
             initializeAbilities();
@@ -189,7 +191,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public void initializeGem(int variant){
         setVariant(variant);
         assignOrigin((ServerLevel) level(), blockPosition());
-        generateAppearance(Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK);
+        generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
         entityData.set(EMERGED, true);
         setQuality(random.nextInt(3));
         initializeAbilities();
@@ -200,7 +202,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public void initializeGemFromChroma(int chromaIndex){
         setVariant(getVariantFromChroma(chromaIndex));
         assignOrigin((ServerLevel) level(), blockPosition());
-        generateAppearance(Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK, 0, Color.BLACK);
+        generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
         entityData.set(EMERGED, true);
         setQuality(random.nextInt(3));
         initializeAbilities();
@@ -275,13 +277,14 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
                 new AttributeModifier(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quality_damage"), damageMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
         );
 
-        this.setHealth(this.getMaxHealth()); // sync current HP to the new max, since changing MAX_HEALTH doesn't auto-heal
+        this.setHealth(this.getMaxHealth()); // sync current HP to the new max, since changing MAX_HEALTH doesn't auto-fix it
     }
 
-    protected void generateAppearance(Color gemColor, int maxOutfits, Color outfitColor, int maxInsignias, Color insigniaColor, int maxHairstyles, Color hairColor, int maxVisors, Color visorColor) {
+    protected void generateAppearance(Color gemColor, int maxOutfits, Color outfitColor, int maxInsignias, Color insigniaColor, int maxHairstyles, Color hairColor, int maxMarkings, Color markingsColor, int maxVisors, Color visorColor) {
         int outfitIndex = maxOutfits > 0 ? random.nextInt(maxOutfits) : -1;
         int insigniaIndex = maxInsignias > 0 ? random.nextInt(maxInsignias) : -1;
         int hairstyleIndex = maxHairstyles > 0 ? random.nextInt(maxHairstyles) : -1;
+        int markingsIndex = maxMarkings > 0 ? random.nextInt(maxMarkings) : -1;
 
         int visorIndex;
         if(alwaysHasVisor()){
@@ -304,6 +307,8 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.entityData.set(INSIGNIA_COLOR, ColorUtil.colorToInt(insigniaColor));
         this.entityData.set(HAIRSTYLE, hairstyleIndex);
         this.entityData.set(HAIR_COLOR, ColorUtil.colorToInt(hairColor));
+        this.entityData.set(MARKINGS, markingsIndex);
+        this.entityData.set(MARKINGS_COLOR, ColorUtil.colorToInt(markingsColor));
         this.entityData.set(VISOR, visorIndex);
         this.entityData.set(VISOR_COLOR, ColorUtil.colorToInt(visorColor));
     }
@@ -322,7 +327,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
                 entityData.get(GEM_COLOR), entityData.get(OUTFIT), entityData.get(OUTFIT_COLOR),
                 entityData.get(INSIGNIA), entityData.get(INSIGNIA_COLOR),
                 entityData.get(HAIRSTYLE), entityData.get(HAIR_COLOR), entityData.get(GEM_PLACEMENT),
-                entityData.get(VARIANT), entityData.get(WINGS), entityData.get(MARKINGS),
+                entityData.get(VARIANT), entityData.get(WINGS), entityData.get(MARKINGS), entityData.get(MARKINGS_COLOR),
                 entityData.get(VISOR), entityData.get(VISOR_COLOR)
         );
     }
@@ -354,6 +359,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.set(VARIANT, data.variant());
         entityData.set(WINGS, data.wings());
         entityData.set(MARKINGS, data.markings());
+        entityData.set(MARKINGS_COLOR, data.markingsColor());
         entityData.set(VISOR, data.visor());
         entityData.set(VISOR_COLOR, data.visorColor());
     }
@@ -645,7 +651,15 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public abstract int getMaxOutfits();
     public abstract int getMaxInsignias();
     public abstract int getMaxHairstyles();
+    public abstract int getMaxMarkings();
     public abstract int getMaxVisors();
+
+    public abstract Color generateGemColor();
+    public abstract Color generateOutfitColor();
+    public abstract Color generateInsigniaColor();
+    public abstract Color generateHairColor();
+    public abstract Color generateMarkingsColor();
+    public abstract Color generateVisorColor();
 
     protected abstract int getInventorySize();
 
@@ -846,6 +860,10 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        return hurtGemServer(level, source, amount);
+    }
+
+    protected boolean hurtGemServer(ServerLevel level, DamageSource source, float amount) {
         boolean hurt = super.hurtServer(level, source, amount);
 
         if (hurt && source.getEntity() instanceof LivingEntity attacker) {

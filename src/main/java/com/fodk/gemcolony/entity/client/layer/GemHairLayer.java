@@ -31,32 +31,11 @@ public class GemHairLayer<T extends GeoAnimatable, R extends GemRenderState> ext
         return state.hairColor;
     }
 
-    @Override
-    protected RenderType getRenderType(R state, Identifier texture) {
-        if(state.reformProgress < 1f) return GemRenderTypes.whiteEmissive(texture);
-        return RenderTypes.entityCutout(texture);
-    }
-
     final float beginToShow = 0.7f;
     final float endShow = 0.85f;
 
     @Override
     protected Vec3 getReformScale(R renderState, float reformProgress, float beginToShow, float endShow) {
         return super.getReformScale(renderState, renderState.reformProgress, this.beginToShow, this.endShow);
-    }
-
-    @Override
-    protected float getReformCenter(R renderState) {
-        return renderState.reformCenter;
-    }
-
-    @Override
-    protected float getQualityModifier(R renderState) {
-        return renderState.qualityModifier;
-    }
-
-    @Override
-    protected float getModelSize(R renderState) {
-        return renderState.modelSize;
     }
 }

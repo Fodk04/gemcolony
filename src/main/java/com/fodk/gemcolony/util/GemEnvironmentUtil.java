@@ -1,7 +1,7 @@
 package com.fodk.gemcolony.util;
 
 import com.fodk.gemcolony.data.GemAnalysisResult;
-import com.fodk.gemcolony.data.GemConditionsRegistry;
+import com.fodk.gemcolony.entity.custom.gem.base.GemConditionsRegistry;
 import com.fodk.gemcolony.entity.custom.gem.base.GemConditions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
