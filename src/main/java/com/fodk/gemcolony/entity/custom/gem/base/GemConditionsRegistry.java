@@ -26,7 +26,7 @@ public class GemConditionsRegistry {
 
     public static final GemConditions JASPER =
             new GemConditions(
-                    "quartz",
+                    "jasper",
                     1.8f,
                     0.2f,
                     0.3f,
