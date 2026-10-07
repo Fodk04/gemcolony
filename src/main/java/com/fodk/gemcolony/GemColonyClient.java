@@ -1,8 +1,10 @@
 package com.fodk.gemcolony;
 
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
-import com.fodk.gemcolony.block.entity.renderer.InjectorRenderer;
+import com.fodk.gemcolony.block.entity.client.renderer.InjectorRenderer;
+import com.fodk.gemcolony.block.entity.client.renderer.ShellRenderer;
 import com.fodk.gemcolony.block.entity.screen.InjectorScreen;
+import com.fodk.gemcolony.block.entity.screen.ShellScreen;
 import com.fodk.gemcolony.construction.Constructor;
 import com.fodk.gemcolony.construction.ConstructorManager;
 import com.fodk.gemcolony.entity.ModEntities;
@@ -18,7 +20,6 @@ import com.fodk.gemcolony.fluid.ModFluidTypes;
 import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.keymapping.ModKeyMappings;
-import com.fodk.gemcolony.menu.InjectorMenu;
 import com.fodk.gemcolony.menu.ModMenus;
 import com.fodk.gemcolony.networking.packet.BubblingPacketC2S;
 import com.fodk.gemcolony.networking.packet.ConfirmConstructionPacketC2S;
@@ -30,7 +31,6 @@ import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
@@ -88,6 +88,7 @@ public class GemColonyClient {
         event.registerEntityRenderer(ModEntities.BUBBLE.get(), BubbleRenderer::new);
 
         event.registerBlockEntityRenderer(ModBlockEntities.INJECTOR_BE.get(), InjectorRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.SHELL_BE.get(), ShellRenderer::new);
     }
 
     @SubscribeEvent
@@ -216,6 +217,7 @@ public class GemColonyClient {
     public static void registerScreens(RegisterMenuScreensEvent event){
         event.register(ModMenus.GEM_MENU.get(), GemScreen::new);
         event.register(ModMenus.INJECTOR_MENU.get(), InjectorScreen::new);
+        event.register(ModMenus.SHELL_MENU.get(), ShellScreen::new);
     }
 
     @SubscribeEvent
@@ -309,28 +311,37 @@ public class GemColonyClient {
                     }
                 }
 
-                if (ModKeyMappings.CONSTRUCTOR_UP.get().isDown()) {
-                    constructor.moveForward(player);
-                }
+                if (constructor.canMove()) {
 
-                if (ModKeyMappings.CONSTRUCTOR_DOWN.get().isDown()) {
-                    constructor.moveBackward(player);
-                }
+                    if (ModKeyMappings.CONSTRUCTOR_UP.get().isDown()) {
+                        constructor.moveForward(player);
+                        constructor.resetMovementCooldown();
+                    }
 
-                if (ModKeyMappings.CONSTRUCTOR_LEFT.get().isDown()) {
-                    constructor.moveLeft(player);
-                }
+                    else if (ModKeyMappings.CONSTRUCTOR_DOWN.get().isDown()) {
+                        constructor.moveBackward(player);
+                        constructor.resetMovementCooldown();
+                    }
 
-                if (ModKeyMappings.CONSTRUCTOR_RIGHT.get().isDown()) {
-                    constructor.moveRight(player);
-                }
+                    else if (ModKeyMappings.CONSTRUCTOR_LEFT.get().isDown()) {
+                        constructor.moveLeft(player);
+                        constructor.resetMovementCooldown();
+                    }
 
-                if (ModKeyMappings.CONSTRUCTOR_RAISE.get().isDown()) {
-                    constructor.raisePlacement();
-                }
+                    else if (ModKeyMappings.CONSTRUCTOR_RIGHT.get().isDown()) {
+                        constructor.moveRight(player);
+                        constructor.resetMovementCooldown();
+                    }
 
-                if (ModKeyMappings.CONSTRUCTOR_LOWER.get().isDown()) {
-                    constructor.lowerPlacement();
+                    else if (ModKeyMappings.CONSTRUCTOR_RAISE.get().isDown()) {
+                        constructor.raisePlacement();
+                        constructor.resetMovementCooldown();
+                    }
+
+                    else if (ModKeyMappings.CONSTRUCTOR_LOWER.get().isDown()) {
+                        constructor.lowerPlacement();
+                        constructor.resetMovementCooldown();
+                    }
                 }
 
                 boolean rotateDown = ModKeyMappings.CONSTRUCTOR_ROTATE.get().isDown();

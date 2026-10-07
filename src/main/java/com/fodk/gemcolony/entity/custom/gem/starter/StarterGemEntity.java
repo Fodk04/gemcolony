@@ -52,9 +52,9 @@ public abstract class StarterGemEntity extends GemEntity {
     protected void registerGoals() {
         super.registerGoals();
 
-        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class,
+        this.goalSelector.addGoal(7, new AvoidEntityGoal<>(this, LivingEntity.class,
                 16.0F,
-                1.0D,
+                1.1D,
                 1.2D,
                 entity -> entity == this.getTarget()));
     }

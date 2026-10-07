@@ -1,6 +1,7 @@
-package com.fodk.gemcolony.block.entity.renderer;
+package com.fodk.gemcolony.block.entity.client.renderer;
 
 import com.fodk.gemcolony.GemColony;
+import com.fodk.gemcolony.block.entity.client.renderstate.InjectorRenderState;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -12,7 +13,6 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;

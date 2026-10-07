@@ -15,7 +15,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 
 public enum EssenceType {
     PINK(
-            Blocks.STONE,
+            Blocks.GRAVEL,
             "§d§lPebble§r",
             ModFluids.PINK_ESSENCE,
             ModItems.PINK_ESSENCE_BOTTLE,

@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 //handling packets from client to server
@@ -142,11 +143,7 @@ public class ClientPayloadHandler {
                 return;
             }
 
-            if (!ConstructionPlacement.canPlaceAssembly(
-                    player.level(),
-                    assembly,
-                    packet.placementPos(),
-                    packet.placementRotation())) {
+            if (!ConstructionPlacement.canPlaceAssembly(player.level(), assembly, packet.placementPos(), packet.placementRotation())) {
                 return;
             }
 
@@ -170,6 +167,12 @@ public class ClientPayloadHandler {
 
                 if (blockState.getBlock() instanceof ConstructedMultiblock multiblock) {
                     blockState = multiblock.getConstructionState(level, componentPos, blockState);
+                }
+
+                if (blockState.hasProperty(BlockStateProperties.WATERLOGGED)) {
+                    boolean waterlogged = level.getFluidState(componentPos).getType() == Fluids.WATER;
+
+                    blockState = blockState.setValue(BlockStateProperties.WATERLOGGED, waterlogged);
                 }
 
                 if (blockState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {

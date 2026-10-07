@@ -1,6 +1,8 @@
 package com.fodk.gemcolony.entity.client.render;
 
 import com.fodk.gemcolony.GemColony;
+import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
@@ -18,6 +20,14 @@ public final class GemRenderPipelines {
             .builder(RenderPipelines.BLOCK_SNIPPET)
             .withLocation(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pipeline/constructor_ghost"))
             .withFragmentShader(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "core/constructor_ghost"))
+            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+            .build();
+
+    public static final RenderPipeline CONSTRUCTOR_GHOST_RED = RenderPipeline
+            .builder(RenderPipelines.BLOCK_SNIPPET)
+            .withLocation(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pipeline/constructor_ghost_red"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "core/constructor_ghost_red"))
+            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
             .build();
 
     private GemRenderPipelines() {

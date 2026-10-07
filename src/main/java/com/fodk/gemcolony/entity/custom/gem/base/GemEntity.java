@@ -384,7 +384,6 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     protected void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
         output.store("GemData", GemSaveData.CODEC, this.toSaveData());
-        System.out.println("SAVING GEM TARGET: " + getPersistentAngerTarget());
         addPersistentAngerSaveData(output);
     }
 
@@ -393,7 +392,6 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         super.readAdditionalSaveData(input);
         input.read("GemData", GemSaveData.CODEC).ifPresent(this::applySaveData);
         readPersistentAngerSaveData(level(), input);
-        System.out.println("LOADING GEM TARGET: " + getPersistentAngerTarget());
     }
 
     public abstract Item getGemItem();
@@ -432,6 +430,9 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             );
 
             spawnAtLocation((ServerLevel) this.level(), gem);
+            if(getOwnerEntity() instanceof Player player){
+                player.sendSystemMessage(Component.literal(getCurrentName() + " was poofed at location x:" + (int) position().x + " /y:" + (int) position().y + " /z:" + (int) position().z));
+            }
         }
         super.die(source);
     }
@@ -838,8 +839,8 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.targetSelector.addGoal(2, new GemTargetGoal(this, 16.0D));
 
         this.goalSelector.addGoal(4, new GemStayGoal(this));
+        this.goalSelector.addGoal(6, new GemFollowGoal(this, 1.1D, 7.0F, 5.5F));
 
-        this.goalSelector.addGoal(9, new GemFollowGoal(this, 1.1D, 7.0F, 5.5F));
         this.goalSelector.addGoal(10, new GemWanderGoal(this, 1.0D));
     }
 
@@ -885,7 +886,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         setTimeToRemainAngry(20L * 60L * 5L);
     }
 
-    //TO DO
+    //TODO shapeshifting
     public boolean isShapeshifted() {
         return !entityData.get(SHAPESHIFT).isEmpty();
     }

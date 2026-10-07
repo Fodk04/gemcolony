@@ -263,9 +263,28 @@ public class ModModelProvider extends ModelProvider {
                                                 case TANK_TOP -> "tank_top";
                                             };
 
-                                            return BlockModelGenerators.plainVariant(
-                                                    Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model)
-                                            ).with(VariantMutator.Y_ROT.withValue(yRot));
+                                            return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model))
+                                                    .with(VariantMutator.Y_ROT.withValue(yRot));
+                                        })
+                        )
+        );
+
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.SHELL.get())
+                        .with(
+                                PropertyDispatch.initial(BlockStateProperties.HORIZONTAL_FACING)
+                                        .generate(facing -> {
+
+                                            Quadrant yRot = switch (facing) {
+                                                case NORTH -> Quadrant.R0;
+                                                case EAST -> Quadrant.R90;
+                                                case SOUTH -> Quadrant.R180;
+                                                case WEST -> Quadrant.R270;
+                                                default -> Quadrant.R0;
+                                            };
+
+                                            return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/shell"))
+                                                    .with(VariantMutator.Y_ROT.withValue(yRot));
                                         })
                         )
         );

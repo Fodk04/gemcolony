@@ -26,7 +26,7 @@ public abstract class QuartzFamilyEntity extends GemEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(4, new GemAttackGoal(this, 1.1D));
+        this.goalSelector.addGoal(5, new GemAttackGoal(this, 1.1D));
         this.goalSelector.addGoal(11, new GemGuardGoal(this, 1.0D));
     }
 }

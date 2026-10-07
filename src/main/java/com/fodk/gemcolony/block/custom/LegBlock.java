@@ -213,4 +213,26 @@ public class LegBlock extends Block implements ConstructedMultiblock{
             }
         }
     }
+
+    @Override
+    public boolean canPlace(Level level, BlockPos pos, BlockState state) {
+        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+
+        BlockPos[] positions = {
+                pos,
+                pos.above(),
+                pos.below(),
+                pos.relative(facing),
+                pos.relative(facing).above(),
+                pos.relative(facing).below()
+        };
+
+        for (BlockPos blockPos : positions) {
+            if (!level.getBlockState(blockPos).canBeReplaced()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

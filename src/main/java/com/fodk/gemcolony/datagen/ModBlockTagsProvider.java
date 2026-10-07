@@ -5,11 +5,8 @@ import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.references.BlockIds;
 import net.minecraft.references.BlockItemIds;
-import net.minecraft.references.ItemIds;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -87,7 +84,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(BlockTags.TRAPDOORS)
                 .add(ModBlocks.getRK(ModBlocks.CHROMA_TRAPDOOR));
 
-        tag(ModTags.Blocks.GEM_DRAINABLES)
+        tag(ModTags.Blocks.INJECTOR_DRAINABLE)
                 .addTag(Tags.Blocks.ORES)
                 .addTag(Tags.Blocks.STONES)
                 .addTag(Tags.Blocks.SANDS)
@@ -99,6 +96,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(BlockTags.SUBSTRATE_OVERWORLD)
                 .addTag(BlockTags.TERRACOTTA)
                 .addTag(BlockTags.BASE_STONE_NETHER);
+
+        tag(ModTags.Blocks.SHELL_DRAINABLE)
+                .addTag(Tags.Blocks.SANDS)
+                .addTag(Tags.Blocks.GRAVELS)
+                .add(BlockItemIds.CLAY.block());
 
         tag(ModTags.Blocks.GEM_DRAINED)
                 .add(ModBlocks.getRK(ModBlocks.DRAINED_STONE));

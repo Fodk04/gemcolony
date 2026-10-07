@@ -52,16 +52,21 @@ public class ConstructorRenderer {
             return;
         }
 
+        boolean canPlace = ConstructionPlacement.canPlaceAssembly(
+                minecraft.level,
+                assembly,
+                pos,
+                constructor.getPlacementRotation()
+        );
+
         for (AssemblyComponent component : assembly.components()) {
 
             Blueprint blueprint = component.blueprint();
 
             int x = component.x();
-            int y = component.y();
             int z = component.z();
 
             int width = blueprint.width();
-            int height = blueprint.height();
             int depth = blueprint.depth();
 
             int minX = x;
@@ -232,7 +237,7 @@ public class ConstructorRenderer {
 
             collector.submitBlockModel(
                     poseStack,
-                    GemRenderTypes.constructorGhost(),
+                    GemRenderTypes.constructorGhost(canPlace),
                     List.copyOf(parts),
                     new int[0],
                     minecraft.level.getBrightness(LightLayer.BLOCK, pos) << 4

@@ -33,8 +33,7 @@ public class GemSeedBlock extends BaseEntityBlock {
 
     @Override
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide() ? null : createTickerHelper(type,
-                ModBlockEntities.GEM_SEED_BE.get(),
+        return level.isClientSide() ? null : createTickerHelper(type, ModBlockEntities.GEM_SEED_BE.get(),
                 (level1, pos, state1, blockEntity) -> blockEntity.tick());
     }
 }

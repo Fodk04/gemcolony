@@ -269,7 +269,7 @@ public class CrystalBlock extends Block implements ConstructedMultiblock {
         return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
-    private static BlockPos getCenterPos(BlockPos pos, CrystalPart part) {
+    public static BlockPos getCenterPos(BlockPos pos, CrystalPart part) {
         return switch (part) {
             case CENTER -> pos;
 
@@ -361,5 +361,23 @@ public class CrystalBlock extends Block implements ConstructedMultiblock {
 
             injector.handleRedstoneSignal(level.hasNeighborSignal(pos));
         }
+    }
+
+    @Override
+    public boolean canPlace(Level level, BlockPos pos, BlockState state) {
+        for (int y = -1; y <= 1; y++) {
+            for (int z = -1; z <= 1; z++) {
+                for (int x = -1; x <= 1; x++) {
+
+                    BlockPos blockPos = pos.offset(x, y, z);
+
+                    if (!level.getBlockState(blockPos).canBeReplaced()) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

@@ -401,4 +401,33 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
         }
     }
 
+    @Override
+    public boolean canPlace(Level level, BlockPos pos, BlockState state) {
+        BlockPos top = pos.above();
+
+        BlockPos[] positions = {
+                top.north().west(),
+                top.north(),
+                top.north().east(),
+
+                top.west(),
+                top,
+                top.east(),
+
+                top.south().west(),
+                top.south(),
+                top.south().east(),
+
+                pos,
+                pos.below()
+        };
+
+        for (BlockPos blockPos : positions) {
+            if (!level.getBlockState(blockPos).canBeReplaced()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

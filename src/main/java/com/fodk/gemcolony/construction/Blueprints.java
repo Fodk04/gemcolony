@@ -17,9 +17,9 @@ public class Blueprints {
             "shell",
             "Shell",
             3, 2, 3,
-            -1,-1,-1,
+            -1,0,-1,
             5,
-            ModBlocks.CRYSTAL.get(),
+            ModBlocks.SHELL.get(),
             java.util.List.of()
     );
     public static final Blueprint INCUBATOR = new Blueprint(

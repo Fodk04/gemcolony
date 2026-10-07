@@ -1,8 +1,7 @@
 package com.fodk.gemcolony.menu;
 
 import com.fodk.gemcolony.block.custom.InjectionOrientation;
-import com.fodk.gemcolony.block.entity.screen.InjectorSlot;
-import com.fodk.gemcolony.menu.ModMenus;
+import com.fodk.gemcolony.block.entity.screen.MachineSlot;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -92,7 +91,7 @@ public class InjectorMenu extends AbstractContainerMenu {
     private void addSlots(Inventory playerInventory) {
 
         // CHROMA
-        this.addSlot(new InjectorSlot(
+        this.addSlot(new MachineSlot(
                 injector,
                 0,
                 18,
@@ -101,7 +100,7 @@ public class InjectorMenu extends AbstractContainerMenu {
         ));
 
         // GEM SEED
-        this.addSlot(new InjectorSlot(
+        this.addSlot(new MachineSlot(
                 injector,
                 1,
                 18,

@@ -60,7 +60,7 @@ public class EssenceBottle extends Item {
                 gem.initializeGem(-1);
                 ItemStack gemItem = new ItemStack(gem.getGemItem());
                 gemItem.set(ModDataComponents.GEM_SAVE_DATA, gem.toSaveData());
-                gemItem.set(ModDataComponents.REFORM_TIME, gem.getReformTime());
+                gemItem.set(ModDataComponents.REFORM_TIME, 10);
                 gemItem.set(ModDataComponents.REFORM_PROGRESS, GemEntity.maxReformProgress);
 
                 gem.discard();

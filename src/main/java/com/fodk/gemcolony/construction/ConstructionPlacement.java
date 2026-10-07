@@ -1,8 +1,12 @@
 package com.fodk.gemcolony.construction;
 
+import com.fodk.gemcolony.block.custom.ConstructedMultiblock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
@@ -50,32 +54,40 @@ public class ConstructionPlacement {
     public static boolean canPlaceAssembly(Level level, Assembly assembly, BlockPos origin, Rotation assemblyRotation) {
         for (AssemblyComponent component : assembly.components()) {
 
-            AABB box = getComponentBox(
-                    assembly,
-                    component,
+            BlockPos componentPos = rotatePosition(
+                    origin,
+                    component.x(),
+                    component.y(),
+                    component.z(),
                     assemblyRotation,
-                    origin
+                    assembly.centerX(),
+                    assembly.centerZ()
             );
 
-            int minX = (int) Math.floor(box.minX);
-            int maxX = (int) Math.ceil(box.maxX);
+            BlockState blockState = component.blueprint().block().defaultBlockState();
 
-            int minY = (int) Math.floor(box.minY);
-            int maxY = (int) Math.ceil(box.maxY);
+            if (blockState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
 
-            int minZ = (int) Math.floor(box.minZ);
-            int maxZ = (int) Math.ceil(box.maxZ);
+                Direction facing = switch (component.rotation()) {
+                    case CLOCKWISE_90 -> Direction.EAST;
+                    case CLOCKWISE_180 -> Direction.SOUTH;
+                    case COUNTERCLOCKWISE_90 -> Direction.WEST;
+                    default -> Direction.NORTH;
+                };
 
-            for (int x = minX; x < maxX; x++) {
-                for (int y = minY; y < maxY; y++) {
-                    for (int z = minZ; z < maxZ; z++) {
+                facing = assemblyRotation.rotate(facing);
+                blockState = blockState.setValue(BlockStateProperties.HORIZONTAL_FACING, facing);
+            }
 
-                        BlockPos blockPos = new BlockPos(x, y, z);
+            if (blockState.getBlock() instanceof ConstructedMultiblock multiblock) {
 
-                        if (!level.getBlockState(blockPos).canBeReplaced()) {
-                            return false;
-                        }
-                    }
+                blockState = multiblock.getConstructionState(level, componentPos, blockState);
+                if (!multiblock.canPlace(level, componentPos, blockState)) {
+                    return false;
+                }
+            } else {
+                if (!level.getBlockState(componentPos).canBeReplaced()) {
+                    return false;
                 }
             }
         }

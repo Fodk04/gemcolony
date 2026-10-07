@@ -188,6 +188,7 @@ public class ModBlocks {
             properties -> new LegBlock(
                     properties
                             .strength(2F)
+                            .explosionResistance(Float.MAX_VALUE)
                             .noLootTable()
                             .sound(SoundType.METAL)
                             .noOcclusion()
@@ -199,8 +200,21 @@ public class ModBlocks {
             properties -> new CrystalBlock(
                     properties
                             .strength(2F)
+                            .explosionResistance(Float.MAX_VALUE)
                             .noLootTable()
                             .sound(SoundType.GLASS)
+                            .noOcclusion()
+            )
+    );
+
+    public static final DeferredBlock<Block> TANK = registerBlock(
+            "tank",
+            properties -> new TankBlock(
+                    properties
+                            .strength(2F)
+                            .explosionResistance(Float.MAX_VALUE)
+                            .noLootTable()
+                            .sound(SoundType.METAL)
                             .noOcclusion()
             )
     );
@@ -211,17 +225,18 @@ public class ModBlocks {
             properties -> new DrillBlock(
                     properties
                             .strength(2F)
+                            .explosionResistance(Float.MAX_VALUE)
                             .noLootTable()
                             .sound(SoundType.METAL)
                             .noOcclusion()
             )
     );
 
-    public static final DeferredBlock<Block> TANK = registerBlock(
-            "tank",
-            properties -> new TankBlock(
+    public static final DeferredBlock<Block> SHELL = registerBlock(
+            "shell",
+            properties -> new ShellBlock(
                     properties
-                            .strength(2F)
+                            .strength(2F).explosionResistance(Float.MAX_VALUE)
                             .noLootTable()
                             .sound(SoundType.METAL)
                             .noOcclusion()

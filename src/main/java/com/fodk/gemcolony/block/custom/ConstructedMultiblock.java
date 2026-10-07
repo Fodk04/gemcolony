@@ -19,4 +19,8 @@ public interface ConstructedMultiblock {
             BlockPos pos,
             BlockState state
     );
+
+    default boolean canPlace(Level level, BlockPos pos, BlockState state) {
+        return true;
+    }
 }

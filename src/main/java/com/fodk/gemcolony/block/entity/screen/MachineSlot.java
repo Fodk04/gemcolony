@@ -6,11 +6,11 @@ import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-public class InjectorSlot extends Slot {
+public class MachineSlot extends Slot {
 
     private final int slotType;
 
-    public InjectorSlot(Container container, int slot, int x, int y, int slotType) {
+    public MachineSlot(Container container, int slot, int x, int y, int slotType) {
         super(container, slot, x, y);
         this.slotType = slotType;
     }

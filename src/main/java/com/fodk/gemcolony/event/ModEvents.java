@@ -1,7 +1,11 @@
 package com.fodk.gemcolony.event;
 
 import com.fodk.gemcolony.GemColony;
+import com.fodk.gemcolony.block.ModBlocks;
+import com.fodk.gemcolony.block.custom.*;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
+import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
+import com.fodk.gemcolony.block.entity.custom.ShellBlockEntity;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.base.GemRisingItemEntity;
 import com.fodk.gemcolony.item.ModItems;
@@ -42,6 +46,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
 
 @EventBusSubscriber(modid = GemColony.MOD_ID)
 public class ModEvents {
@@ -169,6 +174,186 @@ public class ModEvents {
                 Capabilities.Fluid.BLOCK,
                 ModBlockEntities.INJECTOR_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEssenceHandler()
+        );
+
+        event.registerBlock(
+                Capabilities.Fluid.BLOCK,
+                (level, pos, state, blockEntity, direction) -> {
+
+                    // DRILL
+                    if (state.is(ModBlocks.DRILL.get())) {
+                        DrillPart part = state.getValue(DrillBlock.PART);
+
+                        // CENTER already has its own BlockEntity capability
+                        if (part == DrillPart.CENTER) {
+                            return null;
+                        }
+
+                        BlockPos drillPos = DrillBlock.getCenterPos(pos, part);
+
+                        if (level.getBlockEntity(drillPos) instanceof InjectorBlockEntity injector) {
+                            return injector.getEssenceHandler();
+                        }
+
+                        return null;
+                    }
+
+                    // TANK
+                    if (state.is(ModBlocks.TANK.get())) {
+                        TankPart part = state.getValue(TankBlock.PART);
+
+                        BlockPos tankCenter = TankBlock.getCenterPos(pos, part);
+                        TankHalf half = state.getValue(TankBlock.HALF);
+
+                        BlockPos drillPos = half == TankHalf.TANK_BOTTOM
+                                ? tankCenter.below(3)
+                                : tankCenter.below(6);
+
+                        if (level.getBlockEntity(drillPos) instanceof InjectorBlockEntity injector) {
+                            return injector.getEssenceHandler();
+                        }
+
+                        return null;
+                    }
+
+                    // CRYSTAL
+                    if (state.is(ModBlocks.CRYSTAL.get())) {
+                        CrystalPart part = state.getValue(CrystalBlock.PART);
+
+                        BlockPos crystalCenter = CrystalBlock.getCenterPos(pos, part);
+                        BlockPos drillPos = crystalCenter.below(9);
+
+                        if (level.getBlockEntity(drillPos) instanceof InjectorBlockEntity injector) {
+                            return injector.getEssenceHandler();
+                        }
+
+                        return null;
+                    }
+
+                    return null;
+                },
+                ModBlocks.DRILL.get(),
+                ModBlocks.TANK.get(),
+                ModBlocks.CRYSTAL.get()
+        );
+
+        event.registerBlock(
+                Capabilities.Item.BLOCK,
+                (level, pos, state, blockEntity, direction) -> {
+
+                    // DRILL
+                    if (state.is(ModBlocks.DRILL.get())) {
+                        DrillPart part = state.getValue(DrillBlock.PART);
+
+                        // The CENTER is already a BlockEntity
+                        // Let its normal capability handle it
+                        if (part == DrillPart.CENTER) {
+                            return null;
+                        }
+
+                        BlockPos drillPos = DrillBlock.getCenterPos(pos, part);
+
+                        if (level.getBlockEntity(drillPos) instanceof InjectorBlockEntity injector) {
+                            return VanillaContainerWrapper.of(injector);
+                        }
+
+                        return null;
+                    }
+
+                    // TANK
+                    if (state.is(ModBlocks.TANK.get())) {
+                        TankPart part = state.getValue(TankBlock.PART);
+
+                        BlockPos tankCenter = TankBlock.getCenterPos(pos, part);
+                        TankHalf half = state.getValue(TankBlock.HALF);
+
+                        BlockPos drillPos = half == TankHalf.TANK_BOTTOM
+                                ? tankCenter.below(3)
+                                : tankCenter.below(6);
+
+                        if (level.getBlockEntity(drillPos) instanceof InjectorBlockEntity injector) {
+                            return VanillaContainerWrapper.of(injector);
+                        }
+
+                        return null;
+                    }
+
+                    // CRYSTAL
+                    if (state.is(ModBlocks.CRYSTAL.get())) {
+                        CrystalPart part = state.getValue(CrystalBlock.PART);
+
+                        BlockPos crystalCenter = CrystalBlock.getCenterPos(pos, part);
+                        BlockPos drillPos = crystalCenter.below(9);
+
+                        if (level.getBlockEntity(drillPos) instanceof InjectorBlockEntity injector) {
+                            return VanillaContainerWrapper.of(injector);
+                        }
+
+                        return null;
+                    }
+
+                    return null;
+                },
+                ModBlocks.DRILL.get(),
+                ModBlocks.TANK.get(),
+                ModBlocks.CRYSTAL.get()
+        );
+
+        event.registerBlockEntity(
+                Capabilities.Fluid.BLOCK,
+                ModBlockEntities.SHELL_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEssenceHandler()
+        );
+
+        event.registerBlock(
+                Capabilities.Fluid.BLOCK,
+                (level, pos, state, blockEntity, direction) -> {
+                    if (!(state.getBlock() instanceof ShellBlock shellBlock)) {
+                        return null;
+                    }
+
+                    ShellPart part = state.getValue(ShellBlock.PART);
+
+                    if (part == ShellPart.CENTER) {
+                        return null;
+                    }
+
+                    BlockPos centerPos = shellBlock.getCenterPos(pos, part);
+
+                    if (!(level.getBlockEntity(centerPos) instanceof ShellBlockEntity shellBE)) {
+                        return null;
+                    }
+
+                    return shellBE.getEssenceHandler();
+                },
+                ModBlocks.SHELL.get()
+        );
+
+        event.registerBlock(
+                Capabilities.Item.BLOCK,
+                (level, pos, state, blockEntity, direction) -> {
+
+                    if (!(state.getBlock() instanceof ShellBlock shellBlock)) {
+                        return null;
+                    }
+
+                    ShellPart part = state.getValue(ShellBlock.PART);
+
+                    // CENTER already has the BlockEntity
+                    // Let its normal capability handle it
+                    if (part == ShellPart.CENTER) {
+                        return null;
+                    }
+
+                    BlockPos centerPos = shellBlock.getCenterPos(pos, part);
+
+                    if (level.getBlockEntity(centerPos) instanceof ShellBlockEntity shellBE) {
+                        return VanillaContainerWrapper.of(shellBE);
+                    }
+
+                    return null;
+                },
+                ModBlocks.SHELL.get()
         );
     }
 

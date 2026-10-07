@@ -29,13 +29,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 
@@ -141,7 +139,6 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
             return InteractionResult.SUCCESS;
         }
 
-        // Normal Injector interaction
         if (!isComplete()) {
             player.sendSystemMessage(Component.literal("Injector is incomplete."));
 
@@ -582,7 +579,7 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
 
                 BlockPos pos = new BlockPos(x, y, z);
 
-                if (level.getBlockState(pos).is(ModTags.Blocks.GEM_DRAINABLES) && level.getBlockState(pos.below()).isSolid()) {
+                if (level.getBlockState(pos).is(ModTags.Blocks.INJECTOR_DRAINABLE) && level.getBlockState(pos.below()).isSolid()) {
                     return pos;
                 }
             }

@@ -1,4 +1,4 @@
-package com.fodk.gemcolony.block.entity.renderer;
+package com.fodk.gemcolony.block.entity.client.renderstate;
 
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 

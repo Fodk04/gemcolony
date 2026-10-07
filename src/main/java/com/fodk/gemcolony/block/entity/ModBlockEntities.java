@@ -4,6 +4,7 @@ import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.entity.custom.GemSeedBlockEntity;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
+import com.fodk.gemcolony.block.entity.custom.ShellBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -19,6 +20,15 @@ public class ModBlockEntities {
                             InjectorBlockEntity::new,
                             ModBlocks.DRILL.get()
                     ));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShellBlockEntity>> SHELL_BE =
+            BLOCK_ENTITIES.register(
+                    "shell",
+                    () -> new BlockEntityType<>(
+                            ShellBlockEntity::new,
+                            ModBlocks.SHELL.get()
+                    )
+            );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GemSeedBlockEntity>> GEM_SEED_BE =
             BLOCK_ENTITIES.register(

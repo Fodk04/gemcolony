@@ -18,11 +18,11 @@ public final class GemRenderTypes {
         );
     }
 
-    public static RenderType constructorGhost() {
+    public static RenderType constructorGhost(boolean canPlace) {
         return RenderType.create(
-                "constructor_ghost",
+                canPlace ? "constructor_ghost_green" : "constructor_ghost_red",
                 RenderSetup
-                        .builder(GemRenderPipelines.CONSTRUCTOR_GHOST)
+                        .builder(canPlace ? GemRenderPipelines.CONSTRUCTOR_GHOST : GemRenderPipelines.CONSTRUCTOR_GHOST_RED)
                         .withTexture("Sampler0", TextureAtlas.LOCATION_BLOCKS)
                         .useLightmap()
                         .createRenderSetup()

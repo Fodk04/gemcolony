@@ -188,7 +188,7 @@ public class TankBlock extends Block implements ConstructedMultiblock {
         }
     }
 
-    private static BlockPos getCenterPos(BlockPos pos, TankPart part) {
+    public static BlockPos getCenterPos(BlockPos pos, TankPart part) {
         return switch (part) {
             case CENTER -> pos;
 
@@ -357,5 +357,23 @@ public class TankBlock extends Block implements ConstructedMultiblock {
 
             injector.handleRedstoneSignal(level.hasNeighborSignal(pos));
         }
+    }
+
+    @Override
+    public boolean canPlace(Level level, BlockPos pos, BlockState state) {
+        for (int y = -1; y <= 1; y++) {
+            for (int z = -1; z <= 1; z++) {
+                for (int x = -1; x <= 1; x++) {
+
+                    BlockPos blockPos = pos.offset(x, y, z);
+
+                    if (!level.getBlockState(blockPos).canBeReplaced()) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

@@ -101,16 +101,17 @@ public class GemSeedBlockEntity extends BlockEntity {
 
     private int determineQuality(int drained) {
         float drainagePercentage = (float) drained / BLOCKS_NEEDED * 100.0F;
+        System.out.println(drainagePercentage);
 
         if (drainagePercentage < 30.0F) {
             return level.getRandom().nextFloat() < 0.20F ? 0 : 1;
         }
 
-        if (drainagePercentage < 75.0F) {
+        if (drainagePercentage < 50.0F) {
             return level.getRandom().nextFloat() < 0.1F ? 0 : 1;
         }
 
-        return level.getRandom().nextFloat() < 0.20F ? 2 : 1;
+        return level.getRandom().nextFloat() < 0.25F ? 2 : 1;
     }
 
     public void generateGem() {
@@ -122,8 +123,8 @@ public class GemSeedBlockEntity extends BlockEntity {
 
         GemEntity gem = GemDefinitions.get(selectedGemId).gem().create((ServerLevel) level, null, getBlockPos(), EntitySpawnReason.NATURAL, false, false);
 
-        gem.setQuality(quality);
         gem.initializeGemFromChroma(((ChromaItem) chroma.getItem()).colorIndex);
+        gem.setQuality(quality);
 
         int height = (int) Math.ceil(gem.getHitbox().getYsize());
         digTunnel(findShortestTunnel(height), height);
@@ -163,7 +164,7 @@ public class GemSeedBlockEntity extends BlockEntity {
                     for (int z = -DRAIN_RADIUS; z <= DRAIN_RADIUS; z++) {
                         BlockPos pos = worldPosition.offset(x, y, z);
 
-                        if (level.getBlockState(pos).is(ModTags.Blocks.GEM_DRAINABLES) && !isPotentialSeedPosition(pos)) {
+                        if (level.getBlockState(pos).is(ModTags.Blocks.INJECTOR_DRAINABLE) && !isPotentialSeedPosition(pos)) {
                             drainableBlocks.add(pos);
                         }
                     }
@@ -177,7 +178,7 @@ public class GemSeedBlockEntity extends BlockEntity {
         }
 
         BlockPos target = drainableBlocks.get(level.getRandom().nextInt(drainableBlocks.size()));
-        if (!level.getBlockState(target).is(ModTags.Blocks.GEM_DRAINABLES)) {
+        if (!level.getBlockState(target).is(ModTags.Blocks.INJECTOR_DRAINABLE)) {
             drainableBlocks.remove(target);
             return;
         }
@@ -238,7 +239,7 @@ public class GemSeedBlockEntity extends BlockEntity {
             for (int y = 0; y < tunnelHeight; y++) {
                 BlockPos pos = tunnelPos.above(y);
                 BlockState blockState = level.getBlockState(pos);
-                if (blockState.is(ModTags.Blocks.GEM_DRAINABLES) || blockState.is(ModTags.Blocks.GEM_DRAINED)) {
+                if (blockState.is(ModTags.Blocks.INJECTOR_DRAINABLE) || blockState.is(ModTags.Blocks.GEM_DRAINED)) {
                     level.removeBlock(pos, false);
                 }
             }

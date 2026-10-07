@@ -140,10 +140,10 @@ public class PeridotEntity extends GemEntity {
     protected void registerGoals() {
         super.registerGoals();
 
-        this.goalSelector.addGoal(3, new PeridotAnalysisGoal(this, 2));
-        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, LivingEntity.class,
+        this.goalSelector.addGoal(3, new PeridotAnalysisGoal(this, 1));
+        this.goalSelector.addGoal(7, new AvoidEntityGoal<>(this, LivingEntity.class,
                 16.0F,
-                1.0D,
+                1.1D,
                 1.2D,
                 entity -> entity == this.getTarget()));
     }
@@ -194,7 +194,7 @@ public class PeridotEntity extends GemEntity {
     @Override
     protected int getInventorySize() {
         float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
-        return (int) (14 * qualityModifier);
+        return (int) (12 * qualityModifier);
     }
 
     //3 MIN

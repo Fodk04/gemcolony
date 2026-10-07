@@ -21,8 +21,9 @@ void main() {
         discard;
     }
 
-    // Keep the model's alpha, but replace its color with green.
-    vec4 color = vec4(0.0, 1.0, 0.0, textureColor.a);
+    vec3 tint = vec3(0.2, 1.0, 0.2);
+    vec3 tintedColor = mix(textureColor.rgb, tint, 0.65);
+    vec4 color = vec4(tintedColor, textureColor.a);
 
     color *= ColorModulator;
 
