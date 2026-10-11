@@ -160,6 +160,8 @@ public class ModModelProvider extends ModelProvider {
         generateGemItem(ModItems.RUBY_GEM.get(), itemModels);
         generateGemItem(ModItems.SAPPHIRE_GEM.get(), itemModels);
 
+        generateGemItem(ModItems.FUSE.get(), itemModels);
+
         //tools
         itemModels.generateFlatItem(ModItems.CHROMA_SWORD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModels.generateFlatItem(ModItems.CHROMA_PICKAXE.get(), ModelTemplates.FLAT_HANDHELD_ITEM);

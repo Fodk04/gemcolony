@@ -16,6 +16,13 @@ public final class GemRenderPipelines {
             .withShaderDefine("EMISSIVE")
             .build();
 
+    public static final RenderPipeline GEM_PLACEMENT = RenderPipeline
+            .builder(RenderPipelines.ENTITY_SNIPPET)
+            .withLocation(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pipeline/gem_placement"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "core/gem_placement"))
+            .withShaderDefine("EMISSIVE")
+            .build();
+
     public static final RenderPipeline HOLOPEARL = RenderPipeline
             .builder(RenderPipelines.ENTITY_SNIPPET)
             .withLocation(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pipeline/holopearl"))

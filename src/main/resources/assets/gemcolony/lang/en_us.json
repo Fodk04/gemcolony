@@ -18,6 +18,7 @@
 
   "item.gemcolony.gem_shards": "Gem Shards",
   "item.gemcolony.gem_seed": "Gem Seed",
+  "item.gemcolony.fuse": "Fuse",
 
   "item.gemcolony.chroma_sword": "Chroma Sword",
   "item.gemcolony.chroma_pickaxe": "Chroma Pickaxe",
@@ -72,6 +73,23 @@
   "item.gemcolony.amethyst_quartz_gem": "Amethyst Quartz Gem",
   "item.gemcolony.cherry_quartz_gem": "Cherry Quartz Gem",
   "item.gemcolony.rose_quartz_gem": "Rose Quartz Gem",
+
+  "item.gemcolony.spiderweb_jasper_gem": "Spiderweb Jasper Gem",
+  "item.gemcolony.porcelain_jasper_gem": "Porcelain Jasper Gem",
+  "item.gemcolony.zebra_jasper_gem": "Zebra Jasper Gem",
+  "item.gemcolony.chrysanthemum_jasper_gem": "Chrysanthemum Jasper Gem",
+  "item.gemcolony.snakeskin_jasper_gem": "Snakeskin Jasper Gem",
+  "item.gemcolony.biggs_jasper_gem": "Biggs Jasper Gem",
+  "item.gemcolony.noreena_jasper_gem": "Noreena Jasper Gem",
+  "item.gemcolony.honey_jasper_gem": "Honey Jasper Gem",
+  "item.gemcolony.morrisonite_jasper_gem": "Morrisonite Jasper Gem",
+  "item.gemcolony.rhyolite_jasper_gem": "Rhyolite Jasper Gem",
+  "item.gemcolony.kambaba_jasper_gem": "Kambaba Jasper Gem",
+  "item.gemcolony.ocean_jasper_gem": "Ocean Jasper Gem",
+  "item.gemcolony.sea_sediment_jasper_gem": "Sea Sediment Jasper Gem",
+  "item.gemcolony.royal_plume_jasper_gem": "Royal Plume Jasper Gem",
+  "item.gemcolony.mookite_jasper_gem": "Mookite Jasper Gem",
+  "item.gemcolony.peach_petal_jasper_gem": "Peach Petal Jasper Gem",
 
   "item.gemcolony.white_pearl_gem": "White Pearl Gem",
   "item.gemcolony.specter_pearl_gem": "Specter Pearl Gem",

@@ -37,6 +37,32 @@ public abstract class StarterGemEntity extends GemEntity {
     }
 
     @Override
+    public double getBaseMaxHealth() {
+        return 4;
+    }
+
+    @Override
+    public double getBaseAttackDamage() {
+        return 0;
+    }
+
+    @Override
+    public double getBaseMovementSpeed() {
+        return 0.2;
+    }
+
+    @Override
+    public double getBaseAttackSpeed() {
+        return 0;
+    }
+
+    @Override
+    protected int getInventorySize() {
+        float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
+        return (int) (3 * qualityModifier);
+    }
+
+    @Override
     public int getMaxOutfits() {
         return 3;
     }
@@ -98,5 +124,10 @@ public abstract class StarterGemEntity extends GemEntity {
                 1.1D,
                 1.2D,
                 entity -> entity == this.getTarget()));
+    }
+
+    @Override
+    public float getBaseModelSize() {
+        return 0.4f;
     }
 }

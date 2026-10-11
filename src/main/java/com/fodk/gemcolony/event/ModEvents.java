@@ -6,6 +6,7 @@ import com.fodk.gemcolony.block.custom.*;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.block.entity.custom.ShellBlockEntity;
+import com.fodk.gemcolony.data.FusionRegistryData;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.base.GemRisingItemEntity;
 import com.fodk.gemcolony.item.ModItems;
@@ -16,6 +17,7 @@ import com.fodk.gemcolony.networking.packet.*;
 import com.fodk.gemcolony.potion.ModPotions;
 import com.fodk.gemcolony.util.GemCombatUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,6 +45,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -390,5 +393,12 @@ public class ModEvents {
         }
 
         monster.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(monster, GemEntity.class, true));
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(ServerTickEvent.Post event) {
+        for (ServerLevel level : event.getServer().getAllLevels()) {
+            FusionRegistryData.get(level).tickSessions(level);
+        }
     }
 }

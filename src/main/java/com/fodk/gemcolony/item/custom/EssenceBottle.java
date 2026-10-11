@@ -2,7 +2,6 @@ package com.fodk.gemcolony.item.custom;
 
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
-import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -10,7 +9,6 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -61,7 +59,7 @@ public class EssenceBottle extends Item {
                 ItemStack gemItem = new ItemStack(gem.getGemItem());
                 gemItem.set(ModDataComponents.GEM_SAVE_DATA, gem.toSaveData());
                 gemItem.set(ModDataComponents.REFORM_TIME, 10);
-                gemItem.set(ModDataComponents.REFORM_PROGRESS, GemEntity.maxReformProgress);
+                gemItem.set(ModDataComponents.REFORM_PROGRESS, GemEntity.MAX_REFORM_PROGRESS);
 
                 gem.discard();
 

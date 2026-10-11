@@ -12,8 +12,8 @@ public record FacetRegion(ResourceKey<Level> dimension, int regionX, int regionZ
             ResourceKey.codec(Registries.DIMENSION).fieldOf("dimension").forGetter(FacetRegion::dimension),
             Codec.INT.fieldOf("regionX").forGetter(FacetRegion::regionX),
             Codec.INT.fieldOf("regionZ").forGetter(FacetRegion::regionZ),
-            Codec.INT.fieldOf("gemCount").forGetter(FacetRegion::gemCount)
-    ).apply(instance, FacetRegion::new));
+            Codec.INT.fieldOf("gemCount").forGetter(FacetRegion::gemCount))
+            .apply(instance, FacetRegion::new));
 
     public FacetRegion withIncrementedCount() {
         return new FacetRegion(dimension, regionX, regionZ, gemCount + 1);

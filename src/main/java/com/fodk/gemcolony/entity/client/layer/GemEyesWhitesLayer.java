@@ -39,4 +39,13 @@ public class GemEyesWhitesLayer<T extends GeoAnimatable, R extends GemRenderStat
     protected Vec3 getReformScale(R renderState, float reformProgress, float beginToShow, float endShow) {
         return super.getReformScale(renderState, renderState.reformProgress, this.beginToShow, this.endShow);
     }
+
+    @Override
+    protected float getReformCenter(R renderState) {
+        if(renderState.isFusion && renderState.reformProgress < 1f){
+            return 0;
+        }else{
+            return super.getReformCenter(renderState);
+        }
+    }
 }

@@ -45,10 +45,7 @@ public abstract class GemTintedTextureLayer<T extends GeoAnimatable, R extends G
         GemRenderState state = (GemRenderState) renderState;
         return state.reformCenter;
     }
-    protected float getQualityModifier(R renderState){
-        GemRenderState state = (GemRenderState) renderState;
-        return state.qualityModifier;
-    }
+
     protected float getModelSize(R renderState){
         GemRenderState state = (GemRenderState) renderState;
         return state.modelSize;
@@ -69,17 +66,17 @@ public abstract class GemTintedTextureLayer<T extends GeoAnimatable, R extends G
         int myColor = getTintColor(renderState);
         BakedGeoModel model = renderPassInfo.model();
         Vec3 reformScale = getReformScale(renderState, 1, 0, 1);
-        float scale = getQualityModifier(renderState) * getModelSize(renderState);
-        Vec3 qualityScale = new Vec3(scale, scale,scale) ;
+        float scale = getModelSize(renderState);
+        Vec3 scaleVector = new Vec3(scale, scale,scale) ;
 
         renderTasks.order(order).submitCustomGeometry(renderPassInfo.poseStack(), renderType, (pose, vertexConsumer) -> {
             PoseStack poseStack = renderPassInfo.poseStack();
             poseStack.pushPose();
             poseStack.last().set(pose);
-            poseStack.scale((float)qualityScale.x, (float)qualityScale.y, (float)qualityScale.z);
-            poseStack.translate(0, getReformCenter(renderState), 0);
+            poseStack.scale((float)scaleVector.x, (float)scaleVector.y, (float)scaleVector.z);
+            poseStack.translate(0, getReformCenter(renderState) / getModelSize(renderState), 0);
             poseStack.scale((float)reformScale.x, (float)reformScale.y, (float)reformScale.z);
-            poseStack.translate(0, -getReformCenter(renderState), 0);
+            poseStack.translate(0, -getReformCenter(renderState) / getModelSize(renderState), 0);
             renderPassInfo.renderPosed(() -> model.render(renderPassInfo, vertexConsumer, packedLight, packedOverlay, myColor));
             poseStack.popPose();
         });

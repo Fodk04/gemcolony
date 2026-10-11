@@ -3,7 +3,6 @@ package com.fodk.gemcolony.block.entity.custom;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.custom.ShellBlock;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
-import com.fodk.gemcolony.block.entity.client.renderstate.ShellRenderState;
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
@@ -21,7 +20,6 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.constant.dataticket.DataTicket;
 import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -502,7 +500,7 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
         ItemStack pearlGemItem = new ItemStack(gem.getGemItem());
         pearlGemItem.set(ModDataComponents.GEM_SAVE_DATA, gem.toSaveData());
         pearlGemItem.set(ModDataComponents.REFORM_TIME, 0);
-        pearlGemItem.set(ModDataComponents.REFORM_PROGRESS, GemEntity.maxReformProgress);
+        pearlGemItem.set(ModDataComponents.REFORM_PROGRESS, GemEntity.MAX_REFORM_PROGRESS);
 
         gem.discard();
 

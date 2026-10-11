@@ -89,11 +89,19 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
     int textColor;
     int gemColor;
 
+    private int currentPage = 0;
+    private Button pageLeft;
+    private Button pageRight;
+
+    private static final int SLOTS_PER_PAGE = 54;
+    private static final int SLOTS_PER_ROW = 9;
+
     public GemScreen(GemMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, 176, getGuiHeight(menu));
-        setInventorySlotsActive(true);
+        updateGemPageSlots();
         gemColor = menu.getGemEntity().getGemColor();
         textColor = ColorUtil.getContrastingTextColor(gemColor);
+        GemEntity gem = menu.getGemEntity();
     }
 
     public int getLeftPos() {
@@ -110,8 +118,8 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
 
         //INVENTORY
         if(selectedTab == GemTabs.INVENTORY){
-            int gemSlots = menu.getGemEntity().getContainerSize();
-            int rows = (gemSlots + 8) / 9;
+            int gemSlots = getCurrentPageSlotCount();
+            int rows = getCurrentPageRows();
 
             Identifier background = BACKGROUNDS[rows - 1];
 
@@ -195,21 +203,25 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
                     textColor
             );
 
-            drawSelector(
-                    graphics,
-                    "Hairstyle",
-                    menu.getGemEntity().getHairstyle(),
-                    40 + APPEARANCE_TYPE_Y_OFFSET,
-                    textColor
-            );
+            if(menu.getGemEntity().getMaxHairstyles() >= 1){
+                drawSelector(
+                        graphics,
+                        "Hairstyle",
+                        menu.getGemEntity().getHairstyle(),
+                        40 + APPEARANCE_TYPE_Y_OFFSET,
+                        textColor
+                );
+            }
 
-            drawSelector(
-                    graphics,
-                    "Visor",
-                    menu.getGemEntity().getVisor(),
-                    60 + APPEARANCE_TYPE_Y_OFFSET,
-                    textColor
-            );
+            if(menu.getGemEntity().getMaxVisors() >= 1){
+                drawSelector(
+                        graphics,
+                        "Visor",
+                        menu.getGemEntity().getVisor(),
+                        60 + APPEARANCE_TYPE_Y_OFFSET,
+                        textColor
+                );
+            }
 
             drawNameEditBox(graphics);
         }
@@ -310,17 +322,100 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
     }
 
     private void setInventorySlotsActive(boolean active) {
+        if (!active) {
+            for (Slot slot : this.menu.slots) {
+                if (slot instanceof GemSlot gemSlot) {
+                    gemSlot.setActive(false);
+                }
+            }
+            return;
+        }
+
+        updateGemPageSlots();
+    }
+
+    private void updateGemPageSlots() {
+        int startSlot = currentPage * SLOTS_PER_PAGE;
+        int endSlot = startSlot + SLOTS_PER_PAGE;
+
+        int gemSlotCount = menu.getGemEntity().getContainerSize();
+
+        for (int i = 0; i < gemSlotCount; i++) {
+            GemSlot gemSlot = (GemSlot) this.menu.slots.get(i);
+
+            boolean active = selectedTab == GemTabs.INVENTORY
+                    && i >= startSlot
+                    && i < endSlot;
+
+            gemSlot.setActive(active);
+        }
+
+        updatePlayerInventoryLayout();
+    }
+
+    private int getGemPageCount() {
+        return Math.max(1, (menu.getGemEntity().getContainerSize() + SLOTS_PER_PAGE - 1) / SLOTS_PER_PAGE);
+    }
+
+    private int getCurrentPageSlotCount() {
+        int totalSlots = menu.getGemEntity().getContainerSize();
+        int startSlot = currentPage * SLOTS_PER_PAGE;
+
+        return Math.min(SLOTS_PER_PAGE, totalSlots - startSlot);
+    }
+
+    private int getCurrentPageRows() {
+        return (getCurrentPageSlotCount() + 8) / 9;
+    }
+
+    private void nextPage() {
+        if (currentPage < getGemPageCount() - 1) {
+            currentPage++;
+            updateGemPageSlots();
+            updatePageButtons();
+        }
+    }
+
+    private void previousPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            updateGemPageSlots();
+            updatePageButtons();
+        }
+    }
+
+    private void updatePlayerInventoryLayout() {
+        int rows = getCurrentPageRows();
+
         for (Slot slot : this.menu.slots) {
-            if (slot instanceof GemSlot gemSlot) {
-                gemSlot.setActive(active);
+            if (slot instanceof GemSlot gemSlot && gemSlot.getLayoutRows() > 0) {
+                gemSlot.setActive(selectedTab == GemTabs.INVENTORY && gemSlot.getLayoutRows() == rows);
             }
         }
     }
 
-    private void drawTab(GuiGraphicsExtractor graphics, GemTabs gemTab, int x, int y, int gemColor){
+    private void updatePageButtons() {
+        pageLeft.visible = selectedTab == GemTabs.INVENTORY && currentPage > 0;
+        pageRight.visible = selectedTab == GemTabs.INVENTORY && currentPage < getGemPageCount() - 1;
+
+        updatePageButtonPositions();
+    }
+
+    private void updatePageButtonPositions() {
+        int gemRows = getCurrentPageRows();
+        int inventoryLabelY = 18 + gemRows * 18 + 12 - 10;
+
+        int buttonY = this.topPos + inventoryLabelY - 2;
+
+        pageLeft.setPosition(this.leftPos + 65, buttonY);
+        pageRight.setPosition(this.leftPos + 91, buttonY);
+    }
+
+    private void drawTab(GuiGraphicsExtractor graphics, GemTabs gemTab, int x, int y, int gemColor) {
         boolean selected = gemTab == selectedTab;
 
         Identifier tabTexture = selected ? TAB_SELECTED : TAB_UNSELECTED;
+
         graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 tabTexture,
@@ -334,6 +429,32 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
                 26,
                 gemColor
         );
+
+        if (gemTab == GemTabs.ABILITIES) {
+            List<ItemStack> components = menu.getGemEntity().getEntityData().get(GemEntity.FUSION_COMPONENTS);
+
+            if (!components.isEmpty()) {
+                float centerX = x + 18;
+                float centerY = y + 13;
+                float radius = 5.0f;
+
+                for (int i = 0; i < components.size(); i++) {
+                    double angle = Math.PI + 2.0 * Math.PI * i / components.size();
+
+                    int iconX = Math.round(centerX + (float) Math.cos(angle) * radius) - 4;
+
+                    int iconY = Math.round(centerY + (float) Math.sin(angle) * radius) - 4;
+
+                    graphics.pose().pushMatrix();
+                    graphics.pose().translate(iconX, iconY);
+                    graphics.pose().scale(0.5f, 0.5f);
+                    graphics.item(components.get(i), 0, 0);
+                    graphics.pose().popMatrix();
+                }
+
+                return;
+            }
+        }
 
         ItemStack icon = gemTab.getIcon(menu.getGemEntity());
         graphics.item(icon, x + 11, y + 5);
@@ -366,6 +487,7 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
                 setInventorySlotsActive(selectedTab == GemTabs.INVENTORY);
                 setAppearanceWidgetsVisible(selectedTab == GemTabs.APPEARANCE);
                 setAbilityWidgetsVisible(selectedTab == GemTabs.ABILITIES);
+                updatePageButtons();
                 return true;
             }
         }
@@ -404,21 +526,27 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
     private void setAppearanceWidgetsVisible(boolean visible) {
         nameBox.visible = visible;
 
-        outfitLeft.visible = visible;
-        outfitRight.visible = visible;
+        GemEntity gem = menu.getGemEntity();
+        boolean isCustomisable = gem.isCustomisable() && visible;
 
-        insigniaLeft.visible = visible;
-        insigniaRight.visible = visible;
+        outfitLeft.visible = isCustomisable;
+        outfitRight.visible = isCustomisable;
 
-        hairstyleLeft.visible = visible;
-        hairstyleRight.visible = visible;
+        insigniaLeft.visible = isCustomisable;
+        insigniaRight.visible = isCustomisable;
 
-        visorLeft.visible = visible;
-        visorRight.visible = visible;
+        boolean hasHairstyles = gem.getMaxHairstyles() >= 1;
+        hairstyleLeft.visible = isCustomisable && hasHairstyles;
+        hairstyleRight.visible = isCustomisable && hasHairstyles;
+
+        boolean hasVisors = gem.getMaxVisors() >= 1;
+        visorLeft.visible = isCustomisable && hasVisors;
+        visorRight.visible = isCustomisable && hasVisors;
     }
 
     private static int getGuiHeight(GemMenu menu) {
-        int rows = (menu.getGemEntity().getContainerSize() + 8) / 9;
+        int slots = Math.min(SLOTS_PER_PAGE, menu.getGemEntity().getContainerSize());
+        int rows = (slots + 8) / 9;
 
         return 166 + (rows - 1) * 18;
     }
@@ -427,8 +555,7 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 
         if (selectedTab == GemTabs.INVENTORY) {
-            int gemRows = (menu.getGemEntity().getContainerSize() + 8) / 9;
-
+            int gemRows = getCurrentPageRows();
             int inventoryLabelY = 18 + gemRows * 18 + 12 - 10;
 
             graphics.text(
@@ -448,6 +575,27 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
                     textColor,
                     false
             );
+
+            Component pageText = Component.literal((currentPage + 1) + "/" + getGemPageCount());
+
+            int pageY = this.topPos + inventoryLabelY - 7;
+
+            if(getGemPageCount() > 1){
+                graphics.pose().pushMatrix();
+                graphics.pose().translate(this.leftPos + 82, pageY);
+                graphics.pose().scale(0.78f);
+
+                graphics.text(
+                        this.font,
+                        pageText,
+                        -this.font.width(pageText) / 2 - 193,
+                        0,
+                        textColor,
+                        false
+                );
+
+                graphics.pose().popMatrix();
+            }
         }
         if(selectedTab == GemTabs.APPEARANCE){
             graphics.text(
@@ -563,6 +711,23 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
                 () -> menu.changeVisor(1)
         );
 
+        //int gemRows = getCurrentPageRows();
+        //int pageButtonsY = 18 + gemRows * 18 + 12 - 10;
+
+        pageLeft = Button.builder(Component.literal("◀"),
+                button -> previousPage())
+                .bounds(this.leftPos + 65,
+                this.topPos + 4,
+                10,
+                10).build();
+
+        pageRight = Button.builder(Component.literal("▶"),
+                button -> nextPage())
+                .bounds(this.leftPos + 91,
+                this.topPos + 4,
+                10,
+                10).build();
+
         setAppearanceWidgetsVisible(selectedTab == GemTabs.APPEARANCE);
 
         this.addRenderableWidget(nameBox);
@@ -578,8 +743,12 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
         this.addRenderableWidget(visorLeft);
         this.addRenderableWidget(visorRight);
 
+        this.addRenderableWidget(pageLeft);
+        this.addRenderableWidget(pageRight);
+
         createAbilityButtons();
         setAbilityWidgetsVisible(selectedTab == GemTabs.ABILITIES);
+        updatePageButtons();
     }
 
     private void drawSelector(GuiGraphicsExtractor graphics, String label, int value, int y, int textColor) {
@@ -756,7 +925,7 @@ public class GemScreen extends AbstractContainerScreen<GemMenu> {
 
         renderState.previewPitch = modelPitch;
 
-        // Force the GUI preview to ignore the gem's world rotation
+        // force the GUI preview to ignore the gems world rot
         renderState.addGeckolibData(DataTickets.ENTITY_BODY_YAW, modelRotation);
 
         int modelX = this.leftPos + 86;

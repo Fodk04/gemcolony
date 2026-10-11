@@ -1,5 +1,6 @@
 package com.fodk.gemcolony.entity.client.renderer;
 
+import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.entity.client.layer.*;
 import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
 import com.fodk.gemcolony.entity.custom.gem.ability.ShapeshiftForm;
@@ -10,19 +11,15 @@ import com.geckolib.renderer.base.RenderPassInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState> extends GeoEntityRenderer<T, R> {
@@ -42,6 +39,7 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
         withRenderLayer(new GemInsigniaLayer<>(this, name, 6));
         withRenderLayer(new GemHairLayer<>(this, name, 7));
         withRenderLayer(new GemVisorLayer<>(this, name, 8));
+        withRenderLayer(new GemPlacementLayer<>(this, name, 9));
     }
 
     @Override
@@ -57,7 +55,14 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
         gemState.insigniaColor = synchedEntityData.get(GemEntity.INSIGNIA_COLOR);
         gemState.hairstyle = synchedEntityData.get(GemEntity.HAIRSTYLE);
         gemState.hairColor = synchedEntityData.get(GemEntity.HAIR_COLOR);
-        gemState.gemPlacement = synchedEntityData.get(GemEntity.GEM_PLACEMENT);
+        if(synchedEntityData.get(GemEntity.FUSION_COMPONENTS).isEmpty()){
+            gemState.gemPlacements = List.of(synchedEntityData.get(GemEntity.GEM_PLACEMENT));
+        } else {
+            gemState.gemPlacements = new ArrayList<>();
+            for (ItemStack fusionComponent : synchedEntityData.get(GemEntity.FUSION_COMPONENTS)) {
+                gemState.gemPlacements.add(fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().gemPlacement());
+            }
+        }
         gemState.visor = synchedEntityData.get(GemEntity.VISOR);
         gemState.visorColor = synchedEntityData.get(GemEntity.VISOR_COLOR);
         gemState.markings = synchedEntityData.get(GemEntity.MARKINGS);
@@ -67,6 +72,7 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
         gemState.qualityModifier = synchedEntityData.get(GemEntity.QUALITY) == 0 ? 0.8f : synchedEntityData.get(GemEntity.QUALITY) == 2 ? 1.2f : 1f;
         gemState.modelSize = entity.getModelSize();
         gemState.shapeshift = synchedEntityData.get(GemEntity.SHAPESHIFT);
+        gemState.isFusion = !synchedEntityData.get(GemEntity.FUSION_COMPONENTS).isEmpty();
     }
 
     @Override

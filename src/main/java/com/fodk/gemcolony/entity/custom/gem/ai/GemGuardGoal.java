@@ -6,7 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import java.util.EnumSet;
 
+
 public class GemGuardGoal extends Goal {
+
+    private static final double MAX_GUARD_DISTANCE = 2.0D;
 
     private final GemEntity gem;
     private final double speed;
@@ -16,6 +19,16 @@ public class GemGuardGoal extends Goal {
         this.speed = speed;
 
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+    }
+
+    private double distanceToWorkPosSqr(BlockPos workPos) {
+        double targetX = workPos.getX() + 0.5D;
+        double targetZ = workPos.getZ() + 0.5D;
+
+        double dx = gem.getX() - targetX;
+        double dz = gem.getZ() - targetZ;
+
+        return dx * dx + dz * dz;
     }
 
     @Override
@@ -30,9 +43,7 @@ public class GemGuardGoal extends Goal {
             return false;
         }
 
-        double distance = gem.distanceToSqr(workPos.getX() + 0.5D, workPos.getY(), workPos.getZ() + 0.5D);
-
-        return distance > 1.5D * 1.5D;
+        return distanceToWorkPosSqr(workPos) > MAX_GUARD_DISTANCE * MAX_GUARD_DISTANCE;
     }
 
     @Override
@@ -47,18 +58,12 @@ public class GemGuardGoal extends Goal {
             return false;
         }
 
-        double distance = gem.distanceToSqr(workPos.getX() + 0.5D, workPos.getY(), workPos.getZ() + 0.5D);
-
-        return distance > 1.5D * 1.5D;
+        return distanceToWorkPosSqr(workPos) > MAX_GUARD_DISTANCE * MAX_GUARD_DISTANCE;
     }
 
     @Override
     public void start() {
-        BlockPos workPos = gem.getWorkPos();
-
-        if (workPos != null) {
-            gem.getNavigation().moveTo(workPos.getX() + 0.5D, workPos.getY(), workPos.getZ() + 0.5D, speed);
-        }
+        moveToWorkPos();
     }
 
     @Override
@@ -69,14 +74,28 @@ public class GemGuardGoal extends Goal {
             return;
         }
 
-        double distance = gem.distanceToSqr(workPos.getX() + 0.5D, workPos.getY(), workPos.getZ() + 0.5D);
-        if (distance <= 1.5D * 1.5D) {
+        if (distanceToWorkPosSqr(workPos) <= MAX_GUARD_DISTANCE * MAX_GUARD_DISTANCE) {
             gem.getNavigation().stop();
             return;
         }
 
         gem.getNavigation().recomputePath();
-        gem.getNavigation().moveTo(workPos.getX() + 0.5D, workPos.getY(), workPos.getZ() + 0.5D, speed);
+        moveToWorkPos();
+    }
+
+    private void moveToWorkPos() {
+        BlockPos workPos = gem.getWorkPos();
+
+        if (workPos == null) {
+            return;
+        }
+
+        gem.getNavigation().moveTo(
+                workPos.getX() + 0.5D,
+                workPos.getY(),
+                workPos.getZ() + 0.5D,
+                speed
+        );
     }
 
     @Override

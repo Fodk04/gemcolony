@@ -76,7 +76,7 @@ public class ModEntities {
 
     public static final Supplier<EntityType<PearlEntity>> PEARL = ENTITY_TYPES.register("pearl",
             () -> EntityType.Builder.of(PearlEntity::new, MobCategory.CREATURE)
-                    .sized(0.8f,1.7f)
+                    .sized(0.65f,2f)
                     .fireImmune()
                     .immuneTo(BlockTags.STRAY_IMMUNE_TO)
                     .build(getRK("pearl")));

@@ -28,6 +28,26 @@ public class QuartzEntity extends QuartzFamilyEntity {
     }
 
     @Override
+    public double getBaseMaxHealth() {
+        return 80;
+    }
+
+    @Override
+    public double getBaseAttackDamage() {
+        return 6;
+    }
+
+    @Override
+    public double getBaseMovementSpeed() {
+        return 0.28;
+    }
+
+    @Override
+    public double getBaseAttackSpeed() {
+        return 1.4;
+    }
+
+    @Override
     public Item getGemItem() {
         return GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT)).getGemItem();
     }
@@ -94,7 +114,8 @@ public class QuartzEntity extends QuartzFamilyEntity {
 
     @Override
     protected int getInventorySize() {
-        return 6;
+        float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
+        return (int) (20 * qualityModifier);
     }
 
     //1 MIN
@@ -107,6 +128,11 @@ public class QuartzEntity extends QuartzFamilyEntity {
     @Override
     public String getGemTypeName() {
         return GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT)).getName() + " Quartz";
+    }
+
+    @Override
+    public String getNameWithoutVariant() {
+        return "Quartz";
     }
 
     @Override

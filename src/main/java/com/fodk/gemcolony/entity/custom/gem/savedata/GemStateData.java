@@ -22,7 +22,9 @@ public record GemStateData(
         BlockPos workPos,
         List<ItemStack> inventory,
         List<GemAbility> abilities,
-        String shapeshift
+        String shapeshift,
+        List<ItemStack> fusionComponents,
+        boolean fusing
 ) {
 
     public static final Codec<GemStateData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -35,7 +37,9 @@ public record GemStateData(
             BlockPos.CODEC.optionalFieldOf("workPos").forGetter(data -> Optional.ofNullable(data.workPos())),
             ItemStack.OPTIONAL_CODEC.listOf().fieldOf("inventory").forGetter(GemStateData::inventory),
             GemAbility.CODEC.listOf().fieldOf("abilities").forGetter(GemStateData::abilities),
-            Codec.STRING.fieldOf("shapeshift").forGetter(GemStateData::shapeshift)
+            Codec.STRING.fieldOf("shapeshift").forGetter(GemStateData::shapeshift),
+            ItemStack.OPTIONAL_CODEC.listOf().fieldOf("fusionComponents").forGetter(GemStateData::fusionComponents),
+            Codec.BOOL.fieldOf("fusing").forGetter(GemStateData::fusing)
     ).apply(instance, (
             reformProgress,
             quality,
@@ -46,7 +50,9 @@ public record GemStateData(
             workPos,
             inventory,
             abilities,
-            shapeshift
+            shapeshift,
+            fusionComponents,
+            fusing
     ) -> new GemStateData(
             reformProgress,
             quality,
@@ -57,7 +63,9 @@ public record GemStateData(
             workPos.orElse(null),
             inventory,
             abilities,
-            shapeshift
+            shapeshift,
+            fusionComponents,
+            fusing
     )));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, GemStateData> STREAM_CODEC =
@@ -89,6 +97,12 @@ public record GemStateData(
                     ByteBufCodecs.STRING_UTF8,
                     GemStateData::shapeshift,
 
+                    ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list()),
+                    GemStateData::fusionComponents,
+
+                    ByteBufCodecs.BOOL,
+                    GemStateData::fusing,
+
                     (reformProgress,
                      quality,
                      emerged,
@@ -97,7 +111,9 @@ public record GemStateData(
                      behavior,
                      inventory,
                      abilities,
-                     shapeshift
+                     shapeshift,
+                     fusionComponents,
+                     fusing
                     ) -> new GemStateData(
                             reformProgress,
                             quality,
@@ -108,7 +124,9 @@ public record GemStateData(
                             null,
                             inventory,
                             abilities,
-                            shapeshift
+                            shapeshift,
+                            fusionComponents,
+                            fusing
                     )
             );
 }

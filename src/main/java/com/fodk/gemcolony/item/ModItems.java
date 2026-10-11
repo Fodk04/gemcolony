@@ -5,10 +5,7 @@ import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.food.ModFoods;
-import com.fodk.gemcolony.item.custom.ChromaItem;
-import com.fodk.gemcolony.item.custom.EssenceBottle;
-import com.fodk.gemcolony.item.custom.EssenceType;
-import com.fodk.gemcolony.item.custom.GemItem;
+import com.fodk.gemcolony.item.custom.*;
 import com.fodk.gemcolony.sound.ModSounds;
 import com.fodk.gemcolony.util.ColorUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -233,6 +230,8 @@ public class ModItems {
             properties -> new GemItem(properties, "Ruby", ModEntities.PERIDOT.get()));
     public static final DeferredItem<Item> SAPPHIRE_GEM = ITEMS.registerItem("sapphire_gem",
             properties -> new GemItem(properties, "Sapphire", ModEntities.PERIDOT.get()));
+    public static final DeferredItem<Item> FUSE = ITEMS.registerItem("fuse",
+            properties -> new FuseItem(properties));
 
     public static final DeferredItem<Item> CHROMA_BOW = ITEMS.registerItem("chroma_bow",
             properties -> new BowItem(properties.durability(600)));

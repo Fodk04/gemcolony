@@ -36,6 +36,26 @@ public class PearlEntity extends GemEntity {
     }
 
     @Override
+    public double getBaseMaxHealth() {
+        return 30;
+    }
+
+    @Override
+    public double getBaseAttackDamage() {
+        return 0;
+    }
+
+    @Override
+    public double getBaseMovementSpeed() {
+        return 0.3;
+    }
+
+    @Override
+    public double getBaseAttackSpeed() {
+        return 1.4;
+    }
+
+    @Override
     public Item getGemItem() {
         return GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT)).getGemItem();
     }
@@ -103,7 +123,12 @@ public class PearlEntity extends GemEntity {
     @Override
     protected int getInventorySize() {
         float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
-        return (int) (36 * qualityModifier);
+        return (int) (94 * qualityModifier);
+    }
+
+    @Override
+    public boolean isCustomisable() {
+        return true;
     }
 
     //2 MIN
@@ -116,6 +141,11 @@ public class PearlEntity extends GemEntity {
     @Override
     public String getGemTypeName() {
         return GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT)).getName() + " Pearl";
+    }
+
+    @Override
+    public String getNameWithoutVariant() {
+        return "Pearl";
     }
 
     @Override

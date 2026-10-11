@@ -129,6 +129,26 @@ public class PeridotEntity extends GemEntity {
     }
 
     @Override
+    public double getBaseMaxHealth() {
+        return 40;
+    }
+
+    @Override
+    public double getBaseAttackDamage() {
+        return 0;
+    }
+
+    @Override
+    public double getBaseMovementSpeed() {
+        return 0.32;
+    }
+
+    @Override
+    public double getBaseAttackSpeed() {
+        return 1.4;
+    }
+
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder entityData) {
         super.defineSynchedData(entityData);
         entityData.define(ANALYSING, false);
@@ -216,7 +236,7 @@ public class PeridotEntity extends GemEntity {
     @Override
     protected int getInventorySize() {
         float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
-        return (int) (12 * qualityModifier);
+        return (int) (30 * qualityModifier);
     }
 
     //3 MIN
@@ -408,7 +428,7 @@ public class PeridotEntity extends GemEntity {
     }
 
     @Override
-    public float getModelSize() {
+    public float getBaseModelSize() {
         return 0.9f;
     }
 }

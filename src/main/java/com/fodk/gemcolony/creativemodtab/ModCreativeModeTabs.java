@@ -111,6 +111,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.PLUM_PEARL_GEM);
                         output.accept(ModItems.FUCHSIA_PEARL_GEM);
                         output.accept(ModItems.PINK_PEARL_GEM);
+
+                        output.accept(ModItems.FUSE);
                     })
                     .build());
 

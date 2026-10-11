@@ -15,8 +15,8 @@ import java.util.List;
 public class FacetRegistryData extends SavedData {
 
     public static final Codec<FacetRegistryData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            FacetRegion.CODEC.listOf().fieldOf("regions").forGetter(data -> data.regions)
-    ).apply(instance, FacetRegistryData::new));
+            FacetRegion.CODEC.listOf().fieldOf("regions").forGetter(data -> data.regions))
+            .apply(instance, FacetRegistryData::new));
 
     public static final SavedDataType<FacetRegistryData> TYPE = new SavedDataType<>(
             Identifier.fromNamespaceAndPath("gemcolony", "facet_registry"),

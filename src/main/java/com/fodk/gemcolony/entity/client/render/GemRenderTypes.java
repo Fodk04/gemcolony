@@ -18,6 +18,16 @@ public final class GemRenderTypes {
         );
     }
 
+    public static RenderType gemPlacement(Identifier texture) {
+        return RenderType.create(
+                "gem_placement",
+                RenderSetup
+                        .builder(GemRenderPipelines.GEM_PLACEMENT)
+                        .withTexture("Sampler0", texture)
+                        .createRenderSetup()
+        );
+    }
+
     public static RenderType holopearl(Identifier texture) {
         return RenderType.create(
                 "holopearl",

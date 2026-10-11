@@ -2,16 +2,19 @@ package com.fodk.gemcolony.entity.custom.gem.base;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.data.FacetRegistryData;
+import com.fodk.gemcolony.data.FusionData;
+import com.fodk.gemcolony.data.FusionRegistryData;
 import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
-import com.fodk.gemcolony.entity.custom.gem.ai.GemFollowGoal;
-import com.fodk.gemcolony.entity.custom.gem.ai.GemStayGoal;
-import com.fodk.gemcolony.entity.custom.gem.ai.GemTargetGoal;
-import com.fodk.gemcolony.entity.custom.gem.ai.GemWanderGoal;
+import com.fodk.gemcolony.entity.custom.gem.ai.*;
+import com.fodk.gemcolony.entity.custom.gem.placement.GemPlacement;
 import com.fodk.gemcolony.entity.custom.gem.savedata.GemAppearanceData;
 import com.fodk.gemcolony.entity.custom.gem.savedata.GemSaveData;
 import com.fodk.gemcolony.entity.custom.gem.savedata.GemStateData;
 import com.fodk.gemcolony.entity.custom.gem.savedata.ModEntityDataSerializers;
+import com.fodk.gemcolony.item.ModItems;
+import com.fodk.gemcolony.item.custom.FuseItem;
+import com.fodk.gemcolony.item.custom.GemItem;
 import com.fodk.gemcolony.menu.GemMenu;
 import com.fodk.gemcolony.sound.ModSounds;
 import com.fodk.gemcolony.util.ColorUtil;
@@ -38,6 +41,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -84,6 +88,8 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public static final EntityDataAccessor<List<Integer>> ABILITIES = SynchedEntityData.defineId(GemEntity.class, ModEntityDataSerializers.INT_LIST.get());
     public static final EntityDataAccessor<Integer> BEHAVIOR = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<String> SHAPESHIFT = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<List<ItemStack>> FUSION_COMPONENTS = SynchedEntityData.defineId(GemEntity.class, ModEntityDataSerializers.ITEM_STACK_LIST.get());
+    public static final EntityDataAccessor<Boolean> FUSING = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.BOOLEAN);
 
     private NonNullList<ItemStack> inventory;
     @Nullable
@@ -122,20 +128,28 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.define(MARKINGS_COLOR, 0xFFFFFF);
         entityData.define(VISOR, -1);
         entityData.define(VISOR_COLOR, 0xFFFFFF);
-        entityData.define(REFORM_PROGRESS, maxReformProgress);
+        entityData.define(REFORM_PROGRESS, MAX_REFORM_PROGRESS);
         entityData.define(EMERGED, false);
         entityData.define(OWNER_UUID, "");
         entityData.define(ABILITIES, List.of());
         entityData.define(BEHAVIOR, GemBehavior.WANDER.ordinal());
         entityData.define(SHAPESHIFT, "");
+        entityData.define(FUSION_COMPONENTS, List.of());
+        entityData.define(FUSING, false);
     }
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
 
-        if (QUALITY.equals(key)) {
-            int size = getInventorySize();
+        if (QUALITY.equals(key) || FUSION_COMPONENTS.equals(key)) {
+            refreshDimensions();
+
+            if (level().isClientSide()) {
+                applyQualityModifiers();
+            }
+
+            int size = getContainerSize();
 
             if (inventory.size() != size) {
                 NonNullList<ItemStack> newInventory =
@@ -171,6 +185,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             initializeAbilities();
             entityData.set(REFORM_PROGRESS, 0);
             this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
+            entityData.set(GEM_PLACEMENT, GemPlacement.getRandomGemPlacement().ordinal());
         }
 
         return super.finalizeSpawn(level, difficulty, spawnReason, groupData);
@@ -197,6 +212,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         initializeAbilities();
         entityData.set(REFORM_PROGRESS, 0);
         this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
+        entityData.set(GEM_PLACEMENT, GemPlacement.getRandomGemPlacement().ordinal());
     }
 
     public void initializeGemFromChroma(int chromaIndex){
@@ -208,12 +224,39 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         initializeAbilities();
         entityData.set(REFORM_PROGRESS, 0);
         this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
+        entityData.set(GEM_PLACEMENT, GemPlacement.getRandomGemPlacement().ordinal());
     }
 
     public void initializeGemFromReform(int reformProgress){
         applyQualityModifiers();
         UpdateDisplayedName();
         entityData.set(REFORM_PROGRESS, reformProgress);
+    }
+
+    public void initializeSameGemFusion(){
+        setVariant(0);
+        generateAppearance(mixComponentsGemColors(), getMaxOutfits(), mixComponentsOutfitColors(), getMaxInsignias(), mixComponentsInsigniaColors(), getMaxHairstyles(), mixComponentsHairColors(), getMaxMarkings(), mixComponentsMarkingsColors(), getMaxVisors(), mixComponentsVisorColors());
+        setQuality(getFusionQuality());
+        initializeAbilities();
+        entityData.set(REFORM_PROGRESS, (int)(MAX_REFORM_PROGRESS * (1 - getPercentageToReform())));
+        entityData.set(BEHAVIOR, GemBehavior.FOLLOW.ordinal());
+
+        this.inventory = NonNullList.create();
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData == null) {
+                continue;
+            }
+
+            for (ItemStack stack : saveData.gemStateData().inventory()) {
+                this.inventory.add(stack.copy());
+            }
+        }
+
+        String name = "Mega " + getNameWithoutVariant();
+        this.entityData.set(NAME, name);
+        setCustomName(Component.literal(name));
+        this.entityData.set(OWNER_UUID, getFusionComponents().get(0).get(ModDataComponents.GEM_SAVE_DATA).gemStateData().ownerUUID());
     }
 
     public void setQuality(int quality){
@@ -225,8 +268,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         int regionX = Math.floorDiv(pos.getX(), 1024);
         int regionZ = Math.floorDiv(pos.getZ(), 1024);
 
-        FacetRegistryData.FacetAssignment assignment =
-                FacetRegistryData.get(level).assignGem(level.dimension(), regionX, regionZ);
+        FacetRegistryData.FacetAssignment assignment = FacetRegistryData.get(level).assignGem(level.dimension(), regionX, regionZ);
 
         String facetSuffix = level.dimension() == Level.NETHER ? "N" : level.dimension() == Level.END ? "E" : "";
         String cut = computeCutString(assignment.gemCountInRegion());
@@ -257,27 +299,76 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return number + "X" + letter;
     }
 
+    public abstract double getBaseMaxHealth();
+    public abstract double getBaseAttackDamage();
+    public abstract double getBaseMovementSpeed();
+    public abstract double getBaseAttackSpeed();
+
     public void applyQualityModifiers() {
+        updateKnockbackResistance();
+
+        getAttribute(Attributes.MAX_HEALTH).removeModifier(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quality_health"));
+        getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quality_damage"));
+
+        if (!getFusionComponents().isEmpty()) {
+            applyFusionStats();
+            setHealth(getMaxHealth());
+            return;
+        }
+
         int quality = entityData.get(QUALITY);
+
         double healthMultiplier = switch (quality) {
             case 0 -> -0.25D;
             case 2 -> 0.40D;
-            default -> 0;
+            default -> 0.0D;
         };
+
         double damageMultiplier = switch (quality) {
             case 0 -> -0.25D;
             case 2 -> 0.20D;
-            default -> 0;
+            default -> 0.0D;
         };
 
-        this.getAttribute(Attributes.MAX_HEALTH).addOrReplacePermanentModifier(
-                new AttributeModifier(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quality_health"), healthMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-        );
-        this.getAttribute(Attributes.ATTACK_DAMAGE).addOrReplacePermanentModifier(
-                new AttributeModifier(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quality_damage"), damageMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+        getAttribute(Attributes.MAX_HEALTH).addOrReplacePermanentModifier(
+                new AttributeModifier(
+                        Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quality_health"),
+                        healthMultiplier,
+                        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                )
         );
 
-        this.setHealth(this.getMaxHealth()); // sync current HP to the new max, since changing MAX_HEALTH doesn't auto-fix it
+        getAttribute(Attributes.ATTACK_DAMAGE).addOrReplacePermanentModifier(
+                new AttributeModifier(
+                        Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quality_damage"),
+                        damageMultiplier,
+                        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                )
+        );
+
+        setHealth(getMaxHealth());
+    }
+
+    private void updateKnockbackResistance() {
+        double sizeMultiplier = getDefaultDimensions(Pose.STANDING).width() / super.getDefaultDimensions(Pose.STANDING).width();
+
+        getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(Math.clamp((sizeMultiplier - 1.0) * 0.5, 0.0, 1.0));
+    }
+
+    private static double getQualityHealthMultiplier(int quality) {
+        return switch (quality) {
+            case 0 -> 0.75D;
+            case 2 -> 1.40D;
+            default -> 1.0D;
+        };
+    }
+
+    private static double getQualityDamageMultiplier(int quality) {
+        return switch (quality) {
+            case 0 -> 0.75D;
+            case 2 -> 1.20D;
+            default -> 1.0D;
+        };
     }
 
     protected void generateAppearance(Color gemColor, int maxOutfits, Color outfitColor, int maxInsignias, Color insigniaColor, int maxHairstyles, Color hairColor, int maxMarkings, Color markingsColor, int maxVisors, Color visorColor) {
@@ -336,7 +427,8 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return new GemStateData(
                 entityData.get(REFORM_PROGRESS), entityData.get(QUALITY), entityData.get(EMERGED),
                 entityData.get(CRACKED), entityData.get(OWNER_UUID), entityData.get(BEHAVIOR), workPos,
-                List.copyOf(inventory), List.copyOf(abilities), entityData.get(SHAPESHIFT)
+                List.copyOf(inventory), List.copyOf(abilities), entityData.get(SHAPESHIFT),
+                List.copyOf(getFusionComponents()), entityData.get(FUSING)
         );
     }
 
@@ -373,10 +465,16 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.set(BEHAVIOR, data.behavior());
         entityData.set(SHAPESHIFT, data.shapeshift());
         this.workPos = data.workPos();
-        this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
 
+        List<ItemStack> copies = new ArrayList<>();
+        for (ItemStack stack : data.fusionComponents()) {
+            copies.add(stack.copy());
+        }
+        entityData.set(FUSION_COMPONENTS, copies);
+        entityData.set(FUSING, data.fusing());
+
+        this.inventory = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
         int copySize = Math.min(inventory.size(), data.inventory().size());
-
         for (int i = 0; i < copySize; i++) {
             inventory.set(i, data.inventory().get(i).copy());
         }
@@ -419,23 +517,21 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return cache;
     }
 
-    public static final int maxReformProgress = 140;
+    public static final int MAX_REFORM_PROGRESS = 140;
 
     @Override
     public void die(DamageSource source) {
         level().addParticle(ParticleTypes.EXPLOSION_EMITTER, blockPosition().getX(), blockPosition().getY() + 2d, blockPosition().getZ(), 0, 0, 0);
         if(!level().isClientSide()){
-            ItemStack gem = new ItemStack(getGemItem());
-            gem.set(ModDataComponents.GEM_SAVE_DATA, toSaveData());
-            gem.set(ModDataComponents.REFORM_TIME, getReformTime());
-            gem.set(ModDataComponents.REFORM_PROGRESS, maxReformProgress);
-
             playSound(ModSounds.GEM_POOF.get(),
                     2.0F,
                     1.0F - (0.4F * random.nextFloat())
             );
-
-            spawnAtLocation((ServerLevel) this.level(), gem);
+            if(getFusionComponents().isEmpty()){
+                killGem();
+            }else{
+                killFusion();
+            }
             if(getOwnerEntity() instanceof Player player){
                 player.sendSystemMessage(Component.literal(getCurrentName() + " was poofed at location x:" + (int) position().x + " /y:" + (int) position().y + " /z:" + (int) position().z));
             }
@@ -443,8 +539,159 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         super.die(source);
     }
 
+    void killGem(){
+        ItemStack gem = new ItemStack(getGemItem());
+        gem.set(ModDataComponents.GEM_SAVE_DATA, toSaveData());
+        gem.set(ModDataComponents.REFORM_TIME, getReformTime());
+        gem.set(ModDataComponents.REFORM_PROGRESS, MAX_REFORM_PROGRESS);
+
+        spawnAtLocation((ServerLevel) this.level(), gem);
+    }
+
+
+    void killFusion() {
+        int inventoryOffset = 0;
+
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+
+            if (saveData == null) {
+                continue;
+            }
+
+            GemStateData oldState = saveData.gemStateData();
+            int componentInventorySize = oldState.inventory().size();
+
+            // copy this component's section of the fused inventory
+            List<ItemStack> componentInventory = new ArrayList<>();
+
+            for (int i = 0; i < componentInventorySize; i++) {
+                int fusedSlot = inventoryOffset + i;
+
+                componentInventory.add(fusedSlot < inventory.size() ? inventory.get(fusedSlot).copy() : ItemStack.EMPTY);
+            }
+
+            inventoryOffset += componentInventorySize;
+
+            // keep every other saved property of the original gem
+            GemStateData updatedState = new GemStateData(
+                    oldState.reformProgress(),
+                    oldState.quality(),
+                    oldState.emerged(),
+                    oldState.cracked(),
+                    oldState.ownerUUID(),
+                    oldState.behavior(),
+                    oldState.workPos(),
+                    componentInventory,
+                    oldState.abilities(),
+                    oldState.shapeshift(),
+                    oldState.fusionComponents(),
+                    oldState.fusing()
+            );
+
+            // Drop drop a copy containing the updated saved state
+            ItemStack updatedComponent = fusionComponent.copy();
+            updatedComponent.set(ModDataComponents.GEM_SAVE_DATA, new GemSaveData(saveData.gemAppearanceData(), updatedState));
+
+            spawnAtLocation((ServerLevel) level(), updatedComponent);
+        }
+    }
+
+
+    public boolean unfuse(ServerLevel serverLevel) {
+        List<ItemStack> components = getFusionComponents();
+
+        if (components.isEmpty()) {
+            return false;
+        }
+
+        List<GemEntity> spawnedGems = new ArrayList<>();
+        int inventoryOffset = 0;
+
+        for (ItemStack component : components) {
+            GemSaveData saveData = component.get(ModDataComponents.GEM_SAVE_DATA);
+
+            if (saveData == null) {
+                for (GemEntity spawned : spawnedGems) {
+                    spawned.discard();
+                }
+                return false;
+            }
+
+            GemStateData oldState = saveData.gemStateData();
+            int componentInventorySize = oldState.inventory().size();
+
+            List<ItemStack> componentInventory = new ArrayList<>();
+
+            for (int i = 0; i < componentInventorySize; i++) {
+                int fusedSlot = inventoryOffset + i;
+
+                componentInventory.add(fusedSlot < inventory.size() ? inventory.get(fusedSlot).copy() : ItemStack.EMPTY);
+            }
+
+            inventoryOffset += componentInventorySize;
+
+            GemStateData updatedState = new GemStateData(
+                    oldState.reformProgress(),
+                    oldState.quality(),
+                    oldState.emerged(),
+                    oldState.cracked(),
+                    oldState.ownerUUID(),
+                    oldState.behavior(),
+                    oldState.workPos(),
+                    componentInventory,
+                    oldState.abilities(),
+                    oldState.shapeshift(),
+                    oldState.fusionComponents(),
+                    oldState.fusing()
+            );
+
+            GemSaveData updatedSaveData = new GemSaveData(saveData.gemAppearanceData(), updatedState);
+
+            if (!(component.getItem() instanceof GemItem gemItem)) {
+                for (GemEntity spawned : spawnedGems) {
+                    spawned.discard();
+                }
+                return false;
+            }
+
+            GemEntity gem = gemItem.entityType.create(serverLevel, EntitySpawnReason.TRIGGERED);
+
+            if (gem == null) {
+                for (GemEntity spawned : spawnedGems) {
+                    spawned.discard();
+                }
+                return false;
+            }
+
+            ItemStack updatedComponent = component.copy();
+            updatedComponent.set(ModDataComponents.GEM_SAVE_DATA, updatedSaveData);
+
+            gem.applySaveData(updatedSaveData);
+            gem.initializeGemFromReform(20);
+
+            gem.setPos(
+                    getX() + (random.nextDouble() - 0.5) * 2.0,
+                    getY(),
+                    getZ() + (random.nextDouble() - 0.5) * 2.0
+            );
+
+            if (!serverLevel.addFreshEntity(gem)) {
+                for (GemEntity spawned : spawnedGems) {
+                    spawned.discard();
+                }
+                return false;
+            }
+
+            spawnedGems.add(gem);
+        }
+
+        discard();
+        return true;
+    }
+
     public static float getReformProgressPercentage(int reformProgress){
-        return 1f - (float)reformProgress/(float)maxReformProgress;
+        return 1f - (float)reformProgress/(float) MAX_REFORM_PROGRESS;
     }
 
     public static float getPercentageToReform(){
@@ -484,7 +731,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
-        // Unowned → claim
+        // Unowned to claimed
         if (!isOwned()) {
             if (!level().isClientSide()) {
                 setOwner(player);
@@ -512,18 +759,33 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             return InteractionResult.SUCCESS;
         }
 
-        // Owned by this player → normal interaction
+        // Owned by this player then normal interaction
         UUID ownerUUID = getOwnerUUID();
 
         if (ownerUUID != null && ownerUUID.equals(player.getUUID())) {
             return handleOwnedInteraction(player, hand);
         }
 
-        // Owned by somebody/something else → nothing
+        // Owned by somebody/something else then do nothing
         return InteractionResult.PASS;
     }
 
     private InteractionResult handleOwnedInteraction(Player player, InteractionHand hand) {
+
+        // FUSION ITEM
+        if (player.getItemInHand(hand).is(ModItems.FUSE.get())) {
+            if (player.isShiftKeyDown() && !getFusionComponents().isEmpty()) {
+                if (!level().isClientSide() && level() instanceof ServerLevel serverLevel) {
+                    unfuse(serverLevel);
+                }
+                return InteractionResult.SUCCESS;
+            }
+
+            if (getFusionComponents().isEmpty() && player.getItemInHand(hand).getItem() instanceof FuseItem fuseItem) {
+                return fuseItem.tryAddGem(player.getItemInHand(hand), player, this);
+            }
+        }
+
         if(customizeGemOutfitAndInsignia(player, hand)){
             return InteractionResult.SUCCESS;
         }
@@ -665,7 +927,17 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     @Override
     public int getContainerSize() {
-        return inventory.size();
+        if (getFusionComponents().isEmpty()) {
+            return getInventorySize();
+        }
+        int totalSize = 0;
+        for (ItemStack component : getFusionComponents()) {
+            GemSaveData saveData = component.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData != null) {
+                totalSize += saveData.gemStateData().inventory().size();
+            }
+        }
+        return totalSize;
     }
 
     @Override
@@ -719,9 +991,16 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     }
 
     public abstract String getGemTypeName();
+    public String getNameWithoutVariant(){
+        return getGemTypeName();
+    }
 
     public String getCurrentName(){
         return getCustomName().getString();
+    }
+
+    public boolean isCustomisable(){
+        return false;
     }
 
     public Set<GemAbility> getAbilities() {
@@ -751,7 +1030,32 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     protected abstract void initializeAbilities();
 
     public float getModelSize(){
+        if(getFusionComponents().isEmpty()){
+            return getBaseModelSize() * getQualityScale();
+        }
+        else {
+            return getFusionComponents().size() / 1.5f * getQualityScale() * getBaseModelSize();
+        }
+    }
+
+    public float getBaseModelSize(){
         return 1f;
+    }
+
+    public float getQualityScale(){
+        int quality = entityData.get(QUALITY);
+        return quality == 0 ? 0.8f : quality == 2 ? 1.15f : 1f;
+    }
+
+    @Override
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        EntityDimensions base = super.getDefaultDimensions(pose);
+        if(getFusionComponents().isEmpty()){
+            return base.scale(getQualityScale());
+        }
+        else {
+            return base.scale(getFusionComponents().size() / 1.5f * getQualityScale());
+        }
     }
 
     //OWNERSHIP
@@ -851,6 +1155,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.targetSelector.addGoal(2, new GemTargetGoal(this, 16.0D));
+        this.goalSelector.addGoal(3, new GemFuseGoal(this, 1.1D));
 
         this.goalSelector.addGoal(4, new GemStayGoal(this));
         this.goalSelector.addGoal(6, new GemFollowGoal(this, 1.1D, 7.0F, 5.5F));
@@ -919,5 +1224,263 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     public void clearShapeshift() {
         entityData.set(SHAPESHIFT, "");
+    }
+
+    //FUSION
+    public List<ItemStack> getFusionComponents() {
+        return entityData.get(FUSION_COMPONENTS);
+    }
+
+    public void setFusionComponents(List<ItemStack> fusionComponents) {
+        List<ItemStack> copies = new ArrayList<>();
+
+        for (ItemStack stack : fusionComponents) {
+            copies.add(stack.copy());
+        }
+
+        entityData.set(FUSION_COMPONENTS, copies);
+    }
+
+    private Color mixComponentsGemColors(){
+        int gemColor = 0;
+        for(ItemStack fusionComponent : getFusionComponents()){
+            if(gemColor == 0){
+                gemColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().color();
+            }else{
+                gemColor = ColorUtil.mixColorInts(gemColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().color(), 0.5f);
+            }
+        }
+        return ColorUtil.colorFromInt(gemColor);
+    }
+
+    private Color mixComponentsOutfitColors(){
+        int outfitColor = 0;
+        for(ItemStack fusionComponent : getFusionComponents()){
+            if(outfitColor == 0){
+                outfitColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().outfitColor();
+            }else{
+                outfitColor = ColorUtil.mixColorInts(outfitColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().outfitColor(), 0.5f);
+            }
+        }
+        return ColorUtil.colorFromInt(outfitColor);
+    }
+
+    private Color mixComponentsInsigniaColors(){
+        int insigniaColor = 0;
+        for(ItemStack fusionComponent : getFusionComponents()){
+            if(insigniaColor == 0){
+                insigniaColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().insigniaColor();
+            }else{
+                insigniaColor = ColorUtil.mixColorInts(insigniaColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().insigniaColor(), 0.5f);
+            }
+        }
+        return ColorUtil.colorFromInt(insigniaColor);
+    }
+
+    private Color mixComponentsHairColors(){
+        int hairColor = 0;
+        for(ItemStack fusionComponent : getFusionComponents()){
+            if(hairColor == 0){
+                hairColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().hairColor();
+            }else{
+                hairColor = ColorUtil.mixColorInts(hairColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().hairColor(), 0.5f);
+            }
+        }
+        return ColorUtil.colorFromInt(hairColor);
+    }
+
+    private Color mixComponentsMarkingsColors(){
+        int markingsColor = 0;
+        for(ItemStack fusionComponent : getFusionComponents()){
+            if(markingsColor == 0){
+                markingsColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().markingsColor();
+            }else{
+                markingsColor = ColorUtil.mixColorInts(markingsColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().markingsColor(), 0.5f);
+            }
+        }
+        return ColorUtil.colorFromInt(markingsColor);
+    }
+
+    private Color mixComponentsVisorColors(){
+        int visorColor = 0;
+        for(ItemStack fusionComponent : getFusionComponents()){
+            if(visorColor == 0){
+                visorColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().visorColor();
+            }else{
+                visorColor = ColorUtil.mixColorInts(visorColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().visorColor(), 0.5f);
+            }
+        }
+        return ColorUtil.colorFromInt(visorColor);
+    }
+
+    private int getFusionQuality(){
+        int quality = 0;
+        for(ItemStack fusionComponent : getFusionComponents()){
+            quality += fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemStateData().quality();
+        }
+        return quality / getFusionComponents().size();
+    }
+
+    private double calculateFusionMaxHealth() {
+        double total = 0.0D;
+
+        for (ItemStack component : getFusionComponents()) {
+            GemSaveData saveData =
+                    component.get(ModDataComponents.GEM_SAVE_DATA);
+
+            if (saveData == null) {
+                continue;
+            }
+
+            int quality = saveData.gemStateData().quality();
+
+            total += getBaseMaxHealth()
+                    * getQualityHealthMultiplier(quality);
+        }
+
+        return total;
+    }
+
+    private double calculateFusionAttackDamage() {
+        double total = 0.0D;
+
+        for (ItemStack component : getFusionComponents()) {
+            GemSaveData saveData =
+                    component.get(ModDataComponents.GEM_SAVE_DATA);
+
+            if (saveData == null) {
+                continue;
+            }
+
+            int quality = saveData.gemStateData().quality();
+
+            total += getBaseAttackDamage()
+                    * getQualityDamageMultiplier(quality)
+                    * 0.5D;
+        }
+
+        return total;
+    }
+
+    private double calculateFusionMovementSpeed() {
+        return getBaseMovementSpeed();
+    }
+
+    private double calculateFusionAttackSpeed() {
+        return getBaseAttackSpeed();
+    }
+
+    private void applyFusionStats() {
+        if (getFusionComponents().isEmpty()) {
+            return;
+        }
+
+        getAttribute(Attributes.MAX_HEALTH).setBaseValue(calculateFusionMaxHealth());
+
+        getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(calculateFusionAttackDamage());
+
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(calculateFusionMovementSpeed());
+
+        getAttribute(Attributes.ATTACK_SPEED).setBaseValue(calculateFusionAttackSpeed());
+    }
+
+    public boolean isFusing() {
+        return entityData.get(FUSING);
+    }
+
+    public void setFusing(boolean fusing) {
+        entityData.set(FUSING, fusing);
+    }
+
+    public boolean completeSameGemFusion(ServerLevel serverLevel, UUID fusionId) {
+        FusionRegistryData registry = FusionRegistryData.get(serverLevel);
+
+        // Claim the transformation so only one participant can execute it.
+        if (!registry.beginFusion(fusionId)) {
+            return false;
+        }
+
+        FusionData session = registry.getSession(fusionId).orElse(null);
+
+        if (session == null || session.participants().size() < 2) {
+            return false;
+        }
+
+        List<GemEntity> participants = new ArrayList<>();
+
+        for (UUID uuid : session.participants()) {
+            Entity entity = serverLevel.getEntity(uuid);
+
+            if (!(entity instanceof GemEntity participant)
+                    || !participant.isAlive()
+                    || participant.getClass() != getClass()) {
+                // We have claimed the session, so don't leave it stuck in FUSING.
+                registry.removeSession(fusionId);
+                for (UUID participantUUID : session.participants()) {
+                    Entity remaining = serverLevel.getEntity(participantUUID);
+                    if (remaining instanceof GemEntity gem) {
+                        gem.setFusing(false);
+                    }
+                }
+                return false;
+            }
+
+            participants.add(participant);
+        }
+
+        List<ItemStack> components = new ArrayList<>();
+
+        double x = 0.0D;
+        double y = 0.0D;
+        double z = 0.0D;
+
+        for (GemEntity participant : participants) {
+            ItemStack component = new ItemStack(participant.getGemItem());
+            component.set(ModDataComponents.GEM_SAVE_DATA, participant.toSaveData());
+            component.set(ModDataComponents.REFORM_TIME, participant.getReformTime());
+            component.set(ModDataComponents.REFORM_PROGRESS, GemEntity.MAX_REFORM_PROGRESS);
+
+            components.add(component);
+
+            x += participant.getX();
+            y += participant.getY();
+            z += participant.getZ();
+        }
+
+        x /= participants.size();
+        y /= participants.size();
+        z /= participants.size();
+
+        GemEntity fusedGem = (GemEntity) getType().create(serverLevel, EntitySpawnReason.TRIGGERED);
+
+        if (fusedGem == null) {
+            registry.removeSession(fusionId);
+            for (GemEntity participant : participants) {
+                participant.setFusing(false);
+            }
+            return false;
+        }
+
+        fusedGem.setPos(x, y, z);
+        fusedGem.setFusionComponents(components);
+        fusedGem.initializeSameGemFusion();
+
+        if (!serverLevel.addFreshEntity(fusedGem)) {
+            registry.removeSession(fusionId);
+            for (GemEntity participant : participants) {
+                participant.setFusing(false);
+            }
+            return false;
+        }
+
+        // remove originals only after the fused entity has spawned successfully
+        registry.removeSession(fusionId);
+
+        for (GemEntity participant : participants) {
+            participant.setFusing(false);
+            participant.discard();
+        }
+
+        return true;
     }
 }

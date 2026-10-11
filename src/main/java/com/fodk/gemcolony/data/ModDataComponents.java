@@ -29,6 +29,8 @@ public class ModDataComponents {
             builder -> builder.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> BUBBLE_COLOR = register("bubble_color",
             builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<FusionSelectionData>> FUSION_SELECTION = register("fusion_selection",
+                    builder -> builder.persistent(FusionSelectionData.CODEC).networkSynchronized(FusionSelectionData.STREAM_CODEC));
     public static final DataComponentType<UUID> GEM_ITEM_ID = DataComponentType.<UUID>builder()
             .persistent(UUIDUtil.CODEC).networkSynchronized(UUIDUtil.STREAM_CODEC).build();
 

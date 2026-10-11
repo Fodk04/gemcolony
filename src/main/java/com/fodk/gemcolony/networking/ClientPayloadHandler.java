@@ -87,7 +87,7 @@ public class ClientPayloadHandler {
                     }
 
                     case VISOR -> {
-                        if (packet.value() >= 0 && packet.value() < gem.getMaxVisors()) {
+                        if (packet.value() >= -1 && packet.value() < gem.getMaxVisors()) {
                             gem.setVisor(packet.value());
                         }
                     }

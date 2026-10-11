@@ -16,6 +16,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 public class GemMenu extends AbstractContainerMenu {
 
     private final GemEntity gemEntity;
+    private static final int SLOTS_PER_PAGE = 54;
 
     public GemMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf data) {
         super(ModMenus.GEM_MENU.get(), containerId);
@@ -44,7 +45,7 @@ public class GemMenu extends AbstractContainerMenu {
         int gemSlots = gemEntity.getContainerSize();
 
         if (index < gemSlots) {
-            // Gem inventory → Player inventory
+            // Gem inventory to Player inventory
             if (!this.moveItemStackTo(
                     stack,
                     gemSlots,
@@ -54,7 +55,7 @@ public class GemMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
         } else {
-            // Player inventory → Gem inventory
+            // Player inventory to Gem inventory
             if (!this.moveItemStackTo(
                     stack,
                     0,
@@ -81,13 +82,12 @@ public class GemMenu extends AbstractContainerMenu {
     }
 
     private void addSlots(Inventory playerInventory) {
-
-        int gemRows = (gemEntity.getContainerSize() + 8) / 9;
-
         // Gem inventory
         for (int i = 0; i < gemEntity.getContainerSize(); i++) {
-            int row = i / 9;
-            int col = i % 9;
+            int pageSlot = i % SLOTS_PER_PAGE;
+
+            int row = pageSlot / 9;
+            int col = pageSlot % 9;
             this.addSlot(new GemSlot(
                     gemEntity,
                     i,
@@ -96,26 +96,43 @@ public class GemMenu extends AbstractContainerMenu {
             ));
         }
 
-        // Player inventory
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 9; col++) {
-                this.addSlot(new GemSlot(
-                        playerInventory,
-                        col + row * 9 + 9,
-                        8 + col * 18,
-                        18 + gemRows * 18 + 12 + row * 18 + 2
-                ));
-            }
-        }
+        // Player inventory layouts for 1–6 gem rows
+        for (int layoutRows = 1; layoutRows <= 6; layoutRows++) {
 
-        // Hotbar
-        for (int col = 0; col < 9; col++) {
-            this.addSlot(new GemSlot(
-                    playerInventory,
-                    col,
-                    8 + col * 18,
-                    18 + gemRows * 18 + 12 + 54 + 6
-            ));
+            int playerInventoryY = 18 + layoutRows * 18 + 12 + 2;
+            int hotbarY = playerInventoryY + 54 + 4;
+
+            // Player inventory
+            for (int row = 0; row < 3; row++) {
+                for (int col = 0; col < 9; col++) {
+                    GemSlot slot = new GemSlot(
+                            playerInventory,
+                            col + row * 9 + 9,
+                            8 + col * 18,
+                            playerInventoryY + row * 18
+                    );
+
+                    slot.setLayoutRows(layoutRows);
+                    slot.setActive(false);
+
+                    this.addSlot(slot);
+                }
+            }
+
+            // Hotbar
+            for (int col = 0; col < 9; col++) {
+                GemSlot slot = new GemSlot(
+                        playerInventory,
+                        col,
+                        8 + col * 18,
+                        hotbarY
+                );
+
+                slot.setLayoutRows(layoutRows);
+                slot.setActive(false);
+
+                this.addSlot(slot);
+            }
         }
     }
 
@@ -146,7 +163,7 @@ public class GemMenu extends AbstractContainerMenu {
     }
 
     public void changeVisor(int direction) {
-        int next = getNext(gemEntity.getVisor(),direction, gemEntity.getMaxVisors());
+        int next = getNextVisor(gemEntity.getVisor(),direction, gemEntity.getMaxVisors());
 
         sendAppearanceChange(AppearanceChange.VISOR, next);
     }
@@ -158,6 +175,18 @@ public class GemMenu extends AbstractContainerMenu {
             next = max - 1;
         } else if (next >= max) {
             next = 0;
+        }
+
+        return next;
+    }
+
+    int getNextVisor(int current, int direction, int max){
+        int next = current + direction;
+
+        if (next < -1) {
+            next = max - 1;
+        } else if (next >= max) {
+            next = -1;
         }
 
         return next;

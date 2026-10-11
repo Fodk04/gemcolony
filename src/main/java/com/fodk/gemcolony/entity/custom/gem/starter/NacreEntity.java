@@ -54,12 +54,6 @@ public class NacreEntity extends StarterGemEntity{
     }
 
     @Override
-    protected int getInventorySize() {
-        float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
-        return (int) (3 * qualityModifier);
-    }
-
-    @Override
     public String getGemTypeName() {
         return "Nacre";
     }
@@ -67,10 +61,5 @@ public class NacreEntity extends StarterGemEntity{
     @Override
     protected void initializeAbilities() {
         addAbility(GemAbility.CONSTRUCTOR);
-    }
-
-    @Override
-    public float getModelSize() {
-        return 0.4f;
     }
 }
