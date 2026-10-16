@@ -13,9 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.NetherWartBlock;
-import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -42,20 +40,312 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.DRAINED_STONE.get());
         dropSelf(ModBlocks.DESTABILIZER_WALL_GENERATOR.get());
 
-        dropSelf(ModBlocks.CHROMA_BLOCK.get());
-        dropSelf(ModBlocks.CHROMA_STAIRS.get());
-        dropSelf(ModBlocks.CHROMA_PRESSURE_PLATE.get());
-        dropSelf(ModBlocks.CHROMA_BUTTON.get());
-        dropSelf(ModBlocks.CHROMA_FENCE.get());
-        dropSelf(ModBlocks.CHROMA_FENCE_GATE.get());
-        dropSelf(ModBlocks.CHROMA_WALL.get());
-        dropSelf(ModBlocks.CHROMA_TRAPDOOR.get());
+        // CHROMA PILLARS
+        dropSelf(ModBlocks.WHITE_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.LIGHT_GRAY_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.GRAY_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.BLACK_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.BROWN_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.RED_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.ORANGE_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.YELLOW_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.LIME_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.GREEN_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.CYAN_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.LIGHT_BLUE_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.BLUE_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.PURPLE_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.MAGENTA_CHROMA_PILLAR.get());
+        dropSelf(ModBlocks.PINK_CHROMA_PILLAR.get());
+
+        // WHITE
+        dropChromaBlockFamily(
+                ModBlocks.WHITE_CHROMA_BLOCK.get(),
+                ModBlocks.WHITE_CHROMA_STAIRS.get(),
+                ModBlocks.WHITE_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.WHITE_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.WHITE_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.WHITE_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.WHITE_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.WHITE_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.WHITE_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // LIGHT GRAY
+        dropChromaBlockFamily(
+                ModBlocks.LIGHT_GRAY_CHROMA_BLOCK.get(),
+                ModBlocks.LIGHT_GRAY_CHROMA_STAIRS.get(),
+                ModBlocks.LIGHT_GRAY_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // GRAY
+        dropChromaBlockFamily(
+                ModBlocks.GRAY_CHROMA_BLOCK.get(),
+                ModBlocks.GRAY_CHROMA_STAIRS.get(),
+                ModBlocks.GRAY_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.GRAY_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.GRAY_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.GRAY_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.GRAY_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.GRAY_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.GRAY_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // BLACK
+        dropChromaBlockFamily(
+                ModBlocks.BLACK_CHROMA_BLOCK.get(),
+                ModBlocks.BLACK_CHROMA_STAIRS.get(),
+                ModBlocks.BLACK_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.BLACK_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.BLACK_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.BLACK_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.BLACK_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.BLACK_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.BLACK_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // BROWN
+        dropChromaBlockFamily(
+                ModBlocks.BROWN_CHROMA_BLOCK.get(),
+                ModBlocks.BROWN_CHROMA_STAIRS.get(),
+                ModBlocks.BROWN_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.BROWN_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.BROWN_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.BROWN_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.BROWN_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.BROWN_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.BROWN_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // RED
+        dropChromaBlockFamily(
+                ModBlocks.RED_CHROMA_BLOCK.get(),
+                ModBlocks.RED_CHROMA_STAIRS.get(),
+                ModBlocks.RED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.RED_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.RED_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.RED_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.RED_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.RED_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.RED_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // ORANGE
+        dropChromaBlockFamily(
+                ModBlocks.ORANGE_CHROMA_BLOCK.get(),
+                ModBlocks.ORANGE_CHROMA_STAIRS.get(),
+                ModBlocks.ORANGE_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.ORANGE_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.ORANGE_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.ORANGE_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.ORANGE_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.ORANGE_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.ORANGE_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // YELLOW
+        dropChromaBlockFamily(
+                ModBlocks.YELLOW_CHROMA_BLOCK.get(),
+                ModBlocks.YELLOW_CHROMA_STAIRS.get(),
+                ModBlocks.YELLOW_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.YELLOW_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.YELLOW_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.YELLOW_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.YELLOW_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.YELLOW_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.YELLOW_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // LIME
+        dropChromaBlockFamily(
+                ModBlocks.LIME_CHROMA_BLOCK.get(),
+                ModBlocks.LIME_CHROMA_STAIRS.get(),
+                ModBlocks.LIME_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.LIME_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.LIME_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.LIME_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.LIME_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.LIME_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.LIME_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // GREEN
+        dropChromaBlockFamily(
+                ModBlocks.GREEN_CHROMA_BLOCK.get(),
+                ModBlocks.GREEN_CHROMA_STAIRS.get(),
+                ModBlocks.GREEN_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.GREEN_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.GREEN_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.GREEN_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.GREEN_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.GREEN_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.GREEN_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // CYAN
+        dropChromaBlockFamily(
+                ModBlocks.CYAN_CHROMA_BLOCK.get(),
+                ModBlocks.CYAN_CHROMA_STAIRS.get(),
+                ModBlocks.CYAN_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.CYAN_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.CYAN_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.CYAN_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.CYAN_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.CYAN_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.CYAN_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // LIGHT BLUE
+        dropChromaBlockFamily(
+                ModBlocks.LIGHT_BLUE_CHROMA_BLOCK.get(),
+                ModBlocks.LIGHT_BLUE_CHROMA_STAIRS.get(),
+                ModBlocks.LIGHT_BLUE_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // BLUE
+        dropChromaBlockFamily(
+                ModBlocks.BLUE_CHROMA_BLOCK.get(),
+                ModBlocks.BLUE_CHROMA_STAIRS.get(),
+                ModBlocks.BLUE_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.BLUE_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.BLUE_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.BLUE_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.BLUE_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.BLUE_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.BLUE_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // PURPLE
+        dropChromaBlockFamily(
+                ModBlocks.PURPLE_CHROMA_BLOCK.get(),
+                ModBlocks.PURPLE_CHROMA_STAIRS.get(),
+                ModBlocks.PURPLE_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.PURPLE_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.PURPLE_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.PURPLE_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.PURPLE_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.PURPLE_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.PURPLE_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // MAGENTA
+        dropChromaBlockFamily(
+                ModBlocks.MAGENTA_CHROMA_BLOCK.get(),
+                ModBlocks.MAGENTA_CHROMA_STAIRS.get(),
+                ModBlocks.MAGENTA_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.MAGENTA_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.MAGENTA_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.MAGENTA_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.MAGENTA_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.MAGENTA_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.MAGENTA_SMOOTH_CHROMA_SLAB.get()
+        );
+
+        // PINK
+        dropChromaBlockFamily(
+                ModBlocks.PINK_CHROMA_BLOCK.get(),
+                ModBlocks.PINK_CHROMA_STAIRS.get(),
+                ModBlocks.PINK_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.PINK_POLISHED_CHROMA_BLOCK.get(),
+                ModBlocks.PINK_POLISHED_CHROMA_STAIRS.get(),
+                ModBlocks.PINK_POLISHED_CHROMA_SLAB.get()
+        );
+        dropChromaBlockFamily(
+                ModBlocks.PINK_SMOOTH_CHROMA_BLOCK.get(),
+                ModBlocks.PINK_SMOOTH_CHROMA_STAIRS.get(),
+                ModBlocks.PINK_SMOOTH_CHROMA_SLAB.get()
+        );
+
+
+
+        //dropSelf(ModBlocks.CHROMA_BLOCK.get());
+        //dropSelf(ModBlocks.CHROMA_STAIRS.get());
+        //dropSelf(ModBlocks.CHROMA_PRESSURE_PLATE.get());
+        //dropSelf(ModBlocks.CHROMA_BUTTON.get());
+        //dropSelf(ModBlocks.CHROMA_FENCE.get());
+        //dropSelf(ModBlocks.CHROMA_FENCE_GATE.get());
+        //dropSelf(ModBlocks.CHROMA_WALL.get());
+        //dropSelf(ModBlocks.CHROMA_TRAPDOOR.get());
 
         //slab drops
-        add(ModBlocks.CHROMA_SLAB.get(), this::createSlabItemTable);
+        //add(ModBlocks.CHROMA_SLAB.get(), this::createSlabItemTable);
 
         //door drops
-        add(ModBlocks.CHROMA_DOOR.get(), this::createDoorTable);
+        //add(ModBlocks.CHROMA_DOOR.get(), this::createDoorTable);
 
         //ore drops
         add(ModBlocks.WHITE_CHROMA_DEPOSIT.get(), createCopperOreLikeDrops(ModBlocks.WHITE_CHROMA_DEPOSIT.get(), ModItems.WHITE_CHROMA.get(), 1, 4));
@@ -120,6 +410,14 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                         )
         ));
     }
+
+
+    private void dropChromaBlockFamily(Block block, StairBlock stairs, SlabBlock slab) {
+        dropSelf(block);
+        dropSelf(stairs);
+        add(slab, this::createSlabItemTable);
+    }
+
 
     protected LootTable.Builder createCopperOreLikeDrops(Block block, Item item, float minDrops, float maxDrops) {
 

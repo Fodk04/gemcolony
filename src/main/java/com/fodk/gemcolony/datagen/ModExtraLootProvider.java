@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -51,6 +52,10 @@ public class ModExtraLootProvider implements LootTableSubProvider {
             Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "extra/glm/magenta_chroma"));
     public static final ResourceKey<LootTable> PINK_CHROMA = ResourceKey.create(Registries.LOOT_TABLE,
             Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "extra/glm/pink_chroma"));
+    public static final ResourceKey<LootTable> BLUE_ONSEN = ResourceKey.create(Registries.LOOT_TABLE,
+            Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "chests/blue_onsen"));
+    public static final ResourceKey<LootTable> YELLOW_SAUNA = ResourceKey.create(Registries.LOOT_TABLE,
+            Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "chests/yellow_sauna"));
 
 
     public ModExtraLootProvider(HolderLookup.Provider provider) {
@@ -155,5 +160,37 @@ public class ModExtraLootProvider implements LootTableSubProvider {
                         .when(LootItemRandomChanceCondition.randomChance(0.7f))
                         .add(LootItem.lootTableItem(ModItems.PINK_CHROMA))
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 8)))));
+
+        output.accept(BLUE_ONSEN, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(3))
+                        .add(LootItem.lootTableItem(ModItems.BLUE_CHROMA).setWeight(20))
+                        .add(LootItem.lootTableItem(ModItems.LIGHT_BLUE_CHROMA).setWeight(20))
+                        .add(LootItem.lootTableItem(ModItems.CYAN_CHROMA).setWeight(20))
+                        .add(LootItem.lootTableItem(Items.LAPIS_LAZULI).setWeight(40))
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(4, 10))))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.BLUE_QUARTZ_GEM).setWeight(1))
+                        .add(LootItem.lootTableItem(ModItems.DUMORTIERITE_QUARTZ_GEM).setWeight(1))
+                        .add(LootItem.lootTableItem(ModItems.SEA_SEDIMENT_JASPER_GEM).setWeight(1))
+                        .add(LootItem.lootTableItem(ModItems.OCEAN_JASPER_GEM).setWeight(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.1F))));
+
+        output.accept(YELLOW_SAUNA, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(3))
+                        .add(LootItem.lootTableItem(ModItems.YELLOW_CHROMA).setWeight(20))
+                        .add(LootItem.lootTableItem(ModItems.ORANGE_CHROMA).setWeight(20))
+                        .add(LootItem.lootTableItem(ModItems.LIME_CHROMA).setWeight(20))
+                        .add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(40))
+                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(4, 10))))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.CITRINE_QUARTZ_GEM).setWeight(1))
+                        .add(LootItem.lootTableItem(ModItems.CHERT_QUARTZ_GEM).setWeight(1))
+                        .add(LootItem.lootTableItem(ModItems.NOREENA_JASPER_GEM).setWeight(1))
+                        .add(LootItem.lootTableItem(ModItems.BIGGS_JASPER_GEM).setWeight(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.1F))));
     }
 }

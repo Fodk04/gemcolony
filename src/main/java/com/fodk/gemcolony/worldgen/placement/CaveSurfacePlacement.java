@@ -5,12 +5,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +58,19 @@ public class CaveSurfacePlacement extends PlacementModifier {
 
                     if (!context.getBlockState(pos).isAir()) {
                         continue;
+                    }
+
+                    if (context.getLevel() instanceof WorldGenRegion region) {
+                        StructureManager manager =
+                                region.getLevel().structureManager()
+                                        .forWorldGenRegion(region);
+
+                        StructureStart structure =
+                                manager.getStructureWithPieceAt(pos, holder -> true);
+
+                        if (structure.isValid()) {
+                            continue;
+                        }
                     }
 
                     for (Direction direction : Direction.values()) {

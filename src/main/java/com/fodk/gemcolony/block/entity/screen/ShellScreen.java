@@ -2,8 +2,10 @@ package com.fodk.gemcolony.block.entity.screen;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.entity.custom.ShellBlockEntity;
+import com.fodk.gemcolony.entity.custom.gem.variant.PearlVariants;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.menu.ShellMenu;
+import com.fodk.gemcolony.util.GemVariantUtil;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -15,13 +17,14 @@ import net.minecraft.world.item.ItemStack;
 public class ShellScreen extends AbstractContainerScreen<ShellMenu> {
 
     private static final Identifier SHELL_BG = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/shell_inventory.png");
+    private static final Identifier SHELL_ESSENCE_CLIP = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/shell_inventory_essence_clip.png");
 
     private static final Identifier ESSENCE_STILL = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/block/essence_still.png");
 
     private static final Identifier PEARL_PROGRESS = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/shell_progress_pearl.png");
-    private static final int PEARL_X = 60;
-    private static final int PEARL_Y = 24;
-    private static final int PEARL_SIZE = 48;
+    private static final int PEARL_X = 80;
+    private static final int PEARL_Y = 40;
+    private static final int PEARL_SIZE = 16;
 
     public ShellScreen(ShellMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, 176, 166);
@@ -55,10 +58,10 @@ public class ShellScreen extends AbstractContainerScreen<ShellMenu> {
                 graphics,
                 shell.getWhiteEssenceAmount(),
                 shell.getWhiteEssenceCapacity(),
-                135,
-                16,
+                142,
                 24,
-                54
+                15,
+                53
         );
 
         drawPearlPreview(graphics, shell);
@@ -67,14 +70,6 @@ public class ShellScreen extends AbstractContainerScreen<ShellMenu> {
     private void drawWhiteEssenceTank(GuiGraphicsExtractor graphics, int amount, int capacity, int x, int y, int width, int height) {
         float fill = capacity <= 0 ? 0.0F : (float) amount / capacity;
         int filledHeight = Math.round(height * fill);
-
-        graphics.fill(
-                this.leftPos + x,
-                this.topPos + y,
-                this.leftPos + x + width,
-                this.topPos + y + height,
-                0xFF303030
-        );
 
         if (filledHeight <= 0) {
             return;
@@ -93,6 +88,20 @@ public class ShellScreen extends AbstractContainerScreen<ShellMenu> {
                 filledHeight,
                 16,
                 16,
+                0xFFFFFFFF
+        );
+
+        graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                SHELL_ESSENCE_CLIP,
+                this.leftPos + x,
+                76,
+                0,
+                0,
+                15,
+                8,
+                15,
+                8,
                 0xFFFFFFFF
         );
     }

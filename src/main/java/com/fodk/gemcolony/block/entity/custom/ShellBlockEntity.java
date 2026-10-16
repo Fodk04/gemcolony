@@ -90,6 +90,9 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
     private int waterDrained = 0;
 
     private int chromaColorIndex = 0;
+    public int getChromaColorIndex() {
+        return chromaColorIndex;
+    }
 
     private final List<BlockPos> drainableBlocks = new ArrayList<>();
     private final List<BlockPos> waterBlocks = new ArrayList<>();

@@ -23,9 +23,13 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -53,6 +57,111 @@ public class ModModelProvider extends ModelProvider {
             Map.entry(ColorUtil.MAGENTA, ModBlocks.MAGENTA_CHROMA_DEPOSIT),
             Map.entry(ColorUtil.PINK, ModBlocks.PINK_CHROMA_DEPOSIT)
     );
+
+    private record ChromaBlockSet(
+            ColorUtil color,
+            DeferredBlock<Block> regular,
+            DeferredBlock<StairBlock> regularStairs,
+            DeferredBlock<SlabBlock> regularSlab,
+            DeferredBlock<Block> polished,
+            DeferredBlock<StairBlock> polishedStairs,
+            DeferredBlock<SlabBlock> polishedSlab,
+            DeferredBlock<Block> smooth,
+            DeferredBlock<StairBlock> smoothStairs,
+            DeferredBlock<SlabBlock> smoothSlab
+    ) {}
+
+    private static final List<ChromaBlockSet> CHROMA_BLOCK_SETS = List.of(
+            new ChromaBlockSet(ColorUtil.WHITE,
+                    ModBlocks.WHITE_CHROMA_BLOCK, ModBlocks.WHITE_CHROMA_STAIRS, ModBlocks.WHITE_CHROMA_SLAB,
+                    ModBlocks.WHITE_POLISHED_CHROMA_BLOCK, ModBlocks.WHITE_POLISHED_CHROMA_STAIRS, ModBlocks.WHITE_POLISHED_CHROMA_SLAB,
+                    ModBlocks.WHITE_SMOOTH_CHROMA_BLOCK, ModBlocks.WHITE_SMOOTH_CHROMA_STAIRS, ModBlocks.WHITE_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.LIGHT_GRAY,
+                    ModBlocks.LIGHT_GRAY_CHROMA_BLOCK, ModBlocks.LIGHT_GRAY_CHROMA_STAIRS, ModBlocks.LIGHT_GRAY_CHROMA_SLAB,
+                    ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_BLOCK, ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_STAIRS, ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_SLAB,
+                    ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_BLOCK, ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_STAIRS, ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.GRAY,
+                    ModBlocks.GRAY_CHROMA_BLOCK, ModBlocks.GRAY_CHROMA_STAIRS, ModBlocks.GRAY_CHROMA_SLAB,
+                    ModBlocks.GRAY_POLISHED_CHROMA_BLOCK, ModBlocks.GRAY_POLISHED_CHROMA_STAIRS, ModBlocks.GRAY_POLISHED_CHROMA_SLAB,
+                    ModBlocks.GRAY_SMOOTH_CHROMA_BLOCK, ModBlocks.GRAY_SMOOTH_CHROMA_STAIRS, ModBlocks.GRAY_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.BLACK,
+                    ModBlocks.BLACK_CHROMA_BLOCK, ModBlocks.BLACK_CHROMA_STAIRS, ModBlocks.BLACK_CHROMA_SLAB,
+                    ModBlocks.BLACK_POLISHED_CHROMA_BLOCK, ModBlocks.BLACK_POLISHED_CHROMA_STAIRS, ModBlocks.BLACK_POLISHED_CHROMA_SLAB,
+                    ModBlocks.BLACK_SMOOTH_CHROMA_BLOCK, ModBlocks.BLACK_SMOOTH_CHROMA_STAIRS, ModBlocks.BLACK_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.BROWN,
+                    ModBlocks.BROWN_CHROMA_BLOCK, ModBlocks.BROWN_CHROMA_STAIRS, ModBlocks.BROWN_CHROMA_SLAB,
+                    ModBlocks.BROWN_POLISHED_CHROMA_BLOCK, ModBlocks.BROWN_POLISHED_CHROMA_STAIRS, ModBlocks.BROWN_POLISHED_CHROMA_SLAB,
+                    ModBlocks.BROWN_SMOOTH_CHROMA_BLOCK, ModBlocks.BROWN_SMOOTH_CHROMA_STAIRS, ModBlocks.BROWN_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.RED,
+                    ModBlocks.RED_CHROMA_BLOCK, ModBlocks.RED_CHROMA_STAIRS, ModBlocks.RED_CHROMA_SLAB,
+                    ModBlocks.RED_POLISHED_CHROMA_BLOCK, ModBlocks.RED_POLISHED_CHROMA_STAIRS, ModBlocks.RED_POLISHED_CHROMA_SLAB,
+                    ModBlocks.RED_SMOOTH_CHROMA_BLOCK, ModBlocks.RED_SMOOTH_CHROMA_STAIRS, ModBlocks.RED_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.ORANGE,
+                    ModBlocks.ORANGE_CHROMA_BLOCK, ModBlocks.ORANGE_CHROMA_STAIRS, ModBlocks.ORANGE_CHROMA_SLAB,
+                    ModBlocks.ORANGE_POLISHED_CHROMA_BLOCK, ModBlocks.ORANGE_POLISHED_CHROMA_STAIRS, ModBlocks.ORANGE_POLISHED_CHROMA_SLAB,
+                    ModBlocks.ORANGE_SMOOTH_CHROMA_BLOCK, ModBlocks.ORANGE_SMOOTH_CHROMA_STAIRS, ModBlocks.ORANGE_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.YELLOW,
+                    ModBlocks.YELLOW_CHROMA_BLOCK, ModBlocks.YELLOW_CHROMA_STAIRS, ModBlocks.YELLOW_CHROMA_SLAB,
+                    ModBlocks.YELLOW_POLISHED_CHROMA_BLOCK, ModBlocks.YELLOW_POLISHED_CHROMA_STAIRS, ModBlocks.YELLOW_POLISHED_CHROMA_SLAB,
+                    ModBlocks.YELLOW_SMOOTH_CHROMA_BLOCK, ModBlocks.YELLOW_SMOOTH_CHROMA_STAIRS, ModBlocks.YELLOW_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.LIME,
+                    ModBlocks.LIME_CHROMA_BLOCK, ModBlocks.LIME_CHROMA_STAIRS, ModBlocks.LIME_CHROMA_SLAB,
+                    ModBlocks.LIME_POLISHED_CHROMA_BLOCK, ModBlocks.LIME_POLISHED_CHROMA_STAIRS, ModBlocks.LIME_POLISHED_CHROMA_SLAB,
+                    ModBlocks.LIME_SMOOTH_CHROMA_BLOCK, ModBlocks.LIME_SMOOTH_CHROMA_STAIRS, ModBlocks.LIME_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.GREEN,
+                    ModBlocks.GREEN_CHROMA_BLOCK, ModBlocks.GREEN_CHROMA_STAIRS, ModBlocks.GREEN_CHROMA_SLAB,
+                    ModBlocks.GREEN_POLISHED_CHROMA_BLOCK, ModBlocks.GREEN_POLISHED_CHROMA_STAIRS, ModBlocks.GREEN_POLISHED_CHROMA_SLAB,
+                    ModBlocks.GREEN_SMOOTH_CHROMA_BLOCK, ModBlocks.GREEN_SMOOTH_CHROMA_STAIRS, ModBlocks.GREEN_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.CYAN,
+                    ModBlocks.CYAN_CHROMA_BLOCK, ModBlocks.CYAN_CHROMA_STAIRS, ModBlocks.CYAN_CHROMA_SLAB,
+                    ModBlocks.CYAN_POLISHED_CHROMA_BLOCK, ModBlocks.CYAN_POLISHED_CHROMA_STAIRS, ModBlocks.CYAN_POLISHED_CHROMA_SLAB,
+                    ModBlocks.CYAN_SMOOTH_CHROMA_BLOCK, ModBlocks.CYAN_SMOOTH_CHROMA_STAIRS, ModBlocks.CYAN_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.LIGHT_BLUE,
+                    ModBlocks.LIGHT_BLUE_CHROMA_BLOCK, ModBlocks.LIGHT_BLUE_CHROMA_STAIRS, ModBlocks.LIGHT_BLUE_CHROMA_SLAB,
+                    ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_BLOCK, ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_STAIRS, ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_SLAB,
+                    ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_BLOCK, ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_STAIRS, ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.BLUE,
+                    ModBlocks.BLUE_CHROMA_BLOCK, ModBlocks.BLUE_CHROMA_STAIRS, ModBlocks.BLUE_CHROMA_SLAB,
+                    ModBlocks.BLUE_POLISHED_CHROMA_BLOCK, ModBlocks.BLUE_POLISHED_CHROMA_STAIRS, ModBlocks.BLUE_POLISHED_CHROMA_SLAB,
+                    ModBlocks.BLUE_SMOOTH_CHROMA_BLOCK, ModBlocks.BLUE_SMOOTH_CHROMA_STAIRS, ModBlocks.BLUE_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.PURPLE,
+                    ModBlocks.PURPLE_CHROMA_BLOCK, ModBlocks.PURPLE_CHROMA_STAIRS, ModBlocks.PURPLE_CHROMA_SLAB,
+                    ModBlocks.PURPLE_POLISHED_CHROMA_BLOCK, ModBlocks.PURPLE_POLISHED_CHROMA_STAIRS, ModBlocks.PURPLE_POLISHED_CHROMA_SLAB,
+                    ModBlocks.PURPLE_SMOOTH_CHROMA_BLOCK, ModBlocks.PURPLE_SMOOTH_CHROMA_STAIRS, ModBlocks.PURPLE_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.MAGENTA,
+                    ModBlocks.MAGENTA_CHROMA_BLOCK, ModBlocks.MAGENTA_CHROMA_STAIRS, ModBlocks.MAGENTA_CHROMA_SLAB,
+                    ModBlocks.MAGENTA_POLISHED_CHROMA_BLOCK, ModBlocks.MAGENTA_POLISHED_CHROMA_STAIRS, ModBlocks.MAGENTA_POLISHED_CHROMA_SLAB,
+                    ModBlocks.MAGENTA_SMOOTH_CHROMA_BLOCK, ModBlocks.MAGENTA_SMOOTH_CHROMA_STAIRS, ModBlocks.MAGENTA_SMOOTH_CHROMA_SLAB),
+
+            new ChromaBlockSet(ColorUtil.PINK,
+                    ModBlocks.PINK_CHROMA_BLOCK, ModBlocks.PINK_CHROMA_STAIRS, ModBlocks.PINK_CHROMA_SLAB,
+                    ModBlocks.PINK_POLISHED_CHROMA_BLOCK, ModBlocks.PINK_POLISHED_CHROMA_STAIRS, ModBlocks.PINK_POLISHED_CHROMA_SLAB,
+                    ModBlocks.PINK_SMOOTH_CHROMA_BLOCK, ModBlocks.PINK_SMOOTH_CHROMA_STAIRS, ModBlocks.PINK_SMOOTH_CHROMA_SLAB)
+    );
+
+    private void registerChromaPillar(BlockModelGenerators blockModels, RotatedPillarBlock pillar, String name) {
+        Material side = new Material(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + name + "_side"));
+        Material end = new Material(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + name + "_top"));
+
+        TextureMapping mapping = TextureMapping.column(side, end);
+
+        blockModels.blockStateOutput.accept(BlockModelGenerators.createPillarBlockUVLocked(pillar, mapping, blockModels.modelOutput));
+        blockModels.registerSimpleItemModel(pillar, ModelLocationUtils.getModelLocation(pillar).withSuffix("_y"));
+    }
 
     private static final TextureSlot SLOT_ZERO = TextureSlot.create("0");
 
@@ -187,7 +296,7 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.CHROMA_HORSE_ARMOR.get(), ModelTemplates.FLAT_ITEM);
 
         //blocks
-        blockModels.family(ModBlocks.CHROMA_BLOCK.get())
+        /*blockModels.family(ModBlocks.CHROMA_BLOCK.get())
                 .stairs(ModBlocks.CHROMA_STAIRS.get())
                 .slab(ModBlocks.CHROMA_SLAB.get())
                 .pressurePlate(ModBlocks.CHROMA_PRESSURE_PLATE.get())
@@ -196,10 +305,41 @@ public class ModModelProvider extends ModelProvider {
                 .fenceGate(ModBlocks.CHROMA_FENCE_GATE.get())
                 .wall(ModBlocks.CHROMA_WALL.get())
                 .door(ModBlocks.CHROMA_DOOR.get())
-                .trapdoor(ModBlocks.CHROMA_TRAPDOOR.get());
+                .trapdoor(ModBlocks.CHROMA_TRAPDOOR.get());*/
+
+        // COLORED CHROMA BLOCK FAMILIES
+        for (ChromaBlockSet set : CHROMA_BLOCK_SETS) {
+            blockModels.family(set.regular().get())
+                    .stairs(set.regularStairs().get())
+                    .slab(set.regularSlab().get());
+
+            blockModels.family(set.polished().get())
+                    .stairs(set.polishedStairs().get())
+                    .slab(set.polishedSlab().get());
+
+            blockModels.family(set.smooth().get())
+                    .stairs(set.smoothStairs().get())
+                    .slab(set.smoothSlab().get());
+        }
+
+        registerChromaPillar(blockModels, ModBlocks.WHITE_CHROMA_PILLAR.get(), "white_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.LIGHT_GRAY_CHROMA_PILLAR.get(), "light_gray_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.GRAY_CHROMA_PILLAR.get(), "gray_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.BLACK_CHROMA_PILLAR.get(), "black_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.BROWN_CHROMA_PILLAR.get(), "brown_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.RED_CHROMA_PILLAR.get(), "red_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.ORANGE_CHROMA_PILLAR.get(), "orange_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.YELLOW_CHROMA_PILLAR.get(), "yellow_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.LIME_CHROMA_PILLAR.get(), "lime_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.GREEN_CHROMA_PILLAR.get(), "green_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.CYAN_CHROMA_PILLAR.get(), "cyan_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.LIGHT_BLUE_CHROMA_PILLAR.get(), "light_blue_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.BLUE_CHROMA_PILLAR.get(), "blue_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.PURPLE_CHROMA_PILLAR.get(), "purple_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.MAGENTA_CHROMA_PILLAR.get(), "magenta_chroma_pillar");
+        registerChromaPillar(blockModels, ModBlocks.PINK_CHROMA_PILLAR.get(), "pink_chroma_pillar");
 
         blockModels.createTrivialCube(ModBlocks.DRAINED_STONE.get());
-
         blockModels.createNonTemplateModelBlock(ModBlocks.GEM_SEED.get());
 
         //custom 3d model blocks with facing 6direc and age

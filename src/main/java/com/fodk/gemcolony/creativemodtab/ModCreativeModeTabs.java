@@ -55,10 +55,242 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.YELLOW_ESSENCE_BUCKET);
                         output.accept(ModItems.WHITE_ESSENCE_BUCKET);
 
+                        output.accept(ModItems.FUSE);
+                    })
+                    .build());
+
+    public static final Supplier<CreativeModeTab> GEM_BLOCKS_TAB = CREATIVE_MODE_TABS.register("gem_blocks_tab",
+            () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ModBlocks.WHITE_CHROMA_BLOCK.get()))
+                    .title(Component.translatable("creativetab.gemcolony.gem_blocks"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gem_ingredients_tab"))
+                    .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(ModBlocks.DRAINED_STONE);
+                        output.accept(ModBlocks.DESTABILIZER_WALL_GENERATOR);
+
+                        // CHROMA DEPOSITS
+                        output.accept(ModBlocks.WHITE_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.LIGHT_GRAY_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.GRAY_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.BLACK_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.BROWN_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.RED_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.ORANGE_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.YELLOW_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.LIME_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.GREEN_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.CYAN_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.LIGHT_BLUE_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.BLUE_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.PURPLE_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.MAGENTA_CHROMA_DEPOSIT);
+                        output.accept(ModBlocks.PINK_CHROMA_DEPOSIT);
+
+                        // WHITE CHROMA
+                        output.accept(ModBlocks.WHITE_CHROMA_BLOCK);
+                        output.accept(ModBlocks.WHITE_CHROMA_STAIRS);
+                        output.accept(ModBlocks.WHITE_CHROMA_SLAB);
+                        output.accept(ModBlocks.WHITE_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.WHITE_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.WHITE_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.WHITE_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.WHITE_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.WHITE_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.WHITE_CHROMA_PILLAR);
+
+                        // LIGHT GRAY CHROMA
+                        output.accept(ModBlocks.LIGHT_GRAY_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIGHT_GRAY_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIGHT_GRAY_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIGHT_GRAY_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIGHT_GRAY_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIGHT_GRAY_CHROMA_PILLAR);
+
+                        // GRAY CHROMA
+                        output.accept(ModBlocks.GRAY_CHROMA_BLOCK);
+                        output.accept(ModBlocks.GRAY_CHROMA_STAIRS);
+                        output.accept(ModBlocks.GRAY_CHROMA_SLAB);
+                        output.accept(ModBlocks.GRAY_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.GRAY_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.GRAY_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.GRAY_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.GRAY_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.GRAY_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.GRAY_CHROMA_PILLAR);
+
+                        // BLACK CHROMA
+                        output.accept(ModBlocks.BLACK_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BLACK_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BLACK_CHROMA_SLAB);
+                        output.accept(ModBlocks.BLACK_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BLACK_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BLACK_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.BLACK_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BLACK_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BLACK_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.BLACK_CHROMA_PILLAR);
+
+                        // BROWN CHROMA
+                        output.accept(ModBlocks.BROWN_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BROWN_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BROWN_CHROMA_SLAB);
+                        output.accept(ModBlocks.BROWN_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BROWN_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BROWN_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.BROWN_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BROWN_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BROWN_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.BROWN_CHROMA_PILLAR);
+
+                        // RED CHROMA
+                        output.accept(ModBlocks.RED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.RED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.RED_CHROMA_SLAB);
+                        output.accept(ModBlocks.RED_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.RED_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.RED_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.RED_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.RED_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.RED_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.RED_CHROMA_PILLAR);
+
+                        // ORANGE CHROMA
+                        output.accept(ModBlocks.ORANGE_CHROMA_BLOCK);
+                        output.accept(ModBlocks.ORANGE_CHROMA_STAIRS);
+                        output.accept(ModBlocks.ORANGE_CHROMA_SLAB);
+                        output.accept(ModBlocks.ORANGE_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.ORANGE_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.ORANGE_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.ORANGE_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.ORANGE_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.ORANGE_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.ORANGE_CHROMA_PILLAR);
+
+                        // YELLOW CHROMA
+                        output.accept(ModBlocks.YELLOW_CHROMA_BLOCK);
+                        output.accept(ModBlocks.YELLOW_CHROMA_STAIRS);
+                        output.accept(ModBlocks.YELLOW_CHROMA_SLAB);
+                        output.accept(ModBlocks.YELLOW_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.YELLOW_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.YELLOW_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.YELLOW_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.YELLOW_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.YELLOW_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.YELLOW_CHROMA_PILLAR);
+
+                        // LIME CHROMA
+                        output.accept(ModBlocks.LIME_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIME_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIME_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIME_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIME_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIME_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIME_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIME_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIME_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIME_CHROMA_PILLAR);
+
+                        // GREEN CHROMA
+                        output.accept(ModBlocks.GREEN_CHROMA_BLOCK);
+                        output.accept(ModBlocks.GREEN_CHROMA_STAIRS);
+                        output.accept(ModBlocks.GREEN_CHROMA_SLAB);
+                        output.accept(ModBlocks.GREEN_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.GREEN_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.GREEN_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.GREEN_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.GREEN_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.GREEN_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.GREEN_CHROMA_PILLAR);
+
+                        // CYAN CHROMA
+                        output.accept(ModBlocks.CYAN_CHROMA_BLOCK);
+                        output.accept(ModBlocks.CYAN_CHROMA_STAIRS);
+                        output.accept(ModBlocks.CYAN_CHROMA_SLAB);
+                        output.accept(ModBlocks.CYAN_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.CYAN_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.CYAN_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.CYAN_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.CYAN_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.CYAN_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.CYAN_CHROMA_PILLAR);
+
+                        // LIGHT BLUE CHROMA
+                        output.accept(ModBlocks.LIGHT_BLUE_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIGHT_BLUE_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIGHT_BLUE_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIGHT_BLUE_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.LIGHT_BLUE_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.LIGHT_BLUE_CHROMA_PILLAR);
+
+                        // BLUE CHROMA
+                        output.accept(ModBlocks.BLUE_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BLUE_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BLUE_CHROMA_SLAB);
+                        output.accept(ModBlocks.BLUE_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BLUE_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BLUE_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.BLUE_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.BLUE_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.BLUE_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.BLUE_CHROMA_PILLAR);
+
+                        // PURPLE CHROMA
+                        output.accept(ModBlocks.PURPLE_CHROMA_BLOCK);
+                        output.accept(ModBlocks.PURPLE_CHROMA_STAIRS);
+                        output.accept(ModBlocks.PURPLE_CHROMA_SLAB);
+                        output.accept(ModBlocks.PURPLE_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.PURPLE_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.PURPLE_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.PURPLE_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.PURPLE_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.PURPLE_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.PURPLE_CHROMA_PILLAR);
+
+                        // MAGENTA CHROMA
+                        output.accept(ModBlocks.MAGENTA_CHROMA_BLOCK);
+                        output.accept(ModBlocks.MAGENTA_CHROMA_STAIRS);
+                        output.accept(ModBlocks.MAGENTA_CHROMA_SLAB);
+                        output.accept(ModBlocks.MAGENTA_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.MAGENTA_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.MAGENTA_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.MAGENTA_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.MAGENTA_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.MAGENTA_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.MAGENTA_CHROMA_PILLAR);
+
+                        // PINK CHROMA
+                        output.accept(ModBlocks.PINK_CHROMA_BLOCK);
+                        output.accept(ModBlocks.PINK_CHROMA_STAIRS);
+                        output.accept(ModBlocks.PINK_CHROMA_SLAB);
+                        output.accept(ModBlocks.PINK_POLISHED_CHROMA_BLOCK);
+                        output.accept(ModBlocks.PINK_POLISHED_CHROMA_STAIRS);
+                        output.accept(ModBlocks.PINK_POLISHED_CHROMA_SLAB);
+                        output.accept(ModBlocks.PINK_SMOOTH_CHROMA_BLOCK);
+                        output.accept(ModBlocks.PINK_SMOOTH_CHROMA_STAIRS);
+                        output.accept(ModBlocks.PINK_SMOOTH_CHROMA_SLAB);
+                        output.accept(ModBlocks.PINK_CHROMA_PILLAR);
+                    })
+                    .build());
+
+    public static final Supplier<CreativeModeTab> GEMSTONES_TAB = CREATIVE_MODE_TABS.register("gemstones_tab",
+            () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ModItems.PEBBLE_GEM.get()))
+                    .title(Component.translatable("creativetab.gemcolony.gemstones"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gem_blocks_tab"))
+                    .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.PEBBLE_GEM);
                         output.accept(ModItems.SHALE_GEM);
                         output.accept(ModItems.MICA_GEM);
                         output.accept(ModItems.NACRE_GEM);
+
                         output.accept(ModItems.PERIDOT_GEM);
 
                         output.accept(ModItems.MILKY_QUARTZ_GEM);
@@ -111,58 +343,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.PLUM_PEARL_GEM);
                         output.accept(ModItems.FUCHSIA_PEARL_GEM);
                         output.accept(ModItems.PINK_PEARL_GEM);
-
-                        output.accept(ModItems.FUSE);
-                    })
-                    .build());
-
-    public static final Supplier<CreativeModeTab> GEM_BLOCKS_TAB = CREATIVE_MODE_TABS.register("gem_blocks_tab",
-            () -> CreativeModeTab.builder()
-                    .icon(() -> new ItemStack(ModBlocks.CHROMA_BLOCK.get()))
-                    .title(Component.translatable("creativetab.gemcolony.gem_blocks"))
-                    .withTabsBefore(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gem_ingredients_tab"))
-                    .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModBlocks.CHROMA_BLOCK);
-                        output.accept(ModBlocks.CHROMA_STAIRS);
-                        output.accept(ModBlocks.CHROMA_SLAB);
-                        output.accept(ModBlocks.CHROMA_PRESSURE_PLATE);
-                        output.accept(ModBlocks.CHROMA_BUTTON);
-                        output.accept(ModBlocks.CHROMA_FENCE);
-                        output.accept(ModBlocks.CHROMA_FENCE_GATE);
-                        output.accept(ModBlocks.CHROMA_WALL);
-                        output.accept(ModBlocks.CHROMA_DOOR);
-                        output.accept(ModBlocks.CHROMA_TRAPDOOR);
-
-                        output.accept(ModBlocks.DRAINED_STONE);
-                        output.accept(ModBlocks.DESTABILIZER_WALL_GENERATOR);
-
-
-                        output.accept(ModBlocks.WHITE_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.LIGHT_GRAY_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.GRAY_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.BLACK_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.BROWN_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.RED_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.ORANGE_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.YELLOW_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.LIME_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.GREEN_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.CYAN_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.LIGHT_BLUE_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.BLUE_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.PURPLE_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.MAGENTA_CHROMA_DEPOSIT);
-                        output.accept(ModBlocks.PINK_CHROMA_DEPOSIT);
-                    })
-                    .build());
-
-    public static final Supplier<CreativeModeTab> GEM_FOODS_TAB = CREATIVE_MODE_TABS.register("gem_foods_tab",
-            () -> CreativeModeTab.builder()
-                    .icon(() -> new ItemStack(ModItems.STRAWBERRY.get()))
-                    .title(Component.translatable("creativetab.gemcolony.gem_foods"))
-                    .withTabsBefore(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gem_blocks_tab"))
-                    .displayItems((itemDisplayParameters, output) -> {
-                        output.accept(ModItems.STRAWBERRY);
                     })
                     .build());
 
@@ -170,7 +350,7 @@ public class ModCreativeModeTabs {
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.CHROMA_SWORD.get()))
                     .title(Component.translatable("creativetab.gemcolony.gem_tools"))
-                    .withTabsBefore(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gem_foods_tab"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gemstones_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.CHROMA_SWORD);
                         output.accept(ModItems.CHROMA_PICKAXE);
