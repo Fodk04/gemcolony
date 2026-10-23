@@ -56,7 +56,7 @@ public class PeridotEntity extends GemEntity {
     private static final EntityDataAccessor<Integer> ANALYSIS_TICKS = SynchedEntityData.defineId(PeridotEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ANALYSIS_DURATION = SynchedEntityData.defineId(PeridotEntity.class, EntityDataSerializers.INT);
 
-    private static final int BASE_ANALYSIS_DURATION = 200;
+    private static final int BASE_ANALYSIS_DURATION = 1000;
     private static final int ANALYSIS_RADIUS = 7;
 
     private BlockPos analysisCenter;
@@ -160,12 +160,7 @@ public class PeridotEntity extends GemEntity {
     protected void registerGoals() {
         super.registerGoals();
 
-        this.goalSelector.addGoal(3, new PeridotAnalysisGoal(this, 1));
-        this.goalSelector.addGoal(7, new AvoidEntityGoal<>(this, LivingEntity.class,
-                16.0F,
-                1.1D,
-                1.2D,
-                entity -> entity == this.getTarget()));
+        this.goalSelector.addGoal(4, new PeridotAnalysisGoal(this, 1));
     }
 
     @Override
@@ -417,14 +412,13 @@ public class PeridotEntity extends GemEntity {
         analysisResults = new ArrayList<>(data.results());
     }
 
-    private static final RawAnimation SAMPLE_ANIMATION = RawAnimation.begin().thenPlay("misc.sample");
+    private static final RawAnimation SAMPLE_ANIMATION = RawAnimation.begin().thenPlay("PickUp");
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         super.registerControllers(controllers);
 
-        controllers.add(new AnimationController<>("sampling_controller", 0,
-                state -> PlayState.STOP).triggerableAnim("sample", SAMPLE_ANIMATION));
+        controllers.add(new AnimationController<>("sampling_controller", 3, state -> PlayState.STOP).triggerableAnim("sample", SAMPLE_ANIMATION).setAnimationSpeed(1.3D));
     }
 
     @Override

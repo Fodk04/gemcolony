@@ -77,4 +77,17 @@ public class GemAttackGoal extends MeleeAttackGoal {
 
         super.tick();
     }
+
+    @Override
+    protected void checkAndPerformAttack(LivingEntity target) {
+        if (this.getTicksUntilNextAttack() <= 0) {
+            super.checkAndPerformAttack(target);
+
+            if (this.getTicksUntilNextAttack() > 0) {
+                gem.playRandomPunch();
+            }
+        } else {
+            super.checkAndPerformAttack(target);
+        }
+    }
 }

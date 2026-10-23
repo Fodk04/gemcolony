@@ -7,5 +7,6 @@ import net.minecraft.core.Direction;
 
 public class ShellRenderState extends BlockEntityRenderState implements GeoRenderState {
     public ItemStackRenderState pearl = new ItemStackRenderState();
+    public boolean complete;
     public Direction facing = Direction.NORTH;
 }

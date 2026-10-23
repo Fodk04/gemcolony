@@ -1,10 +1,13 @@
 package com.fodk.gemcolony.block.custom;
 
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
+import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.util.VoxelShapeUtil;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +25,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.List;
 
 public class LegBlock extends Block implements ConstructedMultiblock{
 
@@ -66,6 +71,10 @@ public class LegBlock extends Block implements ConstructedMultiblock{
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if(state.getValue(CONSTRUCTION_STAGE) != getMaxConstructionStage()){
+            return super.getShape(state, level, pos, context);
+        }
+
         VoxelShape shape = switch (state.getValue(PART)) {
             case BOTTOM -> BOTTOM_SHAPE;
             case SIDE_BOTTOM -> SIDE_BOTTOM_SHAPE;
@@ -234,5 +243,84 @@ public class LegBlock extends Block implements ConstructedMultiblock{
         }
 
         return true;
+    }
+
+    public static BlockPos getCenterPos(BlockPos pos, LegPart part, Direction facing) {
+        return switch (part) {
+            case CENTER -> pos;
+            case TOP -> pos.below();
+            case BOTTOM -> pos.above();
+            case SIDE -> pos.relative(facing.getOpposite());
+            case SIDE_TOP -> pos.relative(facing.getOpposite()).below();
+            case SIDE_BOTTOM -> pos.relative(facing.getOpposite()).above();
+        };
+    }
+
+    //construction res/time
+    @Override
+    public BlockPos getConstructionCenter(Level level, BlockPos pos, BlockState state) {
+        return getCenterPos(pos, state.getValue(PART), state.getValue(BlockStateProperties.HORIZONTAL_FACING));
+    }
+
+    @Override
+    public int getMaxConstructionStage() {
+        return 1;
+    }
+
+    @Override
+    public List<ConstructionRequirement> getConstructionRequirements() {
+        return List.of(
+                new ConstructionRequirement(12, Items.IRON_INGOT),
+                new ConstructionRequirement(6, ModItems.LIGHT_GRAY_CHROMA.get()),
+                new ConstructionRequirement(6, Items.COPPER_INGOT)
+        );
+    }
+
+    @Override
+    public BlockPos getController(Level level, BlockPos pos, BlockState state) {
+        BlockPos legCenter = getConstructionCenter(level, pos, state);
+
+        BlockPos[] candidates = {
+                legCenter.east(2),
+                legCenter.west(2),
+                legCenter.north(2),
+                legCenter.south(2)
+        };
+
+        for (BlockPos candidate : candidates) {
+            BlockState candidateState = level.getBlockState(candidate);
+
+            if (candidateState.getBlock() instanceof DrillBlock drill) {
+                return drill.getController(level, candidate, candidateState);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public void advanceConstruction(Level level, BlockPos centerPos, int stage) {
+        Direction facing = level.getBlockState(centerPos).getValue(BlockStateProperties.HORIZONTAL_FACING);
+
+        BlockPos[] positions = {
+                centerPos,
+                centerPos.above(),
+                centerPos.below(),
+                centerPos.relative(facing),
+                centerPos.relative(facing).above(),
+                centerPos.relative(facing).below()
+        };
+
+        for (BlockPos partPos : positions) {
+            BlockState partState = level.getBlockState(partPos);
+
+            if (partState.getBlock() == this && partState.getValue(CONSTRUCTION_STAGE) == stage) {
+                level.setBlock(
+                        partPos,
+                        partState.setValue(CONSTRUCTION_STAGE, stage + 1),
+                        3
+                );
+            }
+        }
     }
 }

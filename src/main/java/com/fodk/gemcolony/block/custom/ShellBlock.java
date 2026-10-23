@@ -1,7 +1,11 @@
 package com.fodk.gemcolony.block.custom;
 
+import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
 import com.fodk.gemcolony.block.entity.custom.ShellBlockEntity;
+import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
+import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.util.VoxelShapeUtil;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -12,6 +16,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -23,6 +28,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -31,11 +37,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
 public class ShellBlock extends BaseEntityBlock implements ConstructedMultiblock, SimpleWaterloggedBlock {
 
     public static final EnumProperty<ShellPart> PART = EnumProperty.create("part", ShellPart.class);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final IntegerProperty CONSTRUCTION_STAGE = GemColonyBlockStateProperties.CONSTRUCTION_STAGE;
 
     public ShellBlock(Properties properties) {
         super(properties);
@@ -43,7 +52,8 @@ public class ShellBlock extends BaseEntityBlock implements ConstructedMultiblock
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(PART, ShellPart.CENTER)
                 .setValue(FACING, Direction.NORTH)
-                .setValue(WATERLOGGED, false));
+                .setValue(WATERLOGGED, false)
+                .setValue(CONSTRUCTION_STAGE, 0));
     }
 
     private static final VoxelShape BOTTOM_SHAPE = Block.box(0, 0, 0, 16, 16, 16);
@@ -53,6 +63,10 @@ public class ShellBlock extends BaseEntityBlock implements ConstructedMultiblock
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if(state.getValue(CONSTRUCTION_STAGE) != getMaxConstructionStage()){
+            return super.getShape(state, level, pos, context);
+        }
+
         BlockPos centerPos = getCenterPos(pos, state.getValue(PART));
 
         if (level.getBlockEntity(centerPos) instanceof ShellBlockEntity shell) {
@@ -79,12 +93,12 @@ public class ShellBlock extends BaseEntityBlock implements ConstructedMultiblock
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(PART, FACING, WATERLOGGED);
+        builder.add(PART, FACING, WATERLOGGED, CONSTRUCTION_STAGE);
     }
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.INVISIBLE;
+        return state.getValue(CONSTRUCTION_STAGE) != getMaxConstructionStage() && state.getValue(PART) == ShellPart.CENTER ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 
     @Override
@@ -523,5 +537,65 @@ public class ShellBlock extends BaseEntityBlock implements ConstructedMultiblock
         }
 
         return waterNeighbours >= 2;
+    }
+
+    //construction res/time
+    @Override
+    public BlockPos getConstructionCenter(Level level, BlockPos pos, BlockState state) {
+        return getCenterPos(pos, state.getValue(PART));
+    }
+
+    @Override
+    public int getMaxConstructionStage() {
+        return 1;
+    }
+
+    @Override
+    public List<ConstructionRequirement> getConstructionRequirements() {
+        return List.of(
+                new ConstructionRequirement(26, ModItems.CYAN_CHROMA.get()),
+                new ConstructionRequirement(18, Items.IRON_INGOT),
+                new ConstructionRequirement(10, Items.COPPER_INGOT)
+        );
+    }
+
+    @Override
+    public BlockPos getController(Level level, BlockPos pos, BlockState state) {
+        BlockPos centerPos = getConstructionCenter(level, pos, state);
+        BlockState centerState = level.getBlockState(centerPos);
+
+        if (centerState.getBlock() != this || centerState.getValue(PART) != ShellPart.CENTER) {
+            return null;
+        }
+
+        return centerPos.north();
+    }
+
+    @Override
+    public void advanceConstruction(Level level, BlockPos centerPos, int stage) {
+        for (int y = 0; y <= 1; y++) {
+            for (int x = -1; x <= 1; x++) {
+                for (int z = -1; z <= 1; z++) {
+                    BlockPos partPos = centerPos.offset(x, y, z);
+                    BlockState partState = level.getBlockState(partPos);
+
+                    if (partState.getBlock() == this && partState.getValue(CONSTRUCTION_STAGE) == stage) {
+                        level.setBlock(partPos, partState.setValue(CONSTRUCTION_STAGE, stage + 1), 3);
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean isShellComplete(Level level, BlockPos shellPos) {
+        BlockState shellState = level.getBlockState(shellPos);
+
+        // Shell must be finished
+        if(shellState.getBlock() instanceof ConstructedMultiblock multiblock){
+            if(shellState.is(ModBlocks.SHELL.get()) && shellState.getValue(CONSTRUCTION_STAGE) == multiblock.getMaxConstructionStage()){
+                return true;
+            }
+        }
+        return false;
     }
 }

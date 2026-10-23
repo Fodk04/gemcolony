@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.block.entity.custom;
 
 import com.fodk.gemcolony.block.ModBlocks;
+import com.fodk.gemcolony.block.custom.DrillBlock;
 import com.fodk.gemcolony.block.custom.ShellBlock;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
 import com.fodk.gemcolony.data.ModDataComponents;
@@ -19,6 +20,7 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.constant.dataticket.DataTicket;
 import com.geckolib.util.GeckoLibUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -235,8 +237,22 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
         draining = input.getBooleanOr("Draining", false);
     }
 
+    public boolean isComplete() {
+        if (level == null) {
+            return false;
+        }
+
+        return ShellBlock.isShellComplete(level, worldPosition);
+    }
+
     public InteractionResult handleInteraction(Player player, ItemStack stack) {
         if (level == null || level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+
+        if (!isComplete()) {
+            player.sendOverlayMessage(Component.literal("Shell is incomplete.").withStyle(ChatFormatting.RED));
+
             return InteractionResult.SUCCESS;
         }
 
@@ -537,16 +553,10 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
                             boolean draining = state.renderState().getOrDefaultGeckolibData(ShellBlockEntity.DRAINING, false);
 
                             if (draining) {
-                                return state.setAndContinue(
-                                        RawAnimation.begin()
-                                                .thenPlayAndHold("lid_close")
-                                );
+                                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("lid_close"));
                             }
 
-                            return state.setAndContinue(
-                                    RawAnimation.begin()
-                                            .thenPlayAndHold("lid_open")
-                            );
+                            return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("lid_open"));
                         }
                 )
         );

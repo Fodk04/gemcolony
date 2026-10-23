@@ -9,36 +9,28 @@ public class Blueprints {
             "Workstation",
             3, 2, 3,
             -1,-1,-1,
-            4,
-            ModBlocks.CRYSTAL.get(),
-            java.util.List.of()
+            ModBlocks.CRYSTAL.get()
     );
     public static final Blueprint SHELL = new Blueprint(
             "shell",
             "Shell",
             3, 2, 3,
             -1,0,-1,
-            5,
-            ModBlocks.SHELL.get(),
-            java.util.List.of()
+            ModBlocks.SHELL.get()
     );
     public static final Blueprint INCUBATOR = new Blueprint(
             "incubator",
             "Incubator",
             3, 3, 3,
             -1,-1,-1,
-            5,
-            ModBlocks.CRYSTAL.get(),
-            java.util.List.of()
+            ModBlocks.CRYSTAL.get()
     );
     public static final Blueprint DRILL = new Blueprint(
             "drill",
             "Drill",
             3, 3, 3,
             -1, -1, -1,
-            4,
-            ModBlocks.DRILL.get(),
-            java.util.List.of()
+            ModBlocks.DRILL.get()
     );
 
     public static final Blueprint LEG = new Blueprint(
@@ -46,9 +38,7 @@ public class Blueprints {
             "Leg",
             1, 3, 2,
             0, -1, -1,
-            3,
-            ModBlocks.LEG.get(),
-            java.util.List.of()
+            ModBlocks.LEG.get()
     );
 
     public static final Blueprint TANK = new Blueprint(
@@ -56,9 +46,7 @@ public class Blueprints {
             "Tank",
             3, 3, 3,
             -1, -1, -1,
-            4,
-            ModBlocks.TANK.get(),
-            java.util.List.of()
+            ModBlocks.TANK.get()
     );
 
     public static final Blueprint CRYSTAL = new Blueprint(
@@ -66,8 +54,6 @@ public class Blueprints {
             "Crystal",
             3, 3, 3,
             -1, -1, -1,
-            3,
-            ModBlocks.CRYSTAL.get(),
-            java.util.List.of()
+            ModBlocks.CRYSTAL.get()
     );
 }

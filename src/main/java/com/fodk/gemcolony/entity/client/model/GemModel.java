@@ -6,7 +6,7 @@ import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.base.GeoRenderState;
 import net.minecraft.resources.Identifier;
 
-public abstract class GemModel<T extends GemEntity> extends DefaultedEntityGeoModel<T> {
+public class GemModel<T extends GemEntity> extends DefaultedEntityGeoModel<T> {
 
     public GemModel(Identifier model) {
         super(model);

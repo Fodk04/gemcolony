@@ -2,10 +2,13 @@ package com.fodk.gemcolony.block.custom;
 
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
+import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,6 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class CrystalBlock extends Block implements ConstructedMultiblock {
 
@@ -37,14 +41,12 @@ public class CrystalBlock extends Block implements ConstructedMultiblock {
         this.registerDefaultState(
                 this.stateDefinition.any()
                         .setValue(PART, CrystalPart.CENTER)
-                        .setValue(CONSTRUCTION_STAGE, 1));
+                        .setValue(CONSTRUCTION_STAGE, 0));
     }
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return state.getValue(PART) == CrystalPart.CENTER
-                ? RenderShape.MODEL
-                : RenderShape.INVISIBLE;
+        return state.getValue(PART) == CrystalPart.CENTER ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 
     @Override
@@ -68,6 +70,10 @@ public class CrystalBlock extends Block implements ConstructedMultiblock {
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if(state.getValue(CONSTRUCTION_STAGE) != getMaxConstructionStage()){
+            return super.getShape(state, level, pos, context);
+        }
+
         VoxelShape shape = switch (state.getValue(PART)) {
             case BOTTOM_NORTH -> NORTH_SHAPE;
             case MIDDLE_NORTH -> NORTH_SHAPE;
@@ -379,5 +385,58 @@ public class CrystalBlock extends Block implements ConstructedMultiblock {
         }
 
         return true;
+    }
+
+    //construction res/time
+    @Override
+    public BlockPos getConstructionCenter(Level level, BlockPos pos, BlockState state) {
+        return getCenterPos(pos, state.getValue(PART));
+    }
+
+    @Override
+    public int getMaxConstructionStage() {
+        return 1;
+    }
+
+    @Override
+    public List<ConstructionRequirement> getConstructionRequirements() {
+        return List.of(
+                new ConstructionRequirement(8, Items.IRON_INGOT),
+                new ConstructionRequirement(10, Items.REDSTONE_BLOCK),
+                new ConstructionRequirement(10, ModItems.GRAY_CHROMA.get())
+        );
+    }
+
+    @Override
+    public BlockPos getController(Level level, BlockPos pos, BlockState state) {
+        BlockPos crystalCenter = getConstructionCenter(level, pos, state);
+        BlockPos drillPos = getInjectorDrillPos(crystalCenter);
+        BlockState drillState = level.getBlockState(drillPos);
+
+        if (drillState.getBlock() instanceof DrillBlock drill) {
+            return drill.getController(level, drillPos, drillState);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void advanceConstruction(Level level, BlockPos centerPos, int stage) {
+        for (int y = -1; y <= 1; y++) {
+            for (int z = -1; z <= 1; z++) {
+                for (int x = -1; x <= 1; x++) {
+                    BlockPos partPos = centerPos.offset(x, y, z);
+                    BlockState partState = level.getBlockState(partPos);
+
+                    if (partState.getBlock() == this && partState.getValue(CONSTRUCTION_STAGE) == stage) {
+                        level.setBlock(
+                                partPos,
+                                partState.setValue(CONSTRUCTION_STAGE, stage + 1),
+                                3
+                        );
+                    }
+                }
+            }
+        }
     }
 }

@@ -22,6 +22,9 @@ import com.fodk.gemcolony.util.GemCombatUtil;
 import com.geckolib.animatable.GeoEntity;
 import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
 import com.geckolib.constant.DefaultAnimations;
 import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.core.BlockPos;
@@ -36,6 +39,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.*;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
@@ -43,6 +47,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Inventory;
@@ -99,6 +104,11 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     private long persistentAngerEndTime = NeutralMob.NO_ANGER_END_TIME;
     @Nullable
     private EntityReference<LivingEntity> persistentAngerTarget;
+
+    @Nullable
+    private BlockPos supplyTargetPos;
+
+    private Map<Item, Integer> supplyRequirements = Map.of();
 
     public GemEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -507,9 +517,46 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("GenericIdle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("GenericWalking");
+    private static final RawAnimation LEFT_PUNCH = RawAnimation.begin().thenPlay("GenericPunchL");
+    private static final RawAnimation RIGHT_PUNCH = RawAnimation.begin().thenPlay("GenericPunchR");
+    float walkAnimSpeed = 0.07f;
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(DefaultAnimations.genericWalkIdleController());
+        controllers.add(new AnimationController<GemEntity>("Walk/Idle", 8, state -> {
+            double dx = this.getDeltaMovement().x;
+            double dz = this.getDeltaMovement().z;
+            double horizontalSpeed = Math.sqrt(dx * dx + dz * dz);
+
+            if (horizontalSpeed > 0.01) {
+
+                float referenceWidth = 0.6f;
+                float sizeFactor = this.getBbWidth() / referenceWidth;
+
+                float animationSpeed = (float) Mth.clamp((horizontalSpeed / walkAnimSpeed) / sizeFactor, 0.4, 3.0);
+
+                state.setControllerSpeed(animationSpeed);
+                return state.setAndContinue(WALK);
+            }
+
+            state.setControllerSpeed(1.0F);
+            return state.setAndContinue(IDLE);
+        }));
+
+        controllers.add(new AnimationController<GemEntity>("Attack", 0, state -> PlayState.STOP)
+                        .triggerableAnim("left_punch", LEFT_PUNCH)
+                        .triggerableAnim("right_punch", RIGHT_PUNCH)
+        );
+    }
+
+    public void playRandomPunch() {
+        if (this.getRandom().nextBoolean()) {
+            this.triggerAnim("Attack", "left_punch");
+        } else {
+            this.triggerAnim("Attack", "right_punch");
+        }
     }
 
     @Override
@@ -1157,10 +1204,17 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.targetSelector.addGoal(2, new GemTargetGoal(this, 16.0D));
         this.goalSelector.addGoal(3, new GemFuseGoal(this, 1.1D));
 
-        this.goalSelector.addGoal(4, new GemStayGoal(this));
-        this.goalSelector.addGoal(6, new GemFollowGoal(this, 1.1D, 7.0F, 5.5F));
+        this.goalSelector.addGoal(5, new GemStayGoal(this));
+        this.goalSelector.addGoal(7, new AvoidEntityGoal<>(this, LivingEntity.class,
+                16.0F,
+                1.1D,
+                1.2D,
+                entity -> entity == this.getTarget()));
 
-        this.goalSelector.addGoal(10, new GemWanderGoal(this, 1.0D));
+        this.goalSelector.addGoal(8, new GemFollowGoal(this, 1.1D, 7.0F, 5.5F));
+        this.goalSelector.addGoal(9, new GemWanderGoal(this, 1.0D));
+
+        this.goalSelector.addGoal(10, new ChestSupplyGoal(this));
     }
 
     @Override
@@ -1345,8 +1399,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         double total = 0.0D;
 
         for (ItemStack component : getFusionComponents()) {
-            GemSaveData saveData =
-                    component.get(ModDataComponents.GEM_SAVE_DATA);
+            GemSaveData saveData = component.get(ModDataComponents.GEM_SAVE_DATA);
 
             if (saveData == null) {
                 continue;
@@ -1354,9 +1407,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
             int quality = saveData.gemStateData().quality();
 
-            total += getBaseAttackDamage()
-                    * getQualityDamageMultiplier(quality)
-                    * 0.5D;
+            total += getBaseAttackDamage() * getQualityDamageMultiplier(quality) * 0.5D;
         }
 
         return total;
@@ -1395,7 +1446,6 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public boolean completeSameGemFusion(ServerLevel serverLevel, UUID fusionId) {
         FusionRegistryData registry = FusionRegistryData.get(serverLevel);
 
-        // Claim the transformation so only one participant can execute it.
         if (!registry.beginFusion(fusionId)) {
             return false;
         }
@@ -1411,10 +1461,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         for (UUID uuid : session.participants()) {
             Entity entity = serverLevel.getEntity(uuid);
 
-            if (!(entity instanceof GemEntity participant)
-                    || !participant.isAlive()
-                    || participant.getClass() != getClass()) {
-                // We have claimed the session, so don't leave it stuck in FUSING.
+            if (!(entity instanceof GemEntity participant) || !participant.isAlive() || participant.getClass() != getClass()) {
                 registry.removeSession(fusionId);
                 for (UUID participantUUID : session.participants()) {
                     Entity remaining = serverLevel.getEntity(participantUUID);
@@ -1473,7 +1520,6 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             return false;
         }
 
-        // remove originals only after the fused entity has spawned successfully
         registry.removeSession(fusionId);
 
         for (GemEntity participant : participants) {
@@ -1482,5 +1528,29 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         }
 
         return true;
+    }
+
+    //item handling
+    public void requestSupplies(BlockPos targetPos, Map<Item, Integer> requirements) {
+        this.supplyTargetPos = targetPos.immutable();
+        this.supplyRequirements = Map.copyOf(requirements);
+    }
+
+    @Nullable
+    public BlockPos getSupplyTargetPos() {
+        return supplyTargetPos;
+    }
+
+    public Map<Item, Integer> getSupplyRequirements() {
+        return supplyRequirements;
+    }
+
+    public boolean hasSupplyRequest() {
+        return supplyTargetPos != null && !supplyRequirements.isEmpty();
+    }
+
+    public void clearSupplyRequest() {
+        supplyTargetPos = null;
+        supplyRequirements = Map.of();
     }
 }

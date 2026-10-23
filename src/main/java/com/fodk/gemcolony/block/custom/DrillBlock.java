@@ -2,6 +2,8 @@ package com.fodk.gemcolony.block.custom;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
+import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -11,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -29,6 +32,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
+
 public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock {
 
     public static final EnumProperty<DrillPart> PART = EnumProperty.create("part", DrillPart.class);
@@ -39,7 +44,7 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
 
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(PART, DrillPart.CENTER)
-                .setValue(CONSTRUCTION_STAGE, 1));
+                .setValue(CONSTRUCTION_STAGE, 0));
     }
 
     @Override
@@ -49,9 +54,7 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return state.getValue(PART) == DrillPart.CENTER
-                ? RenderShape.MODEL
-                : RenderShape.INVISIBLE;
+        return state.getValue(PART) == DrillPart.CENTER ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 
     @Override
@@ -63,6 +66,10 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        if(state.getValue(CONSTRUCTION_STAGE) != getMaxConstructionStage()){
+            return super.getShape(state, level, pos, context);
+        }
+
         VoxelShape shape = switch (state.getValue(PART)) {
             case BOTTOM -> BOTTOM_SHAPE;
             default -> super.getShape(state, level, pos, context);
@@ -322,9 +329,10 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
         BlockState drillState = level.getBlockState(drillPos);
 
         // Drill must be finished
-        if (!drillState.is(ModBlocks.DRILL.get())
-                || drillState.getValue(CONSTRUCTION_STAGE) != 1) {
-            return false;
+        if(drillState.getBlock() instanceof ConstructedMultiblock multiblock){
+            if (!drillState.is(ModBlocks.DRILL.get()) || drillState.getValue(CONSTRUCTION_STAGE) != multiblock.getMaxConstructionStage()) {
+                return false;
+            }
         }
 
         // Bottom tank
@@ -353,15 +361,21 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
     }
 
     private static boolean isFinishedTank(BlockState state) {
-        return state.is(ModBlocks.TANK.get())
-                && state.getValue(TankBlock.PART) == TankPart.CENTER
-                && state.getValue(TankBlock.CONSTRUCTION_STAGE) == 1;
+        if(state.getBlock() instanceof ConstructedMultiblock multiblock){
+            return state.is(ModBlocks.TANK.get())
+                    && state.getValue(TankBlock.PART) == TankPart.CENTER
+                    && state.getValue(TankBlock.CONSTRUCTION_STAGE) == multiblock.getMaxConstructionStage();
+        }
+        return false;
     }
 
     private static boolean isFinishedCrystal(BlockState state) {
-        return state.is(ModBlocks.CRYSTAL.get())
-                && state.getValue(CrystalBlock.PART) == CrystalPart.CENTER
-                && state.getValue(CrystalBlock.CONSTRUCTION_STAGE) == 1;
+        if(state.getBlock() instanceof ConstructedMultiblock multiblock){
+            return state.is(ModBlocks.CRYSTAL.get())
+                    && state.getValue(CrystalBlock.PART) == CrystalPart.CENTER
+                    && state.getValue(CrystalBlock.CONSTRUCTION_STAGE) == multiblock.getMaxConstructionStage();
+        }
+        return false;
     }
 
     public static BlockPos getCenterPos(BlockPos pos, DrillPart part) {
@@ -429,5 +443,57 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
         }
 
         return true;
+    }
+
+    //construction res/time
+    @Override
+    public BlockPos getConstructionCenter(Level level, BlockPos pos, BlockState state) {
+        return getCenterPos(pos, state.getValue(PART));
+    }
+
+    @Override
+    public int getMaxConstructionStage() {
+        return 1;
+    }
+
+    @Override
+    public List<ConstructionRequirement> getConstructionRequirements() {
+        return List.of(
+                new ConstructionRequirement(20, Items.IRON_INGOT),
+                new ConstructionRequirement(10, Items.REDSTONE),
+                new ConstructionRequirement(9, ModItems.GRAY_CHROMA.get())
+        );
+    }
+
+    @Override
+    public BlockPos getController(Level level, BlockPos pos, BlockState state) {
+        BlockPos centerPos = getConstructionCenter(level, pos, state);
+        BlockState centerState = level.getBlockState(centerPos);
+
+        if (!(centerState.getBlock() instanceof DrillBlock)) {
+            return null;
+        }
+
+        return centerPos.below();
+    }
+
+    @Override
+    public void advanceConstruction(Level level, BlockPos centerPos, int stage) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    BlockPos partPos = centerPos.offset(dx, dy, dz);
+                    BlockState partState = level.getBlockState(partPos);
+
+                    if (partState.getBlock() == this && partState.getValue(CONSTRUCTION_STAGE) == stage) {
+                        level.setBlock(
+                                partPos,
+                                partState.setValue(CONSTRUCTION_STAGE, stage + 1),
+                                3
+                        );
+                    }
+                }
+            }
+        }
     }
 }

@@ -16,7 +16,5 @@ public record Blueprint(
         double offsetY,
         double offsetZ,
 
-        int constructionStages,
-        Block block,
-        List<ConstructionRequirement> requirements
+        Block block
 ) {}

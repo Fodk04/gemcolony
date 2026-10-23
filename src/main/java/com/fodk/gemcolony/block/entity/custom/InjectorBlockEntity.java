@@ -9,6 +9,7 @@ import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.item.custom.EssenceType;
 import com.fodk.gemcolony.menu.InjectorMenu;
 import com.fodk.gemcolony.tags.ModTags;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -140,7 +141,7 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
         }
 
         if (!isComplete()) {
-            player.sendSystemMessage(Component.literal("Injector is incomplete."));
+            player.sendOverlayMessage(Component.literal("Injector is incomplete.").withStyle(ChatFormatting.RED));
 
             return InteractionResult.SUCCESS;
         }

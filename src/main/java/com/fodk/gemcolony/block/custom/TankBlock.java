@@ -2,6 +2,8 @@ package com.fodk.gemcolony.block.custom;
 
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
+import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -11,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -23,8 +26,11 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class TankBlock extends Block implements ConstructedMultiblock {
 
@@ -39,14 +45,12 @@ public class TankBlock extends Block implements ConstructedMultiblock {
                 .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
                 .setValue(PART, TankPart.CENTER)
                 .setValue(HALF, TankHalf.TANK_BOTTOM)
-                .setValue(CONSTRUCTION_STAGE, 1));
+                .setValue(CONSTRUCTION_STAGE, 0));
     }
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return state.getValue(PART) == TankPart.CENTER
-                ? RenderShape.MODEL
-                : RenderShape.INVISIBLE;
+        return state.getValue(PART) == TankPart.CENTER ? RenderShape.MODEL : RenderShape.INVISIBLE;
     }
 
     @Override
@@ -375,5 +379,64 @@ public class TankBlock extends Block implements ConstructedMultiblock {
         }
 
         return true;
+    }
+
+    //construction res/time
+    @Override
+    public BlockPos getConstructionCenter(Level level, BlockPos pos, BlockState state) {
+        BlockPos tankCenter = getCenterPos(pos, state.getValue(PART));
+
+        return level.getBlockState(tankCenter).getValue(HALF) == TankHalf.TANK_TOP
+                ? tankCenter.below(3)
+                : tankCenter;
+    }
+
+    @Override
+    public int getMaxConstructionStage() {
+        return 1;
+    }
+
+    @Override
+    public List<ConstructionRequirement> getConstructionRequirements() {
+        return List.of(
+                new ConstructionRequirement(36, Items.GLASS_PANE),
+                new ConstructionRequirement(16, Items.IRON_INGOT),
+                new ConstructionRequirement(12, ModItems.LIGHT_GRAY_CHROMA.get())
+        );
+    }
+
+    @Override
+    public void advanceConstruction(Level level, BlockPos centerPos, int stage) {
+        for (int dy = -1; dy <= 4; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    BlockPos partPos = centerPos.offset(dx, dy, dz);
+                    BlockState partState = level.getBlockState(partPos);
+
+                    if (partState.getBlock() == this && partState.getValue(CONSTRUCTION_STAGE) == stage) {
+                        level.setBlock(
+                                partPos,
+                                partState.setValue(CONSTRUCTION_STAGE, stage + 1),
+                                3
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public BlockPos getController(Level level, BlockPos pos, BlockState state) {
+        BlockPos tankCenter = getConstructionCenter(level, pos, state);
+        TankHalf half = level.getBlockState(tankCenter).getValue(HALF);
+        BlockPos drillPos = getInjectorDrillPos(tankCenter, half);
+
+        BlockState drillState = level.getBlockState(drillPos);
+
+        if (drillState.getBlock() instanceof DrillBlock drill) {
+            return drill.getController(level, drillPos, drillState);
+        }
+
+        return null;
     }
 }

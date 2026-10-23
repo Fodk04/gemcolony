@@ -381,14 +381,37 @@ public class ModModelProvider extends ModelProvider {
         }
 
         //custom 3d model no rot
-        blockModels.createNonTemplateModelBlock(ModBlocks.DRILL.get());
-        blockModels.createNonTemplateModelBlock(ModBlocks.CRYSTAL.get());
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.DRILL.get())
+                        .with(
+                                PropertyDispatch.initial(DrillBlock.PART, DrillBlock.CONSTRUCTION_STAGE).generate((part, stage) -> {
+                                    boolean isComplete = stage == ((ConstructedMultiblock)ModBlocks.DRILL.get()).getMaxConstructionStage();
+                                    String model = isComplete ? "drill" : "drill_stage" + stage;
+                                    return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model));
+                                })
+                        )
+        );
+
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(ModBlocks.CRYSTAL.get())
+                        .with(
+                                PropertyDispatch.initial(CrystalBlock.CONSTRUCTION_STAGE).generate(stage -> {
+                                    boolean isComplete = stage == ((ConstructedMultiblock)ModBlocks.CRYSTAL.get()).getMaxConstructionStage();
+                                    String model = isComplete ? "crystal" : "crystal_stage" + stage;
+                                    return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model));
+                                })
+                        )
+        );
 
         //custom blocks with 4 direcs
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(ModBlocks.LEG.get())
-                        .with(PropertyDispatch.initial(BlockStateProperties.HORIZONTAL_FACING)
-                                .generate(facing -> {
+                        .with(
+                                PropertyDispatch.initial(LegBlock.CONSTRUCTION_STAGE, BlockStateProperties.HORIZONTAL_FACING)
+                                        .generate((stage, facing) -> {
+                                    boolean isComplete = stage == ((ConstructedMultiblock)ModBlocks.LEG.get()).getMaxConstructionStage();
+                                    String model = isComplete ? "leg" : "leg_stage0";
+
                                     Quadrant yRot = switch (facing) {
                                         case NORTH -> Quadrant.R0;
                                         case EAST -> Quadrant.R90;
@@ -397,7 +420,7 @@ public class ModModelProvider extends ModelProvider {
                                         default -> Quadrant.R0;
                                     };
 
-                                    return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/leg"))
+                                    return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model))
                                             .with(VariantMutator.Y_ROT.withValue(yRot));
                                 })
                         )
@@ -406,45 +429,48 @@ public class ModModelProvider extends ModelProvider {
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(ModBlocks.TANK.get())
                         .with(
-                                PropertyDispatch.initial(TankBlock.HALF, BlockStateProperties.HORIZONTAL_FACING)
-                                        .generate((half, facing) -> {
+                                PropertyDispatch.initial(TankBlock.HALF, TankBlock.CONSTRUCTION_STAGE, BlockStateProperties.HORIZONTAL_FACING)
+                                        .generate((half, stage, facing) -> {
 
-                                            Quadrant yRot = switch (facing) {
-                                                case NORTH -> Quadrant.R0;
-                                                case EAST -> Quadrant.R90;
-                                                case SOUTH -> Quadrant.R180;
-                                                case WEST -> Quadrant.R270;
-                                                default -> Quadrant.R0;
-                                            };
+                                    boolean isComplete = stage == ((ConstructedMultiblock)ModBlocks.TANK.get()).getMaxConstructionStage();
+                                    String model = switch (half) {
+                                            case TANK_BOTTOM -> isComplete ? "tank_bottom" : "tank_bottom_stage" + stage;
+                                            case TANK_TOP -> isComplete ? "tank_top" : "tank_top_stage" + stage;
+                                    };
 
-                                            String model = switch (half) {
-                                                case TANK_BOTTOM -> "tank_bottom";
-                                                case TANK_TOP -> "tank_top";
-                                            };
+                                    Quadrant yRot = switch (facing) {
+                                        case NORTH -> Quadrant.R0;
+                                        case EAST -> Quadrant.R90;
+                                        case SOUTH -> Quadrant.R180;
+                                        case WEST -> Quadrant.R270;
+                                        default -> Quadrant.R0;
+                                    };
 
-                                            return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model))
-                                                    .with(VariantMutator.Y_ROT.withValue(yRot));
-                                        })
+                                    return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model))
+                                            .with(VariantMutator.Y_ROT.withValue(yRot));
+                                })
                         )
         );
 
         blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(ModBlocks.SHELL.get())
                         .with(
-                                PropertyDispatch.initial(BlockStateProperties.HORIZONTAL_FACING)
-                                        .generate(facing -> {
+                                PropertyDispatch.initial(ShellBlock.CONSTRUCTION_STAGE, BlockStateProperties.HORIZONTAL_FACING)
+                                        .generate((stage, facing) -> {
+                                    boolean isComplete = stage == ((ConstructedMultiblock)ModBlocks.SHELL.get()).getMaxConstructionStage();
+                                    String model = isComplete ? "shell" : "shell_stage" + stage;
 
-                                            Quadrant yRot = switch (facing) {
-                                                case NORTH -> Quadrant.R0;
-                                                case EAST -> Quadrant.R90;
-                                                case SOUTH -> Quadrant.R180;
-                                                case WEST -> Quadrant.R270;
-                                                default -> Quadrant.R0;
-                                            };
+                                    Quadrant yRot = switch (facing) {
+                                        case NORTH -> Quadrant.R0;
+                                        case EAST -> Quadrant.R90;
+                                        case SOUTH -> Quadrant.R180;
+                                        case WEST -> Quadrant.R270;
+                                        default -> Quadrant.R0;
+                                    };
 
-                                            return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/shell"))
-                                                    .with(VariantMutator.Y_ROT.withValue(yRot));
-                                        })
+                                    return BlockModelGenerators.plainVariant(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/" + model))
+                                            .with(VariantMutator.Y_ROT.withValue(yRot));
+                                })
                         )
         );
 

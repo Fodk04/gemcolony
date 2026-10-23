@@ -53,6 +53,7 @@ public class ShellRenderer extends GeoBlockRenderer<ShellBlockEntity, ShellRende
         renderState.addGeckolibData(ShellBlockEntity.DRAINING, blockEntity.isDraining());
 
         renderState.facing = blockEntity.getBlockState().getValue(ShellBlock.FACING);
+        renderState.complete = blockEntity.isComplete();
 
         Minecraft.getInstance().getItemModelResolver().updateForTopItem(
                 renderState.pearl,
@@ -71,6 +72,10 @@ public class ShellRenderer extends GeoBlockRenderer<ShellBlockEntity, ShellRende
 
     @Override
     public void submit(ShellRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+        if (!state.complete) {
+            return;
+        }
+
         poseStack.pushPose();
         poseStack.translate(new Vec3(0.5D, 0.95D, 0.5D));
         if(state.facing == Direction.NORTH){
