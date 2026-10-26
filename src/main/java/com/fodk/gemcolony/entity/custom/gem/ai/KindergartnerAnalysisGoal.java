@@ -1,16 +1,14 @@
 package com.fodk.gemcolony.entity.custom.gem.ai;
 
 import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
-import com.geckolib.animatable.GeoAnimatable;
-import com.geckolib.animation.AnimationController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.EnumSet;
 
-public class PeridotAnalysisGoal extends Goal {
-    private final PeridotEntity peridot;
+public class KindergartnerAnalysisGoal extends Goal {
+    private final PeridotEntity gem;
     private final double speed;
 
     private boolean sampling = false;
@@ -18,21 +16,21 @@ public class PeridotAnalysisGoal extends Goal {
     private int samplingTicks = 0;
     private static final int SAMPLING_DURATION = 20;
 
-    public PeridotAnalysisGoal(PeridotEntity peridot, double speed) {
-        this.peridot = peridot;
+    public KindergartnerAnalysisGoal(PeridotEntity gem, double speed) {
+        this.gem = gem;
         this.speed = speed;
 
-        this.setFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override
     public boolean canUse() {
-        return peridot.isAnalysing();
+        return gem.isAnalysing();
     }
 
     @Override
     public boolean canContinueToUse() {
-        return peridot.isAnalysing();
+        return gem.isAnalysing();
     }
 
     @Override
@@ -50,9 +48,7 @@ public class PeridotAnalysisGoal extends Goal {
                 sampling = false;
                 samplingTicks = 0;
 
-                peridot.sampleAnalysisPosition(
-                        peridot.blockPosition()
-                );
+                gem.sampleAnalysisPosition(gem.blockPosition());
 
                 chooseNewDestination();
             }
@@ -60,37 +56,44 @@ public class PeridotAnalysisGoal extends Goal {
             return;
         }
 
-        if (peridot.getNavigation().isDone()) {
+        if (gem.getNavigation().isDone()) {
             sampling = true;
             samplingTicks = 0;
 
-            peridot.getNavigation().stop();
+            gem.getNavigation().stop();
 
-            peridot.triggerAnim("sampling_controller", "sample");
+            gem.getLookControl().setLookAt(
+                    gem.getX(),
+                    gem.getY(),
+                    gem.getZ(),
+                    30.0F,
+                    30.0F
+            );
+
+            gem.triggerAnim("sampling_controller", "sample");
         }
     }
 
     @Override
-    public void stop() {peridot.getNavigation().stop();sampling = false;}
+    public void stop() {
+        gem.getNavigation().stop();sampling = false;}
 
     private void chooseNewDestination() {
-        BlockPos center = peridot.getAnalysisCenter();
+        BlockPos center = gem.getAnalysisCenter();
 
         if (center == null) {
             return;
         }
 
-        int radius = peridot.getAnalysisRadius();
+        int radius = gem.getAnalysisRadius();
 
-        int x = center.getX() + peridot.getRandom().nextIntBetweenInclusive(-radius, radius);
-
-        int z = center.getZ() + peridot.getRandom().nextIntBetweenInclusive(-radius, radius);
-
-        int y = peridot.level().getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+        int x = center.getX() + gem.getRandom().nextIntBetweenInclusive(-radius, radius);
+        int z = center.getZ() + gem.getRandom().nextIntBetweenInclusive(-radius, radius);
+        int y = gem.level().getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
 
         BlockPos target = new BlockPos(x, y, z);
 
-        peridot.getNavigation().moveTo(
+        gem.getNavigation().moveTo(
                 target.getX(),
                 target.getY(),
                 target.getZ(),

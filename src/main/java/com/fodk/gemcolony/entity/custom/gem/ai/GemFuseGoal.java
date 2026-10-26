@@ -25,7 +25,7 @@ public class GemFuseGoal extends Goal {
     public GemFuseGoal(GemEntity gem, double speed) {
         this.gem = gem;
         this.speed = speed;
-        this.setFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override

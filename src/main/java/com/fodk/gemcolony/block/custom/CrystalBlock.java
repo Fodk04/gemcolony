@@ -3,8 +3,10 @@ package com.fodk.gemcolony.block.custom;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
 import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.data.ConstructionProgressData;
 import com.fodk.gemcolony.item.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -239,6 +241,10 @@ public class CrystalBlock extends Block implements ConstructedMultiblock {
         CrystalPart part = state.getValue(PART);
 
         BlockPos centerPos = getCenterPos(pos, part);
+
+        if (level instanceof ServerLevel serverLevel) {
+            ConstructionProgressData.get(serverLevel).clearProgress(serverLevel.dimension(), centerPos);
+        }
 
         for (int y = -1; y <= 1; y++) {
             for (int z = -1; z <= 1; z++) {

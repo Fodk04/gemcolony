@@ -49,6 +49,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -95,6 +97,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public static final EntityDataAccessor<String> SHAPESHIFT = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<List<ItemStack>> FUSION_COMPONENTS = SynchedEntityData.defineId(GemEntity.class, ModEntityDataSerializers.ITEM_STACK_LIST.get());
     public static final EntityDataAccessor<Boolean> FUSING = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<List<ItemStack>> SUPPLY_ITEMS = SynchedEntityData.defineId(GemEntity.class, ModEntityDataSerializers.ITEM_STACK_LIST.get());
 
     private NonNullList<ItemStack> inventory;
     @Nullable
@@ -107,6 +110,8 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     @Nullable
     private BlockPos supplyTargetPos;
+    @Nullable
+    private Object supplyRequestOwner;
 
     private Map<Item, Integer> supplyRequirements = Map.of();
 
@@ -146,6 +151,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.define(SHAPESHIFT, "");
         entityData.define(FUSION_COMPONENTS, List.of());
         entityData.define(FUSING, false);
+        entityData.define(SUPPLY_ITEMS, List.of());
     }
 
     @Override
@@ -777,6 +783,24 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     }
 
     @Override
+    protected void customServerAiStep(ServerLevel level) {
+        super.customServerAiStep(level);
+
+        for (ServerPlayer player : level.players()) {
+            if (player.containerMenu instanceof GemMenu menu && menu.getGemEntity() == this) {
+                getNavigation().stop();
+
+                Vec3 movement = getDeltaMovement();
+                setDeltaMovement(0.0, movement.y, 0.0);
+
+                getLookControl().setLookAt(player, 30.0F, getMaxHeadXRot());
+
+                return;
+            }
+        }
+    }
+
+    @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         // Unowned to claimed
         if (!isOwned()) {
@@ -1003,20 +1027,33 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return inventory.get(slot);
     }
 
+
     @Override
     public ItemStack removeItem(int slot, int amount) {
-        return ContainerHelper.removeItem(inventory, slot, amount);
+        ItemStack removed = ContainerHelper.removeItem(inventory, slot, amount);
+        refreshSupplyDisplayItems();
+        return removed;
     }
 
     @Override
     public ItemStack removeItemNoUpdate(int slot) {
-        return ContainerHelper.takeItem(inventory, slot);
+        ItemStack removed = ContainerHelper.takeItem(inventory, slot);
+        refreshSupplyDisplayItems();
+        return removed;
     }
 
     @Override
     public void setItem(int slot, ItemStack stack) {
         inventory.set(slot, stack);
+        refreshSupplyDisplayItems();
     }
+
+    @Override
+    public void clearContent() {
+        inventory.clear();
+        refreshSupplyDisplayItems();
+    }
+
 
     @Override
     public void setChanged() {
@@ -1025,11 +1062,6 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     @Override
     public boolean stillValid(Player player) {
         return !isRemoved() && player.distanceToSqr(this) <= 64.0D;
-    }
-
-    @Override
-    public void clearContent() {
-        inventory.clear();
     }
 
     @Override
@@ -1215,6 +1247,8 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.goalSelector.addGoal(9, new GemWanderGoal(this, 1.0D));
 
         this.goalSelector.addGoal(10, new ChestSupplyGoal(this));
+        this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(13, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -1532,8 +1566,29 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
     //item handling
     public void requestSupplies(BlockPos targetPos, Map<Item, Integer> requirements) {
+        requestSupplies(null, targetPos, requirements);
+    }
+
+    public void requestSupplies(Object owner, BlockPos targetPos, Map<Item, Integer> requirements) {
+        this.supplyRequestOwner = owner;
         this.supplyTargetPos = targetPos.immutable();
         this.supplyRequirements = Map.copyOf(requirements);
+        refreshSupplyDisplayItems();
+    }
+
+    public void clearSupplyRequest() {
+        clearSupplyRequest(null);
+    }
+
+    public void clearSupplyRequest(Object owner) {
+        if (supplyRequestOwner != owner) {
+            return;
+        }
+
+        supplyRequestOwner = null;
+        supplyTargetPos = null;
+        supplyRequirements = Map.of();
+        entityData.set(SUPPLY_ITEMS, List.of());
     }
 
     @Nullable
@@ -1549,8 +1604,28 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return supplyTargetPos != null && !supplyRequirements.isEmpty();
     }
 
-    public void clearSupplyRequest() {
-        supplyTargetPos = null;
-        supplyRequirements = Map.of();
+    private void refreshSupplyDisplayItems() {
+        List<ItemStack> displayItems = new ArrayList<>();
+
+        for (Map.Entry<Item, Integer> entry : supplyRequirements.entrySet()) {
+            Item item = entry.getKey();
+            int required = entry.getValue();
+            int held = 0;
+
+            for (int slot = 0; slot < getContainerSize(); slot++) {
+                ItemStack stack = getItem(slot);
+                if (!stack.isEmpty() && stack.is(item)) {
+                    held += stack.getCount();
+                }
+            }
+
+            int missing = required - held;
+
+            if (missing > 0) {
+                displayItems.add(new ItemStack(item));
+            }
+        }
+
+        entityData.set(SUPPLY_ITEMS, List.copyOf(displayItems));
     }
 }

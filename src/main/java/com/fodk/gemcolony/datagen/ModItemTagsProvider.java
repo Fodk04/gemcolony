@@ -37,6 +37,12 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .add(ModItems.getRK(ModItems.MAGENTA_CHROMA))
                 .add(ModItems.getRK(ModItems.PINK_CHROMA));
 
+        tag(ModTags.Items.ESSENCE_BOTTLES)
+                .add(ModItems.getRK(ModItems.PINK_ESSENCE_BOTTLE))
+                .add(ModItems.getRK(ModItems.BLUE_ESSENCE_BOTTLE))
+                .add(ModItems.getRK(ModItems.YELLOW_ESSENCE_BOTTLE))
+                .add(ModItems.getRK(ModItems.WHITE_ESSENCE_BOTTLE));
+
         tag(ModTags.Items.CHROMA_REPAIRABLE).addTag(ModTags.Items.CHROMAS);
 
         tag(ItemTags.SWORDS).add(ModItems.getRK(ModItems.CHROMA_SWORD));

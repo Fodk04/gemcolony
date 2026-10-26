@@ -38,6 +38,7 @@ public interface ConstructedMultiblock {
 
     void advanceConstruction(Level level, BlockPos centerPos, int stage);
 
+    //1MIN def
     default int getProgressNeeded() {
         return 200;
     }

@@ -3,10 +3,12 @@ package com.fodk.gemcolony.block.custom;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
 import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.data.ConstructionProgressData;
 import com.fodk.gemcolony.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -243,6 +245,11 @@ public class TankBlock extends Block implements ConstructedMultiblock {
         BlockPos otherCenterPos = half == TankHalf.TANK_BOTTOM
                 ? centerPos.above(3)
                 : centerPos.below(3);
+
+        if (level instanceof ServerLevel serverLevel) {
+            BlockPos progressCenterPos = getConstructionCenter(serverLevel, pos, state);
+            ConstructionProgressData.get(serverLevel).clearProgress(serverLevel.dimension(), progressCenterPos);
+        }
 
         for (int y = -1; y <= 1; y++) {
             for (int z = -1; z <= 1; z++) {

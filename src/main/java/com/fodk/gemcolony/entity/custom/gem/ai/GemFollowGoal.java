@@ -23,6 +23,8 @@ public class GemFollowGoal extends Goal {
     private final float stopDistance;
 
     private Entity owner;
+    private int navigationUpdateTicks;
+    private static final int navigationTicksTillUpdate = 10;
 
     public GemFollowGoal(GemEntity gem, double speed, float startDistance, float stopDistance) {
         this.gem = gem;
@@ -59,6 +61,7 @@ public class GemFollowGoal extends Goal {
 
     @Override
     public void start() {
+        navigationUpdateTicks = 0;
         gem.getNavigation().moveTo(owner, speed);
     }
 
@@ -86,7 +89,6 @@ public class GemFollowGoal extends Goal {
 
             if (hit.getType() == HitResult.Type.BLOCK) {
                 Vec3 hitPos = hit.getLocation();
-
                 gem.teleportTo(owner.getX(), hitPos.y + 1, owner.getZ());
             } else {
                 gem.teleportTo(owner.getX(), owner.getY(), owner.getZ());
@@ -103,12 +105,21 @@ public class GemFollowGoal extends Goal {
             return;
         }
 
-        gem.getNavigation().moveTo(owner, speed);
+        if (--navigationUpdateTicks <= 0 || gem.getNavigation().isDone()) {
+            navigationUpdateTicks = navigationTicksTillUpdate;
+            gem.getNavigation().moveTo(owner, speed);
+        }
     }
 
     @Override
     public void stop() {
         gem.getNavigation().stop();
         owner = null;
+    }
+
+    private Vec3 getFollowPosition() {
+        Vec3 look = owner.getLookAngle();
+        Vec3 behind = new Vec3(look.x, 0.0, look.z).normalize();
+        return owner.position().subtract(behind.scale(stopDistance + 0.75));
     }
 }

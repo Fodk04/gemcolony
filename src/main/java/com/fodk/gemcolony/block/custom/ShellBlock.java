@@ -5,11 +5,13 @@ import com.fodk.gemcolony.block.entity.ModBlockEntities;
 import com.fodk.gemcolony.block.entity.custom.ShellBlockEntity;
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
 import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.data.ConstructionProgressData;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.util.VoxelShapeUtil;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -290,6 +292,10 @@ public class ShellBlock extends BaseEntityBlock implements ConstructedMultiblock
                 case TOP_SOUTH_EAST -> pos.north().west().below();
             };
 
+            if (level instanceof ServerLevel serverLevel) {
+                ConstructionProgressData.get(serverLevel).clearProgress(serverLevel.dimension(), centerPos);
+            }
+
             BlockPos[] positions = {
                     // Bottom layer
                     centerPos.north().west(),
@@ -569,6 +575,24 @@ public class ShellBlock extends BaseEntityBlock implements ConstructedMultiblock
         }
 
         return centerPos.north();
+    }
+
+    @Override
+    public BlockPos getConstructionApproachPosition(Level level, BlockPos pos, BlockState state) {
+        BlockPos center = getConstructionCenter(level, pos, state);
+
+        BlockPos[] approaches = {
+                center.north(),
+                center.south(),
+                center.east(),
+                center.west(),
+                center.north().west(),
+                center.north().east(),
+                center.south().west(),
+                center.south().east()
+        };
+
+        return approaches[level.getRandom().nextInt(approaches.length)];
     }
 
     @Override

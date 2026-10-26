@@ -1,5 +1,7 @@
 package com.fodk.gemcolony.entity.client.renderer;
 
+import com.fodk.gemcolony.block.custom.ConstructedMultiblock;
+import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
 import com.fodk.gemcolony.construction.*;
 import com.fodk.gemcolony.entity.client.render.GemRenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -75,7 +77,7 @@ public class ConstructorRenderer {
             int minZ = z;
             int maxZ = z + depth;
 
-            //apply the component's own rotation.
+            //apply the component's own rotation
             switch (component.rotation()) {
                 case CLOCKWISE_90 -> {
                     minX = x;
@@ -101,7 +103,8 @@ public class ConstructorRenderer {
                 default -> {
                 }
             }
-            //rotate the entire component box around the assembly center.
+
+            //rotate the entire component box around the assembly center
             double centerX = assembly.centerX();
             double centerZ = assembly.centerZ();
 
@@ -151,14 +154,17 @@ public class ConstructorRenderer {
                 }
             }
 
-            AABB box = ConstructionPlacement.getComponentBox(
-                    assembly,
-                    component,
-                    constructor.getPlacementRotation(),
-                    pos
-            );
+            AABB box = ConstructionPlacement.getComponentBox(assembly, component, constructor.getPlacementRotation(), pos);
 
             BlockState blockState = blueprint.block().defaultBlockState();
+
+            if (blockState.getBlock() instanceof ConstructedMultiblock multiblock) {
+                blockState = multiblock.getConstructionState(minecraft.level, pos, blockState);
+
+                if (blockState.hasProperty(GemColonyBlockStateProperties.CONSTRUCTION_STAGE)) {
+                    blockState = blockState.setValue(GemColonyBlockStateProperties.CONSTRUCTION_STAGE, multiblock.getMaxConstructionStage());
+                }
+            }
 
             if (blockState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
                 Direction facing = switch (component.rotation()) {
@@ -173,10 +179,7 @@ public class ConstructorRenderer {
                 blockState = blockState.setValue(BlockStateProperties.HORIZONTAL_FACING, facing);
             }
 
-            BlockStateModel model =
-                    minecraft.getModelManager()
-                            .getBlockStateModelSet()
-                            .get(blockState);
+            BlockStateModel model = minecraft.getModelManager().getBlockStateModelSet().get(blockState);
 
             List<BlockStateModelPart> parts = new ArrayList<>();
             RandomSource random = RandomSource.createThreadLocalInstance();
@@ -240,8 +243,7 @@ public class ConstructorRenderer {
                     GemRenderTypes.constructorGhost(canPlace),
                     List.copyOf(parts),
                     new int[0],
-                    minecraft.level.getBrightness(LightLayer.BLOCK, pos) << 4
-                            | minecraft.level.getBrightness(LightLayer.SKY, pos) << 20,
+                    minecraft.level.getBrightness(LightLayer.BLOCK, pos) << 4 | minecraft.level.getBrightness(LightLayer.SKY, pos) << 20,
                     OverlayTexture.NO_OVERLAY,
                     0
             );

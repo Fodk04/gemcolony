@@ -3,10 +3,12 @@ import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
 import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.data.ConstructionProgressData;
 import com.fodk.gemcolony.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -157,6 +159,10 @@ public class DrillBlock extends BaseEntityBlock implements ConstructedMultiblock
 
                 case BOTTOM -> pos.above();
             };
+
+            if (level instanceof ServerLevel serverLevel) {
+                ConstructionProgressData.get(serverLevel).clearProgress(serverLevel.dimension(), centerPos);
+            }
 
             BlockPos top = centerPos.above();
 

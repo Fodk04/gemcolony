@@ -2,8 +2,10 @@ package com.fodk.gemcolony.block.custom;
 
 import com.fodk.gemcolony.block.state.GemColonyBlockStateProperties;
 import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.data.ConstructionProgressData;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.util.VoxelShapeUtil;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -137,6 +139,10 @@ public class LegBlock extends Block implements ConstructedMultiblock{
                 case SIDE_TOP -> pos.relative(facing.getOpposite()).below();
                 case SIDE_BOTTOM -> pos.relative(facing.getOpposite()).above();
             };
+
+            if (level instanceof ServerLevel serverLevel) {
+                ConstructionProgressData.get(serverLevel).clearProgress(serverLevel.dimension(), centerPos);
+            }
 
             BlockPos[] positions = {
                     centerPos,

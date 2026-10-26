@@ -5,16 +5,25 @@ import com.fodk.gemcolony.entity.client.layer.*;
 import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
 import com.fodk.gemcolony.entity.custom.gem.ability.ShapeshiftForm;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
+import com.geckolib.constant.DataTickets;
 import com.geckolib.model.GeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.base.BoneSnapshots;
 import com.geckolib.renderer.base.RenderPassInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -31,15 +40,17 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
         for (ShapeshiftForm form : ShapeshiftForm.values()) {
             shapeshiftModels.put(form, form.createModel(context.getModelSet()));
         }
-        withRenderLayer(new GemBodyLayer<>(this, name, 1));
-        withRenderLayer(new GemMarkingsLayer<>(this, name, 2));
-        withRenderLayer(new GemEyesLayer<>(this, name, 3));
-        withRenderLayer(new GemEyesWhitesLayer<>(this, name, 4));
-        withRenderLayer(new GemOutfitLayer<>(this, name, 5));
-        withRenderLayer(new GemInsigniaLayer<>(this, name, 6));
-        withRenderLayer(new GemHairLayer<>(this, name, 7));
-        withRenderLayer(new GemVisorLayer<>(this, name, 8));
-        withRenderLayer(new GemPlacementLayer<>(this, name, 9));
+        withRenderLayer(new GemSupplyCloudLayer<>(this, 11));
+
+        withRenderLayer(new GemBodyLayer<>(this, name, 2));
+        withRenderLayer(new GemMarkingsLayer<>(this, name, 3));
+        withRenderLayer(new GemEyesLayer<>(this, name, 4));
+        withRenderLayer(new GemEyesWhitesLayer<>(this, name, 5));
+        withRenderLayer(new GemOutfitLayer<>(this, name, 6));
+        withRenderLayer(new GemInsigniaLayer<>(this, name, 7));
+        withRenderLayer(new GemHairLayer<>(this, name, 8));
+        withRenderLayer(new GemVisorLayer<>(this, name, 9));
+        withRenderLayer(new GemPlacementLayer<>(this, name, 10));
     }
 
     @Override
@@ -73,6 +84,23 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
         gemState.modelSize = entity.getModelSize();
         gemState.shapeshift = synchedEntityData.get(GemEntity.SHAPESHIFT);
         gemState.isFusion = !synchedEntityData.get(GemEntity.FUSION_COMPONENTS).isEmpty();
+
+        gemState.supplyDisplayItems = synchedEntityData.get(GemEntity.SUPPLY_ITEMS);
+
+        if (!gemState.supplyDisplayItems.isEmpty()) {
+            int itemIndex = (entity.tickCount / 20) % gemState.supplyDisplayItems.size();
+
+            Minecraft.getInstance().getItemModelResolver().updateForTopItem(
+                    gemState.supplyItemRenderState,
+                    gemState.supplyDisplayItems.get(itemIndex),
+                    ItemDisplayContext.FIXED,
+                    null,
+                    null,
+                    0
+            );
+        }
+
+        gemState.height = entity.getBbHeight();
     }
 
     @Override
@@ -94,6 +122,20 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
         poseStack.mulPose(Axis.XP.rotationDegrees(state.previewPitch));
 
         poseStack.translate(0, -pivotY, 0);
+    }
+
+    @Override
+    public void adjustModelBonesForRender(RenderPassInfo<R> renderPassInfo, BoneSnapshots snapshots) {
+        super.adjustModelBonesForRender(renderPassInfo, snapshots);
+
+        GemRenderState state = renderPassInfo.renderState();
+
+        snapshots.get("head").ifPresent(head -> {
+            float yaw = Mth.clamp(state.yRot, -85.0F, 85.0F);
+
+            head.setRotY(head.getRotY() - (float) Math.toRadians(yaw));
+            head.setRotX(head.getRotX() - (float) Math.toRadians(state.xRot));
+        });
     }
 
     private Identifier getShapeshiftTexture(ShapeshiftForm form) {

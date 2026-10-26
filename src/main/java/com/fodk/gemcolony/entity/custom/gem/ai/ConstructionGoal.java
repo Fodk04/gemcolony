@@ -2,6 +2,7 @@ package com.fodk.gemcolony.entity.custom.gem.ai;
 
 import com.fodk.gemcolony.block.custom.ConstructedMultiblock;
 import com.fodk.gemcolony.construction.ConstructionRequirement;
+import com.fodk.gemcolony.data.ConstructionProgressData;
 import com.fodk.gemcolony.entity.custom.gem.base.GemBehavior;
 import com.fodk.gemcolony.entity.custom.gem.starter.StarterGemEntity;
 import net.minecraft.core.BlockPos;
@@ -18,9 +19,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ConstructionGoal extends Goal {
     private static final int SEARCH_INTERVAL = 20;
@@ -31,6 +30,10 @@ public class ConstructionGoal extends Goal {
     private BlockPos targetPos;
     private BlockPos controllerPos;
     private BlockPos approachPos;
+    private BlockPos constructionCenterPos;
+
+    private BlockPos claimedConstructionCenterPos;
+    private boolean isConstructionLead;
 
     private int searchCooldown;
     private int particleCooldown;
@@ -38,12 +41,13 @@ public class ConstructionGoal extends Goal {
 
     public ConstructionGoal(StarterGemEntity gem) {
         this.gem = gem;
-        this.setFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override
     public boolean canUse() {
         if (gem.getBehavior() != GemBehavior.WORK || gem.getWorkPos() == null) {
+            clearConstructionSupplyRequest();
             return false;
         }
 
@@ -56,9 +60,11 @@ public class ConstructionGoal extends Goal {
         targetPos = null;
         controllerPos = null;
         approachPos = null;
+        constructionCenterPos = null;
         targetPos = findClosestUnfinishedBlock();
 
         if (targetPos == null) {
+            clearConstructionSupplyRequest();
             return false;
         }
 
@@ -66,34 +72,54 @@ public class ConstructionGoal extends Goal {
         BlockState state = level.getBlockState(targetPos);
 
         if (!(state.getBlock() instanceof ConstructedMultiblock multiblock)) {
+            clearConstructionSupplyRequest();
             targetPos = null;
             controllerPos = null;
             return false;
         }
 
         controllerPos = multiblock.getController(level, targetPos, state);
+        constructionCenterPos = multiblock.getConstructionCenter(level, targetPos, state);
+
+        if (controllerPos == null || constructionCenterPos == null) {
+            releaseConstructionClaim();
+            targetPos = null;
+            controllerPos = null;
+            approachPos = null;
+            constructionCenterPos = null;
+            return false;
+        }
+
+        constructionCenterPos = constructionCenterPos.immutable();
+
+        if (!constructionCenterPos.equals(claimedConstructionCenterPos)) {
+            releaseConstructionClaim();
+            targetPos = null;
+            controllerPos = null;
+            approachPos = null;
+            constructionCenterPos = null;
+            return false;
+        }
+
         approachPos = multiblock.getConstructionApproachPosition(level, targetPos, state);
 
-        if (controllerPos == null) {
-            targetPos = null;
-            approachPos = null;
-            return false;
-        }
-
         if (!gem.canAffordConstruction(targetPos)) {
-            Map<Item, Integer> required = new HashMap<>();
+            if (isConstructionLead) {
+                Map<Item, Integer> required = new HashMap<>();
 
-            for (ConstructionRequirement requirement : multiblock.getConstructionRequirements()) {
-                required.merge(requirement.item(), requirement.count(), Integer::sum);
-            }
+                for (ConstructionRequirement requirement : multiblock.getConstructionRequirements()) {
+                    required.merge(requirement.item(), requirement.count(), Integer::sum);
+                }
 
-            if (!required.isEmpty()) {
-                gem.requestSupplies(controllerPos, required);
+                if (!required.isEmpty()) {
+                    gem.requestSupplies(this, controllerPos, required);
+                }
             }
 
             return false;
         }
 
+        clearConstructionSupplyRequest();
         return true;
     }
 
@@ -140,6 +166,17 @@ public class ConstructionGoal extends Goal {
         if (isTouchingController()) {
             gem.getNavigation().stop();
 
+            ConstructionProgressData data = getConstructionData();
+
+            if (data == null) {
+                return;
+            }
+
+            isConstructionLead = data.isLead(gem.level().dimension(), claimedConstructionCenterPos, gem.getUUID());
+            if (!isConstructionLead && data.getProgress(gem.level().dimension(), claimedConstructionCenterPos) == 0) {
+                return;
+            }
+
             if (particleCooldown <= 0) {
                 spawnConstructionParticles();
                 particleCooldown = 40;
@@ -154,9 +191,14 @@ public class ConstructionGoal extends Goal {
                 constructionAnimationCooldown--;
             }
 
-            if (!gem.tryBuildBlock(targetPos) || isFinished(targetPos)) {
+            int previousStage = getConstructionStage(targetPos);
+
+            if (!gem.tryBuildBlock(targetPos) || isFinished(targetPos) || getConstructionStage(targetPos) != previousStage) {
+                releaseConstructionClaim();
                 targetPos = null;
                 controllerPos = null;
+                approachPos = null;
+                constructionCenterPos = null;
             }
 
             return;
@@ -172,15 +214,14 @@ public class ConstructionGoal extends Goal {
     }
 
     private boolean isTouchingController() {
-        if (controllerPos == null) {
+        if (approachPos == null) {
             return false;
         }
 
         Level level = gem.level();
-        BlockState state = level.getBlockState(controllerPos);
+        BlockState state = level.getBlockState(approachPos);
 
-        AABB targetBox = state.getCollisionShape(level, controllerPos).bounds().move(controllerPos);
-
+        AABB targetBox = state.getCollisionShape(level, approachPos).bounds().move(approachPos);
         AABB gemBox = gem.getBoundingBox();
 
         return targetBox.inflate(0.2).intersects(gemBox);
@@ -188,8 +229,13 @@ public class ConstructionGoal extends Goal {
 
     @Override
     public void stop() {
+        releaseConstructionClaim();
+        clearConstructionSupplyRequest();
+
         targetPos = null;
         controllerPos = null;
+        approachPos = null;
+        constructionCenterPos = null;
         gem.getNavigation().stop();
 
         if (gem.getBehavior() == GemBehavior.WORK) {
@@ -207,33 +253,33 @@ public class ConstructionGoal extends Goal {
     }
 
     private void moveToTarget() {
-        if (controllerPos == null) {
+        if (approachPos == null) {
             return;
         }
 
         gem.getNavigation().moveTo(
-                controllerPos.getX() + 0.5,
-                controllerPos.getY() + 0.5,
-                controllerPos.getZ() + 0.5,
+                approachPos.getX() + 0.5,
+                approachPos.getY() + 0.5,
+                approachPos.getZ() + 0.5,
                 1.0
         );
     }
 
     private void nudgeTowardController() {
-        if (controllerPos == null) {
+        if (approachPos == null) {
             return;
         }
 
         Vec3 targetCenter = new Vec3(
-                controllerPos.getX() + 0.5,
-                controllerPos.getY() + 0.5,
-                controllerPos.getZ() + 0.5
+                approachPos.getX() + 0.5,
+                approachPos.getY() + 0.5,
+                approachPos.getZ() + 0.5
         );
 
         Vec3 gemCenter = gem.position().add(0, gem.getBbHeight() * 0.5, 0);
         Vec3 direction = targetCenter.subtract(gemCenter);
 
-        double approachDistance = 1.5;
+        double approachDistance = 2;
 
         if (direction.lengthSqr() > approachDistance * approachDistance) {
             return;
@@ -243,23 +289,28 @@ public class ConstructionGoal extends Goal {
             return;
         }
 
-        gem.move(MoverType.SELF, direction.normalize().scale(0.03));
+        Vec3 movement = direction.normalize();
+
+        float yaw = (float) (Math.atan2(movement.z, movement.x) * (180.0 / Math.PI)) - 90.0F;
+
+        gem.setYRot(yaw);
+        gem.setYBodyRot(yaw);
+        gem.setYHeadRot(yaw);
+
+        gem.move(MoverType.SELF, movement.scale(0.03));
     }
-
-
 
 
     private BlockPos findClosestUnfinishedBlock() {
         Level level = gem.level();
         BlockPos origin = gem.blockPosition();
 
-        BlockPos closest = null;
-        BlockPos closestAffordable = null;
+        Map<BlockPos, Double> candidates = new HashMap<>();
+        Map<BlockPos, BlockPos> candidateTargets = new HashMap<>();
+        Map<BlockPos, BlockPos> candidateControllers = new HashMap<>();
 
-        double closestDistance = Double.MAX_VALUE;
-        double closestAffordableDistance = Double.MAX_VALUE;
-
-        for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-SEARCH_RADIUS, -SEARCH_RADIUS, -SEARCH_RADIUS), origin.offset(SEARCH_RADIUS, SEARCH_RADIUS, SEARCH_RADIUS))) {
+        for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-SEARCH_RADIUS, -SEARCH_RADIUS, -SEARCH_RADIUS),
+                origin.offset(SEARCH_RADIUS, SEARCH_RADIUS, SEARCH_RADIUS))) {
 
             if (!level.isLoaded(pos) || !isUnfinished(pos)) {
                 continue;
@@ -267,29 +318,73 @@ public class ConstructionGoal extends Goal {
 
             BlockState state = level.getBlockState(pos);
 
-            if (!(state.getBlock() instanceof ConstructedMultiblock multiblock) || multiblock.getController(level, pos, state) == null) {
+            if (!(state.getBlock() instanceof ConstructedMultiblock multiblock)) {
                 continue;
             }
 
-            double distance = gem.distanceToSqr(
-                    pos.getX() + 0.5,
-                    pos.getY() + 0.5,
-                    pos.getZ() + 0.5
-            );
+            BlockPos controller = multiblock.getController(level, pos, state);
 
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closest = pos.immutable();
+            if (controller == null || !level.isLoaded(controller)) {
+                continue;
             }
 
-            if (gem.canAffordConstruction(pos) && distance < closestAffordableDistance) {
-                closestAffordableDistance = distance;
-                closestAffordable = pos.immutable();
+            BlockPos constructionCenter = multiblock.getConstructionCenter(level, pos, state);
+
+            if (constructionCenter == null) {
+                continue;
+            }
+
+            constructionCenter = constructionCenter.immutable();
+            BlockPos canonicalController = controller.immutable();
+
+            double distance = gem.distanceToSqr(
+                    constructionCenter.getX() + 0.5,
+                    constructionCenter.getY() + 0.5,
+                    constructionCenter.getZ() + 0.5
+            );
+
+            Double previousDistance = candidates.get(constructionCenter);
+
+            if (previousDistance == null || distance < previousDistance) {
+                candidates.put(constructionCenter, distance);
+                candidateTargets.put(constructionCenter, pos.immutable());
+                candidateControllers.put(constructionCenter, canonicalController);
             }
         }
 
-        return closestAffordable != null ? closestAffordable : closest;
+        List<Map.Entry<BlockPos, Double>> orderedCandidates = new ArrayList<>(candidates.entrySet());
+        orderedCandidates.sort(Map.Entry.comparingByValue());
+
+        for (Map.Entry<BlockPos, Double> entry : orderedCandidates) {
+            BlockPos constructionCenter = entry.getKey();
+            BlockPos candidateTarget = candidateTargets.get(constructionCenter);
+            BlockPos candidateController = candidateControllers.get(constructionCenter);
+
+            if (!claimConstruction(constructionCenter)) {
+                continue;
+            }
+
+            BlockState targetState = level.getBlockState(candidateTarget);
+            if (!(targetState.getBlock() instanceof ConstructedMultiblock multiblock) || !isUnfinished(candidateTarget)) {
+                releaseConstructionClaim();
+                continue;
+            }
+
+            BlockPos actualCenter = multiblock.getConstructionCenter(level, candidateTarget, targetState);
+            BlockPos actualController = multiblock.getController(level, candidateTarget, targetState);
+
+            if (actualCenter == null || actualController == null || !actualCenter.equals(constructionCenter) || !actualController.equals(candidateController)) {
+                releaseConstructionClaim();
+                continue;
+            }
+
+            return candidateTarget;
+        }
+
+        releaseConstructionClaim();
+        return null;
     }
+
 
     private boolean isUnfinished(BlockPos pos) {
         BlockState state = gem.level().getBlockState(pos);
@@ -346,5 +441,75 @@ public class ConstructionGoal extends Goal {
                     0.01
             );
         }
+    }
+
+
+    //starter claim
+    private ConstructionProgressData getConstructionData() {
+        if (gem.level() instanceof ServerLevel serverLevel) {
+            return ConstructionProgressData.get(serverLevel);
+        }
+
+        return null;
+    }
+
+    private void releaseConstructionClaim() {
+        if (claimedConstructionCenterPos == null) {
+            return;
+        }
+        ConstructionProgressData data = getConstructionData();
+        if (data != null) {
+            data.releaseClaim(gem.level().dimension(), claimedConstructionCenterPos, gem.getUUID());
+        }
+
+        claimedConstructionCenterPos = null;
+        isConstructionLead = false;
+    }
+
+    private void clearConstructionSupplyRequest() {
+        gem.clearSupplyRequest(this);
+    }
+
+    private boolean claimConstruction(BlockPos constructionCenterPos) {
+        ConstructionProgressData data = getConstructionData();
+        if (data == null) {
+            return false;
+        }
+
+        if (constructionCenterPos.equals(claimedConstructionCenterPos)) {
+            if (data.hasClaim(gem.level().dimension(), constructionCenterPos, gem.getUUID())) {
+                isConstructionLead = data.isLead(gem.level().dimension(), constructionCenterPos, gem.getUUID());
+                return true;
+            }
+            claimedConstructionCenterPos = null;
+            isConstructionLead = false;
+        }
+
+        releaseConstructionClaim();
+
+        if (!data.tryClaim(gem.level().dimension(), constructionCenterPos, gem.getUUID())) {
+            return false;
+        }
+
+        claimedConstructionCenterPos = constructionCenterPos.immutable();
+        isConstructionLead = data.isLead(gem.level().dimension(), constructionCenterPos, gem.getUUID());
+
+        return true;
+    }
+
+    private int getConstructionStage(BlockPos pos) {
+        if (pos == null) {
+            return -1;
+        }
+
+        BlockState state = gem.level().getBlockState(pos);
+
+        for (Property<?> property : state.getProperties()) {
+            if (property.getName().equals("construction_stage") && property instanceof IntegerProperty stageProperty) {
+                return state.getValue(stageProperty);
+            }
+        }
+
+        return -1;
     }
 }

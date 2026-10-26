@@ -3,6 +3,7 @@ package com.fodk.gemcolony.datagen;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.item.ModItems;
+import com.fodk.gemcolony.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -213,6 +214,35 @@ public class ModRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes() {
+
+        //ITEMS
+        shaped(RecipeCategory.MISC, ModItems.GEM_SEED.get())
+                .pattern("GRE")
+                .pattern("RSR")
+                .pattern("ERG")
+                .define('S', Items.STONE)
+                .define('G', Items.GLOWSTONE_DUST)
+                .define('R', Items.REDSTONE)
+                .define('E', Items.GUNPOWDER)
+                .unlockedBy(getHasName(Items.STONE), has(Items.STONE))
+                .unlockedBy(getHasName(Items.GLOWSTONE_DUST), has(Items.GLOWSTONE_DUST))
+                .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+                .unlockedBy(getHasName(Items.GUNPOWDER), has(Items.GUNPOWDER))
+                .save(output);
+
+        shaped(RecipeCategory.MISC, ModItems.CHROMA_SEED.get(), 4)
+                .pattern("CWC")
+                .pattern("ESE")
+                .pattern("CSC")
+                .define('S', Items.STONE)
+                .define('C', ModTags.Items.CHROMAS)
+                .define('E', ModTags.Items.ESSENCE_BOTTLES)
+                .define('W', Items.WATER_BUCKET)
+                .unlockedBy(getHasName(Items.STONE), has(Items.STONE))
+                .unlockedBy(getHasName(ModItems.WHITE_CHROMA), has(ModTags.Items.CHROMAS))
+                .unlockedBy(getHasName(ModItems.WHITE_ESSENCE_BOTTLE), has(ModTags.Items.ESSENCE_BOTTLES))
+                .unlockedBy(getHasName(Items.WATER_BUCKET), has(Items.WATER_BUCKET))
+                .save(output);
 
         // CHROMA BLOCKS
         registerSmoothChromaRecipes();

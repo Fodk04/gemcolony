@@ -6,7 +6,7 @@ import com.fodk.gemcolony.entity.custom.gem.base.GemConditions;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.savedata.PeridotAnalysisData;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
-import com.fodk.gemcolony.entity.custom.gem.ai.PeridotAnalysisGoal;
+import com.fodk.gemcolony.entity.custom.gem.ai.KindergartnerAnalysisGoal;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.networking.packet.AnalysisResultsPacketS2C;
 import com.fodk.gemcolony.util.ColorUtil;
@@ -22,10 +22,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -160,7 +158,7 @@ public class PeridotEntity extends GemEntity {
     protected void registerGoals() {
         super.registerGoals();
 
-        this.goalSelector.addGoal(4, new PeridotAnalysisGoal(this, 1));
+        this.goalSelector.addGoal(4, new KindergartnerAnalysisGoal(this, 1));
     }
 
     @Override
@@ -402,9 +400,7 @@ public class PeridotEntity extends GemEntity {
         entityData.set(ANALYSIS_TICKS, data.analysisTicks());
         entityData.set(ANALYSIS_DURATION, data.analysisDuration());
 
-        analysisCenter = data.analysing()
-                ? new BlockPos(data.centerX(), data.centerY(), data.centerZ())
-                : null;
+        analysisCenter = data.analysing() ? new BlockPos(data.centerX(), data.centerY(), data.centerZ()) : null;
 
         analysisTemperatureTotal = data.temperatureTotal();
         analysisHumidityTotal = data.humidityTotal();

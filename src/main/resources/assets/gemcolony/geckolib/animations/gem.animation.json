@@ -426,7 +426,7 @@
 		"Right_Building": {
 			"animation_length": 1.5,
 			"bones": {
-				"Head": {
+				"head": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -595,7 +595,7 @@
 		"Left_Building": {
 			"animation_length": 1.5,
 			"bones": {
-				"Head": {
+				"head": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
