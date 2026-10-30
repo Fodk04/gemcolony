@@ -262,6 +262,85 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
         setChanged();
     }
 
+    public boolean needsChroma() {
+        return items.get(0).isEmpty();
+    }
+
+    public boolean needsGemSeed() {
+        return items.get(1).isEmpty();
+    }
+
+    public boolean hasUsableEssence() {
+        return calculateEssenceCost() != null;
+    }
+
+
+    public int insertManagedItems(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return 0;
+        }
+
+        if (isEssenceBucket(stack)) {
+            Fluid fluid;
+
+            if (stack.is(ModItems.BLUE_ESSENCE_BUCKET.get())) {
+                fluid = ModFluids.BLUE_ESSENCE.get();
+            } else if (stack.is(ModItems.YELLOW_ESSENCE_BUCKET.get())) {
+                fluid = ModFluids.YELLOW_ESSENCE.get();
+            } else if (stack.is(ModItems.WHITE_ESSENCE_BUCKET.get())) {
+                fluid = ModFluids.WHITE_ESSENCE.get();
+            } else {
+                fluid = ModFluids.PINK_ESSENCE.get();
+            }
+
+            FluidResource resource = FluidResource.of(fluid);
+            int tankIndex = getEssenceTankIndex(resource);
+
+            if (tankIndex < 0) {
+                return 0;
+            }
+
+            try (Transaction transaction = Transaction.openRoot()) {
+                int inserted = essenceHandler.insert(tankIndex, resource, 1000, transaction);
+                if (inserted != 1000) {
+                    return 0;
+                }
+                transaction.commit();
+            }
+
+            syncEssence();
+            return 1;
+        }
+
+        int slot;
+
+        if (stack.is(ModTags.Items.CHROMAS)) {
+            slot = 0;
+        } else if (stack.is(ModItems.GEM_SEED.get())) {
+            slot = 1;
+        } else {
+            return 0;
+        }
+
+        ItemStack existing = items.get(slot);
+
+        if (!existing.isEmpty()) {
+            return 0;
+        }
+
+        int inserted = Math.min(stack.getCount(), Math.min(stack.getMaxStackSize(), getMaxStackSize()));
+
+        if (inserted <= 0) {
+            return 0;
+        }
+
+        items.set(slot, stack.copyWithCount(inserted));
+        setChanged();
+
+        return inserted;
+    }
+
+
     @Override
     public boolean stillValid(Player player) {
         return player.distanceToSqr(

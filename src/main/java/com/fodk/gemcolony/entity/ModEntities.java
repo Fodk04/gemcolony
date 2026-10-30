@@ -30,7 +30,7 @@ public class ModEntities {
 
     public static final Supplier<EntityType<PeridotEntity>> PERIDOT = ENTITY_TYPES.register("peridot",
             () -> EntityType.Builder.of(PeridotEntity::new, MobCategory.CREATURE)
-            .sized(0.6f,2f)
+            .sized(0.6f,1.85f)
             .fireImmune()
             .immuneTo(BlockTags.STRAY_IMMUNE_TO)
             .build(getRK("peridot")));

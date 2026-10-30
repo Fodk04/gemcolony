@@ -31,13 +31,14 @@ displayName="${mod_name}" #mandatory
 
 # A file name (in the root of the mod JAR) containing a logo for display
 #logoFile="examplemod.png" #optional
+iconFile="gemcolony.png"
 
 # A text field displayed in the mod UI
 #credits="" #optional
 
 # The authors of the mod, displayed in the mod UI (optional)
 authors="Fodk"
-credits = "3D Models by bunnybini, SmhSebby"
+credits = "3D Models and Textures by SmhSebby and Bunnybini ;Block Textures by Sparklebr"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
@@ -80,7 +81,18 @@ config="${mod_id}.mixins.json"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
-
+[[dependencies.${mod_id}]]
+    modId="geckolib"
+    type="required"
+    versionRange="[5.5.5,)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="modonomicon"
+    type="required"
+    versionRange="[2.5.0,)"
+    ordering="AFTER"
+    side="BOTH"
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares
 # that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
 # stop your mod loading on the server for example.

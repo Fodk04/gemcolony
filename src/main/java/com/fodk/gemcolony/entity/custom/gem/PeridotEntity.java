@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.entity.custom.gem;
 
 import com.fodk.gemcolony.data.GemAnalysisResult;
+import com.fodk.gemcolony.entity.custom.gem.ai.InjectorManagerGoal;
 import com.fodk.gemcolony.entity.custom.gem.base.GemConditionsRegistry;
 import com.fodk.gemcolony.entity.custom.gem.base.GemConditions;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
@@ -155,10 +156,21 @@ public class PeridotEntity extends GemEntity {
     }
 
     @Override
+    protected boolean canWork() {
+        return true;
+    }
+
+    @Override
+    protected String getWorkMessage() {
+        return "manage nearby injectors.";
+    }
+
+    @Override
     protected void registerGoals() {
         super.registerGoals();
 
         this.goalSelector.addGoal(4, new KindergartnerAnalysisGoal(this, 1));
+        this.goalSelector.addGoal(11, new InjectorManagerGoal(this));
     }
 
     @Override
@@ -419,6 +431,6 @@ public class PeridotEntity extends GemEntity {
 
     @Override
     public float getBaseModelSize() {
-        return 0.9f;
+        return 0.8f;
     }
 }

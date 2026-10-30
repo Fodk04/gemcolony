@@ -38,7 +38,7 @@ public class ModVillagerTrades {
 
         context.register(GEMOLOGIST_2_EMERALD_DESTABILIZER, new VillagerTrade(
                 new TradeCost(Items.EMERALD, 15),
-                new ItemStackTemplate(ModBlocks.DESTABILIZER_WALL_GENERATOR.asItem(), 1),
+                new ItemStackTemplate(ModBlocks.DRAINED_STONE.asItem(), 1),
                 8, 12, 0.05F, Optional.empty(), List.of()));
         context.register(GEMOLOGIST_2_ESSENCE_EMERALD, new VillagerTrade(
                 new TradeCost(ModItems.WHITE_ESSENCE_BOTTLE, 1),

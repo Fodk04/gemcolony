@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.entity.custom.gem.ai;
 
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.base.SupplyRequirement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -32,7 +33,7 @@ public class ChestSupplyGoal extends Goal {
         }
 
         if (getMissingRequirements().isEmpty()) {
-            gem.clearSupplyRequest();
+            gem.clearSupplyRequest(gem.getSupplyRequestOwner());
             return false;
         }
 
@@ -105,10 +106,10 @@ public class ChestSupplyGoal extends Goal {
                 return;
             }
 
-            Map<Item, Integer> missing = getMissingRequirements();
+            List<SupplyRequirement> missing = getMissingRequirements();
 
             if (missing.isEmpty()) {
-                gem.clearSupplyRequest();
+                gem.clearSupplyRequest(gem.getSupplyRequestOwner());
                 chestPos = null;
                 return;
             }
@@ -129,7 +130,7 @@ public class ChestSupplyGoal extends Goal {
             }
 
             if (takeMissingItems(chest, missing)) {
-                gem.clearSupplyRequest();
+                gem.clearSupplyRequest(gem.getSupplyRequestOwner());
                 chestPos = null;
             } else {
                 chestPos = null;
@@ -172,7 +173,7 @@ public class ChestSupplyGoal extends Goal {
             return null;
         }
 
-        Map<Item, Integer> missing = getMissingRequirements();
+        List<SupplyRequirement> missing = getMissingRequirements();
 
         if (missing.isEmpty()) {
             return null;
@@ -216,26 +217,24 @@ public class ChestSupplyGoal extends Goal {
         return closest;
     }
 
-
-    private boolean containsRequirements(Container chest, Map<Item, Integer> requirements) {
-        for (var requirement : requirements.entrySet()) {
-            Item requiredItem = requirement.getKey();
-            int requiredCount = requirement.getValue();
-            int foundCount = 0;
+    private boolean containsRequirements(Container chest, List<SupplyRequirement> requirements) {
+        for (SupplyRequirement requirement : requirements) {
+            int found = 0;
 
             for (int slot = 0; slot < chest.getContainerSize(); slot++) {
                 ItemStack stack = chest.getItem(slot);
-
-                if (stack.is(requiredItem)) {
-                    foundCount += stack.getCount();
+                if (requirement.matches(stack)) {
+                    found += stack.getCount();
                 }
 
-                if (foundCount >= requiredCount) {
+                int needed = requirement.ifPossible() ? 1 : requirement.count();
+                if (found >= needed) {
                     break;
                 }
             }
 
-            if (foundCount < requiredCount) {
+            int needed = requirement.ifPossible() ? 1 : requirement.count();
+            if (found < needed) {
                 return false;
             }
         }
@@ -243,29 +242,34 @@ public class ChestSupplyGoal extends Goal {
         return true;
     }
 
-    private Map<Item, Integer> getMissingRequirements() {
-        Map<Item, Integer> missing = new HashMap<>();
+    private List<SupplyRequirement> getMissingRequirements() {
+        List<SupplyRequirement> missing = new ArrayList<>();
 
-        for (var requirement : gem.getSupplyRequirements().entrySet()) {
-            Item item = requirement.getKey();
-            int required = requirement.getValue();
-            int available = 0;
-
+        for (SupplyRequirement requirement : gem.getSupplyRequirements()) {
+            int held = 0;
             for (int slot = 0; slot < gem.getContainerSize(); slot++) {
                 ItemStack stack = gem.getItem(slot);
-
-                if (stack.is(item)) {
-                    available += stack.getCount();
+                if (requirement.matches(stack)) {
+                    held += stack.getCount();
                 }
             }
 
-            if (available < required) {
-                missing.put(item, required - available);
+            int remaining = requirement.count() - held;
+
+            if (remaining <= 0) {
+                continue;
+            }
+
+            if (requirement.ifPossible()) {
+                missing.add(new SupplyRequirement(requirement.item(), requirement.tag(), requirement.displayItem(), remaining, true));
+            } else {
+                missing.add(new SupplyRequirement(requirement.item(), requirement.tag(), requirement.displayItem(), remaining, false));
             }
         }
 
         return missing;
     }
+
 
     private boolean canFitStack(Container container, ItemStack stack) {
         int remaining = stack.getCount();
@@ -298,8 +302,16 @@ public class ChestSupplyGoal extends Goal {
                 continue;
             }
 
-            // Never deposit a material required for this request.
-            if (gem.getSupplyRequirements().containsKey(stack.getItem())) {
+            boolean required = false;
+
+            for (SupplyRequirement requirement : gem.getSupplyRequirements()) {
+                if (requirement.matches(stack)) {
+                    required = true;
+                    break;
+                }
+            }
+
+            if (required) {
                 continue;
             }
 
@@ -311,24 +323,35 @@ public class ChestSupplyGoal extends Goal {
         return null;
     }
 
-    private boolean canFitAllMissing(Container chest, Map<Item, Integer> missing) {
+    private boolean canFitAllMissing(Container chest, List<SupplyRequirement> missing) {
         List<ItemStack> simulatedInventory = new ArrayList<>();
 
         for (int slot = 0; slot < gem.getContainerSize(); slot++) {
             simulatedInventory.add(gem.getItem(slot).copy());
         }
 
-        for (var entry : missing.entrySet()) {
-            Item item = entry.getKey();
-            int remaining = entry.getValue();
+        for (SupplyRequirement requirement : missing) {
+            int remaining = requirement.count();
+            if (requirement.ifPossible()) {
+                int available = 0;
 
-            for (int chestSlot = 0;
-                 chestSlot < chest.getContainerSize() && remaining > 0;
-                 chestSlot++) {
+                for (int chestSlot = 0; chestSlot < chest.getContainerSize(); chestSlot++) {
+                    ItemStack chestStack = chest.getItem(chestSlot);
+                    if (requirement.matches(chestStack)) {
+                        available += chestStack.getCount();
+                    }
+                }
 
+                remaining = Math.min(remaining, available);
+                if (remaining <= 0) {
+                    continue;
+                }
+            }
+
+            for (int chestSlot = 0; chestSlot < chest.getContainerSize() && remaining > 0; chestSlot++) {
                 ItemStack chestStack = chest.getItem(chestSlot);
 
-                if (!chestStack.is(item)) {
+                if (!requirement.matches(chestStack)) {
                     continue;
                 }
 
@@ -345,7 +368,6 @@ public class ChestSupplyGoal extends Goal {
                     }
 
                     int capacity = inventoryStack.getMaxStackSize() - inventoryStack.getCount();
-
                     int moved = Math.min(Math.max(0, capacity), incoming.getCount());
 
                     if (moved > 0) {
@@ -354,80 +376,73 @@ public class ChestSupplyGoal extends Goal {
                     }
                 }
 
-                // Then, use empty slots.
                 for (int inventorySlot = 0; inventorySlot < simulatedInventory.size() && !incoming.isEmpty(); inventorySlot++) {
-
                     if (!simulatedInventory.get(inventorySlot).isEmpty()) {
                         continue;
                     }
 
-                    int moved = Math.min(
-                            incoming.getCount(),
-                            incoming.getMaxStackSize()
-                    );
-
-                    simulatedInventory.set(
-                            inventorySlot,
-                            incoming.copyWithCount(moved)
-                    );
-
+                    int moved = Math.min(incoming.getCount(), incoming.getMaxStackSize());
+                    simulatedInventory.set(inventorySlot, incoming.copyWithCount(moved));
                     incoming.shrink(moved);
                 }
 
-                // The simulated inventory cannot accept everything.
                 if (!incoming.isEmpty()) {
                     return false;
                 }
-
                 remaining -= amount;
             }
-
-            // The chest doesn't contain enough of this item.
-            if (remaining > 0) {
+            if (remaining > 0 && !requirement.ifPossible()) {
                 return false;
             }
         }
-
         return true;
     }
 
-    private boolean takeMissingItems(Container chest, Map<Item, Integer> missing) {
+
+    private boolean takeMissingItems(Container chest, List<SupplyRequirement> missing) {
         if (!canFitAllMissing(chest, missing) || !containsRequirements(chest, missing)) {
             return false;
         }
 
-        // Recheck the chest's actual contents before withdrawing anything.
-        for (var entry : missing.entrySet()) {
-            Item item = entry.getKey();
-            int required = entry.getValue();
+        for (SupplyRequirement requirement : missing) {
+            if (requirement.ifPossible()) {
+                continue;
+            }
+
             int available = 0;
 
             for (int slot = 0; slot < chest.getContainerSize(); slot++) {
                 ItemStack stack = chest.getItem(slot);
 
-                if (stack.is(item)) {
+                if (requirement.matches(stack)) {
                     available += stack.getCount();
                 }
 
-                if (available >= required) {
+                if (available >= requirement.count()) {
                     break;
                 }
             }
 
-            if (available < required) {
+            if (available < requirement.count()) {
                 return false;
             }
         }
 
-        // All requested items fit and are available. Transfer them now.
-        for (var entry : missing.entrySet()) {
-            Item item = entry.getKey();
-            int remaining = entry.getValue();
+        for (SupplyRequirement requirement : missing) {
+            int available = 0;
 
+            for (int slot = 0; slot < chest.getContainerSize(); slot++) {
+                ItemStack stack = chest.getItem(slot);
+                if (requirement.matches(stack)) {
+                    available += stack.getCount();
+                }
+            }
+
+            int remaining = requirement.ifPossible() ? Math.min(requirement.count(), available) : requirement.count();
             for (int slot = 0; slot < chest.getContainerSize() && remaining > 0; slot++) {
                 ItemStack chestStack = chest.getItem(slot);
 
-                if (!chestStack.is(item)) {
+                if (!requirement.matches(chestStack)) {
                     continue;
                 }
 
@@ -437,15 +452,10 @@ public class ChestSupplyGoal extends Goal {
                 chestStack.shrink(amount);
                 chest.setItem(slot, chestStack.isEmpty() ? ItemStack.EMPTY : chestStack);
 
-                // Merge into compatible stacks first.
-                for (int gemSlot = 0;
-                     gemSlot < gem.getContainerSize() && !extracted.isEmpty();
-                     gemSlot++) {
-
+                for (int gemSlot = 0; gemSlot < gem.getContainerSize() && !extracted.isEmpty(); gemSlot++) {
                     ItemStack gemStack = gem.getItem(gemSlot);
 
-                    if (gemStack.isEmpty()
-                            || !ItemStack.isSameItemSameComponents(gemStack, extracted)) {
+                    if (gemStack.isEmpty() || !ItemStack.isSameItemSameComponents(gemStack, extracted)) {
                         continue;
                     }
 
@@ -458,18 +468,14 @@ public class ChestSupplyGoal extends Goal {
                     }
                 }
 
-                // Put any remainder into an empty slot.
-                for (int gemSlot = 0;
-                     gemSlot < gem.getContainerSize() && !extracted.isEmpty();
-                     gemSlot++) {
-
-                    if (gem.getItem(gemSlot).isEmpty()) {
-                        gem.setItem(gemSlot, extracted.copy());
-                        extracted = ItemStack.EMPTY;
+                for (int gemSlot = 0; gemSlot < gem.getContainerSize() && !extracted.isEmpty(); gemSlot++) {
+                    if (!gem.getItem(gemSlot).isEmpty()) {
+                        continue;
                     }
+                    gem.setItem(gemSlot, extracted.copy());
+                    extracted = ItemStack.EMPTY;
                 }
 
-                // The simulation should have guaranteed this cannot happen.
                 if (!extracted.isEmpty()) {
                     return false;
                 }
@@ -477,7 +483,7 @@ public class ChestSupplyGoal extends Goal {
                 remaining -= amount;
             }
 
-            if (remaining > 0) {
+            if (remaining > 0 && !requirement.ifPossible()) {
                 return false;
             }
         }

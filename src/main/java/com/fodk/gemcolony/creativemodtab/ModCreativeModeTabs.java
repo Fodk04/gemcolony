@@ -66,7 +66,6 @@ public class ModCreativeModeTabs {
                     .withTabsBefore(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gem_ingredients_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.DRAINED_STONE);
-                        output.accept(ModBlocks.DESTABILIZER_WALL_GENERATOR);
 
                         // CHROMA DEPOSITS
                         output.accept(ModBlocks.WHITE_CHROMA_DEPOSIT);

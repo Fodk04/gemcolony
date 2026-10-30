@@ -1,0 +1,170 @@
+{
+  "type": "modonomicon:dense",
+  "pattern": [
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAACAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAATAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAABAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAEAAA",
+      "AAAAAAA",
+      "ANA0ASA",
+      "AAAAAAA",
+      "AAAWAAA",
+      "AAAAAAA"
+    ],
+    [
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA",
+      "AAAAAAA"
+    ],
+    [
+      "DDRDRDD",
+      "RDDDDRD",
+      "DDRDDRD",
+      "DDDDDDR",
+      "DDDRDDD",
+      "DRDDRDD",
+      "DDRDDRD"
+    ]
+  ],
+  "mapping": {
+    "0": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:drill[part=center,construction_stage=1]"
+    },
+    "B": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:tank[part=bottom_center,half=tank_bottom,construction_stage=1]"
+    },
+    "T": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:tank[part=top_center,half=tank_top,construction_stage=1]"
+    },
+    "C": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:crystal[part=center,construction_stage=1]"
+    },
+    "W": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:leg[part=center,facing=east,construction_stage=1]"
+    },
+    "E": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:leg[part=center,facing=west,construction_stage=1]"
+    },
+    "N": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:leg[part=center,facing=north,construction_stage=1]"
+    },
+    "S": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:leg[part=center,facing=south,construction_stage=1]"
+    },
+    "A": {
+      "type": "modonomicon:block",
+      "block": "minecraft:air"
+    },
+    "R": {
+      "type": "modonomicon:block",
+      "block": "minecraft:stone"
+    },
+    "D": {
+      "type": "modonomicon:block",
+      "block": "gemcolony:drained_stone"
+    }
+  }
+}
+
+

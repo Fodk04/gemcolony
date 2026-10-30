@@ -1,0 +1,26 @@
+{
+  "type": "modonomicon:dense",
+  "pattern": [
+    [
+      "AAA",
+      "AAA",
+      "AAA"
+    ],
+    [
+      "AAA",
+      "A0A",
+      "AAA"
+    ]
+  ],
+  "mapping": {
+    "0": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:shell[part=center,construction_stage=1]"
+    },
+    "A": {
+      "type": "modonomicon:block",
+      "block": "minecraft:air"
+    }
+  }
+}
+

@@ -438,13 +438,13 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
             ));
 
-    public static final DeferredBlock<Block> DESTABILIZER_WALL_GENERATOR = registerBlock("destabilizer_wall_generator",
+    /*public static final DeferredBlock<Block> DESTABILIZER_WALL_GENERATOR = registerBlock("destabilizer_wall_generator",
             properties -> new DestabilizerWallGenerator(properties
                     .strength(1)
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.GLASS)
                     .lightLevel(state -> state.getValue(DestabilizerWallGenerator.ACTIVE) ? 10 : 0)
-            ), Component.translatable("tooltip.gemcolony.destabilizer_wall_generator.tooltip"));
+            ), Component.translatable("tooltip.gemcolony.destabilizer_wall_generator.tooltip"));*/
 
     //CHROMA DEPOSITS
     public static final DeferredBlock<Block> WHITE_CHROMA_DEPOSIT = registerBlock("white_chroma_deposit",

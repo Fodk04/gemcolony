@@ -1,0 +1,18 @@
+{
+  "type": "modonomicon:dense",
+  "pattern": [
+    ["01234"],
+    ["CCCCC"]
+  ],
+  "mapping": {
+    "0": {"type": "modonomicon:blockstate", "block": "gemcolony:chroma_crop[age=0]"},
+    "1": {"type": "modonomicon:blockstate", "block": "gemcolony:chroma_crop[age=1]"},
+    "2": {"type": "modonomicon:blockstate", "block": "gemcolony:chroma_crop[age=2]"},
+    "3": {"type": "modonomicon:blockstate", "block": "gemcolony:chroma_crop[age=3]"},
+    "4": {"type": "modonomicon:block", "block": "gemcolony:brown_chroma_deposit"},
+    "C": {"type": "modonomicon:block", "block": "minecraft:dirt"}
+  }
+}
+
+
+

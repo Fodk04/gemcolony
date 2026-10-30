@@ -23,10 +23,15 @@ import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.keymapping.ModKeyMappings;
 import com.fodk.gemcolony.menu.ModMenus;
+import com.fodk.gemcolony.modonomicon.GemPreviewPage;
+import com.fodk.gemcolony.modonomicon.client.GemEntityPreviewPageRenderer;
+import com.fodk.gemcolony.modonomicon.client.GemEntityPreviewRegistry;
 import com.fodk.gemcolony.networking.packet.BubblingPacketC2S;
 import com.fodk.gemcolony.networking.packet.ConfirmConstructionPacketC2S;
 import com.fodk.gemcolony.util.ColorUtil;
 import com.geckolib.renderer.base.GeoRenderState;
+import com.klikli_dev.modonomicon.book.page.BookEntityPage;
+import com.klikli_dev.modonomicon.client.render.page.PageRendererRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -35,6 +40,7 @@ import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -75,6 +81,9 @@ public class GemColonyClient {
         GemColony.LOGGER.info("HELLO FROM CLIENT SETUP");
         GemColony.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         //regiister renderers
+        event.enqueueWork(() -> {
+            PageRendererRegistry.registerPageRenderer(GemPreviewPage.ID, page -> new GemEntityPreviewPageRenderer((GemPreviewPage) page));
+        });
     }
 
     @SubscribeEvent // on the mod event bus only on the physical client

@@ -1,10 +1,14 @@
 package com.fodk.gemcolony.datagen;
 
 import com.fodk.gemcolony.GemColony;
+import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.tags.ModTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
@@ -38,10 +42,10 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .add(ModItems.getRK(ModItems.PINK_CHROMA));
 
         tag(ModTags.Items.ESSENCE_BOTTLES)
-                .add(ModItems.getRK(ModItems.PINK_ESSENCE_BOTTLE))
                 .add(ModItems.getRK(ModItems.BLUE_ESSENCE_BOTTLE))
                 .add(ModItems.getRK(ModItems.YELLOW_ESSENCE_BOTTLE))
-                .add(ModItems.getRK(ModItems.WHITE_ESSENCE_BOTTLE));
+                .add(ModItems.getRK(ModItems.WHITE_ESSENCE_BOTTLE))
+                .add(ModItems.getRK(ModItems.PINK_ESSENCE_BOTTLE));
 
         tag(ModTags.Items.CHROMA_REPAIRABLE).addTag(ModTags.Items.CHROMAS);
 
@@ -63,6 +67,12 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .add(ModItems.getRK(ModItems.ITS_OVER_ISNT_IT_MUSIC_DISC));
 
         tag(Tags.Items.BUCKETS)
+                .add(ModItems.getRK(ModItems.BLUE_ESSENCE_BUCKET))
+                .add(ModItems.getRK(ModItems.YELLOW_ESSENCE_BUCKET))
+                .add(ModItems.getRK(ModItems.WHITE_ESSENCE_BUCKET))
+                .add(ModItems.getRK(ModItems.PINK_ESSENCE_BUCKET));
+
+        tag(ModTags.Items.ESSENCE_BUCKETS)
                 .add(ModItems.getRK(ModItems.BLUE_ESSENCE_BUCKET))
                 .add(ModItems.getRK(ModItems.YELLOW_ESSENCE_BUCKET))
                 .add(ModItems.getRK(ModItems.WHITE_ESSENCE_BUCKET))

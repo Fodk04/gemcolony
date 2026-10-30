@@ -513,10 +513,10 @@ public class ModModelProvider extends ModelProvider {
         blockModels.createNonTemplateModelBlock(ModBlocks.BLUE_ESSENCE.get());
 
         //on/off blocks
-        blockModels.blockStateOutput.accept(
+        /*blockModels.blockStateOutput.accept(
                 MultiVariantGenerator.dispatch(ModBlocks.DESTABILIZER_WALL_GENERATOR.get()).with(BlockModelGenerators.createBooleanModelDispatch(DestabilizerWallGenerator.ACTIVE,
                         BlockModelGenerators.plainVariant(blockModels.createSuffixedVariant(ModBlocks.DESTABILIZER_WALL_GENERATOR.get(), "_on", ModelTemplates.CUBE_ALL, TextureMapping::cube)),
-                        BlockModelGenerators.plainVariant(TexturedModel.CUBE.create(ModBlocks.DESTABILIZER_WALL_GENERATOR.get(), blockModels.modelOutput)))));
+                        BlockModelGenerators.plainVariant(TexturedModel.CUBE.create(ModBlocks.DESTABILIZER_WALL_GENERATOR.get(), blockModels.modelOutput)))));*/
     }
 
     private void generateGemItem(Item item, ItemModelGenerators itemModels) {

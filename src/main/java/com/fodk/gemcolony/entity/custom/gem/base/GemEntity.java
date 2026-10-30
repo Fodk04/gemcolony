@@ -25,7 +25,6 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.PlayState;
-import com.geckolib.constant.DefaultAnimations;
 import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -45,7 +44,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -113,7 +111,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     @Nullable
     private Object supplyRequestOwner;
 
-    private Map<Item, Integer> supplyRequirements = Map.of();
+    private List<SupplyRequirement> supplyRequirements = List.of();
 
     public GemEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -143,7 +141,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.define(MARKINGS_COLOR, 0xFFFFFF);
         entityData.define(VISOR, -1);
         entityData.define(VISOR_COLOR, 0xFFFFFF);
-        entityData.define(REFORM_PROGRESS, MAX_REFORM_PROGRESS);
+        entityData.define(REFORM_PROGRESS, 0);
         entityData.define(EMERGED, false);
         entityData.define(OWNER_UUID, "");
         entityData.define(ABILITIES, List.of());
@@ -201,7 +199,6 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             initializeAbilities();
             entityData.set(REFORM_PROGRESS, 0);
             this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
-            entityData.set(GEM_PLACEMENT, GemPlacement.getRandomGemPlacement().ordinal());
         }
 
         return super.finalizeSpawn(level, difficulty, spawnReason, groupData);
@@ -228,7 +225,20 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         initializeAbilities();
         entityData.set(REFORM_PROGRESS, 0);
         this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
-        entityData.set(GEM_PLACEMENT, GemPlacement.getRandomGemPlacement().ordinal());
+    }
+
+    public void initializeGemPreview(int variant){
+        setVariant(variant);
+        generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
+        setQuality(random.nextInt(3));
+        entityData.set(REFORM_PROGRESS, 0);
+    }
+
+    public void initializeGemPreview(){
+        setVariant(getRandomVariant());
+        generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
+        setQuality(random.nextInt(3));
+        entityData.set(REFORM_PROGRESS, 0);
     }
 
     public void initializeGemFromChroma(int chromaIndex){
@@ -240,7 +250,6 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         initializeAbilities();
         entityData.set(REFORM_PROGRESS, 0);
         this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
-        entityData.set(GEM_PLACEMENT, GemPlacement.getRandomGemPlacement().ordinal());
     }
 
     public void initializeGemFromReform(int reformProgress){
@@ -387,6 +396,10 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         };
     }
 
+    protected void appearancePostProcess(){
+
+    }
+
     protected void generateAppearance(Color gemColor, int maxOutfits, Color outfitColor, int maxInsignias, Color insigniaColor, int maxHairstyles, Color hairColor, int maxMarkings, Color markingsColor, int maxVisors, Color visorColor) {
         int outfitIndex = maxOutfits > 0 ? random.nextInt(maxOutfits) : -1;
         int insigniaIndex = maxInsignias > 0 ? random.nextInt(maxInsignias) : -1;
@@ -418,6 +431,9 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.entityData.set(MARKINGS_COLOR, ColorUtil.colorToInt(markingsColor));
         this.entityData.set(VISOR, visorIndex);
         this.entityData.set(VISOR_COLOR, ColorUtil.colorToInt(visorColor));
+        setGemPlacement(GemPlacement.getRandomGemPlacement().ordinal());
+
+        appearancePostProcess();
     }
 
     protected boolean alwaysHasVisor(){
@@ -786,6 +802,11 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     protected void customServerAiStep(ServerLevel level) {
         super.customServerAiStep(level);
 
+        if (getReformProgressPercentage(entityData.get(REFORM_PROGRESS)) < 1f) {
+            getNavigation().stop();
+            return;
+        }
+
         for (ServerPlayer player : level.players()) {
             if (player.containerMenu instanceof GemMenu menu && menu.getGemEntity() == this) {
                 getNavigation().stop();
@@ -936,11 +957,11 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return entityData.get(GEM_COLOR);
     }
 
-    void setOutfitColor(int color){
+    public void setOutfitColor(int color){
         entityData.set(OUTFIT_COLOR, color);
     }
 
-    void setInsigniaColor(int color){
+    public void setInsigniaColor(int color){
         entityData.set(INSIGNIA_COLOR, color);
     }
 
@@ -968,6 +989,10 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return entityData.get(HAIRSTYLE);
     }
 
+    public int getGemPlacement(){
+        return entityData.get(GEM_PLACEMENT);
+    }
+
     public void setOutfit(int outfit){
         entityData.set(OUTFIT, outfit);
     }
@@ -979,6 +1004,9 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     }
     public void setHairstyle(int hairstyle){
         entityData.set(HAIRSTYLE, hairstyle);
+    }
+    public void setGemPlacement(int gemPlacement){
+        entityData.set(GEM_PLACEMENT, gemPlacement);
     }
 
     public abstract int getMaxOutfits();
@@ -1570,10 +1598,23 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     }
 
     public void requestSupplies(Object owner, BlockPos targetPos, Map<Item, Integer> requirements) {
+        List<SupplyRequirement> converted = new ArrayList<>();
+        for (Map.Entry<Item, Integer> entry : requirements.entrySet()) {
+            converted.add(SupplyRequirement.exact(entry.getKey(), entry.getValue()));
+        }
+        requestSupplies(owner, targetPos, converted);
+    }
+
+    public void requestSupplies(Object owner, BlockPos targetPos, List<SupplyRequirement> requirements) {
         this.supplyRequestOwner = owner;
         this.supplyTargetPos = targetPos.immutable();
-        this.supplyRequirements = Map.copyOf(requirements);
+        this.supplyRequirements = List.copyOf(requirements);
         refreshSupplyDisplayItems();
+    }
+
+    @Nullable
+    public Object getSupplyRequestOwner() {
+        return supplyRequestOwner;
     }
 
     public void clearSupplyRequest() {
@@ -1587,7 +1628,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
 
         supplyRequestOwner = null;
         supplyTargetPos = null;
-        supplyRequirements = Map.of();
+        supplyRequirements = List.of();
         entityData.set(SUPPLY_ITEMS, List.of());
     }
 
@@ -1596,7 +1637,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return supplyTargetPos;
     }
 
-    public Map<Item, Integer> getSupplyRequirements() {
+    public List<SupplyRequirement> getSupplyRequirements() {
         return supplyRequirements;
     }
 
@@ -1605,24 +1646,25 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     }
 
     private void refreshSupplyDisplayItems() {
+        if (level().isClientSide()) {
+            return;
+        }
+
         List<ItemStack> displayItems = new ArrayList<>();
 
-        for (Map.Entry<Item, Integer> entry : supplyRequirements.entrySet()) {
-            Item item = entry.getKey();
-            int required = entry.getValue();
+        for (SupplyRequirement requirement : supplyRequirements) {
+            int required = requirement.ifPossible() ? 1 : requirement.count();
             int held = 0;
-
             for (int slot = 0; slot < getContainerSize(); slot++) {
                 ItemStack stack = getItem(slot);
-                if (!stack.isEmpty() && stack.is(item)) {
+
+                if (requirement.matches(stack)) {
                     held += stack.getCount();
                 }
             }
 
-            int missing = required - held;
-
-            if (missing > 0) {
-                displayItems.add(new ItemStack(item));
+            if (held < required) {
+                displayItems.add(new ItemStack(requirement.displayItem()));
             }
         }
 

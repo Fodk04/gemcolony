@@ -21,7 +21,7 @@ public class ModVillagers {
             DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, GemColony.MOD_ID);
 
     public static final Holder<PoiType> GEMOLOGIST_POI = POI_TYPES.register("gemologist_poi",
-            () -> new PoiType(ImmutableSet.copyOf(ModBlocks.DESTABILIZER_WALL_GENERATOR.get().getStateDefinition().getPossibleStates()), 1, 1));
+            () -> new PoiType(ImmutableSet.copyOf(ModBlocks.BLUE_CHROMA_PILLAR.get().getStateDefinition().getPossibleStates()), 1, 1));
 
     public static final Holder<VillagerProfession> GEMOLOGIST = VILLAGER_PROFESSIONS.register("gemologist",
             () -> new VillagerProfession(Component.literal("gemologist"), holder -> holder.value() == GEMOLOGIST_POI.value(),

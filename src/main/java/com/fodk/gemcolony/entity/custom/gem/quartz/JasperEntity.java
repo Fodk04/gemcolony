@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.entity.custom.gem.quartz;
 
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
+import com.fodk.gemcolony.entity.custom.gem.placement.GemPlacement;
 import com.fodk.gemcolony.entity.custom.gem.variant.JasperVariants;
 import com.fodk.gemcolony.util.GemVariantUtil;
 import net.minecraft.world.entity.EntityType;
@@ -149,5 +150,13 @@ public class JasperEntity extends QuartzFamilyEntity {
     @Override
     public int getVariantFromChroma(int chromaIndex) {
         return GemVariantUtil.getVariantFromChromaColor(JasperVariants.class, chromaIndex);
+    }
+
+    private static final int NAVY_OUTFIT = 1;
+    @Override
+    protected void appearancePostProcess() {
+        if(GemPlacement.values()[getGemPlacement()] == GemPlacement.NAVEL){
+            setOutfit(NAVY_OUTFIT);
+        }
     }
 }

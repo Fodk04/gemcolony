@@ -90,6 +90,4 @@ public class ChromaCrop extends NetherWartBlock {
             }
         }
     }
-
-
 }

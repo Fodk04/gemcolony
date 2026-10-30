@@ -227,7 +227,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 //.add(ModBlocks.getRK(ModBlocks.CHROMA_TRAPDOOR))
 
                 .add(ModBlocks.getRK(ModBlocks.DRAINED_STONE))
-                .add(ModBlocks.getRK(ModBlocks.DESTABILIZER_WALL_GENERATOR))
+                //.add(ModBlocks.getRK(ModBlocks.DESTABILIZER_WALL_GENERATOR))
                 .addTag(ModTags.Blocks.CHROMA_DEPOSITS);
 
         tag(BlockTags.NEEDS_IRON_TOOL)
@@ -250,7 +250,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
 
         tag(ModTags.Blocks.NEEDS_CHROMA_TOOL)
-                .add(ModBlocks.getRK(ModBlocks.DESTABILIZER_WALL_GENERATOR))
+                //.add(ModBlocks.getRK(ModBlocks.DESTABILIZER_WALL_GENERATOR))
                 .addTag(BlockTags.NEEDS_IRON_TOOL);
         tag(ModTags.Blocks.INCORRECT_FOR_CHROMA_TOOL)
                 .addTag(BlockTags.INCORRECT_FOR_IRON_TOOL)

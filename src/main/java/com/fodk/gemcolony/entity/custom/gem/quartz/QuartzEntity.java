@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.entity.custom.gem.quartz;
 
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
+import com.fodk.gemcolony.entity.custom.gem.placement.GemPlacement;
 import com.fodk.gemcolony.entity.custom.gem.variant.QuartzVariants;
 import com.fodk.gemcolony.util.ColorUtil;
 import com.fodk.gemcolony.util.GemVariantUtil;
@@ -149,5 +150,13 @@ public class QuartzEntity extends QuartzFamilyEntity {
     @Override
     public int getVariantFromChroma(int chromaIndex) {
         return GemVariantUtil.getVariantFromChromaColor(QuartzVariants.class, chromaIndex);
+    }
+
+    private static final int NAVY_OUTFIT = 1;
+    @Override
+    protected void appearancePostProcess() {
+        if(GemPlacement.values()[getGemPlacement()] == GemPlacement.NAVEL){
+            setOutfit(NAVY_OUTFIT);
+        }
     }
 }

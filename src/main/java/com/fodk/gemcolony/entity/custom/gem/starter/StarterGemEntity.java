@@ -193,7 +193,6 @@ public abstract class StarterGemEntity extends GemEntity {
         ConstructionProgressData data = ConstructionProgressData.get(serverLevel);
         int progress = data.getProgress(level.dimension(), centerPos);
 
-        // Pay the construction cost only when work first begins
         if (progress == 0) {
             Map<Item, Integer> required = new HashMap<>();
 
@@ -201,7 +200,6 @@ public abstract class StarterGemEntity extends GemEntity {
                 required.merge(requirement.item(), requirement.count(), Integer::sum);
             }
 
-            // Check all requirements before consuming anything
             for (Map.Entry<Item, Integer> entry : required.entrySet()) {
                 int available = 0;
 
@@ -218,7 +216,6 @@ public abstract class StarterGemEntity extends GemEntity {
                 }
             }
 
-            // Consume the requirements once for this block
             for (Map.Entry<Item, Integer> entry : required.entrySet()) {
                 int remaining = entry.getValue();
 

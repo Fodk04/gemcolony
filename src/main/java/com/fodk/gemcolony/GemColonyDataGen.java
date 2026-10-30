@@ -3,6 +3,11 @@ package com.fodk.gemcolony;
 import com.fodk.gemcolony.datagen.*;
 import com.fodk.gemcolony.datagen.villager.ModPOITags;
 import com.fodk.gemcolony.datagen.villager.ModVillagerTradeTags;
+import com.fodk.gemcolony.modonomicon.GemColonyBook;
+import com.fodk.gemcolony.modonomicon.GemColonyBookLanguageProvider;
+import com.klikli_dev.modonomicon.api.datagen.BookProvider;
+import com.klikli_dev.modonomicon.api.datagen.LanguageProviderCache;
+import com.klikli_dev.modonomicon.api.datagen.research.ResearchCache;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
@@ -40,5 +45,11 @@ public class GemColonyDataGen {
         generator.addProvider(true, new ModVillagerTradeTags(packOutput, lookupProvider));
         generator.addProvider(true, new ModPOITags(packOutput, lookupProvider));
         generator.addProvider(true, new ModGlobalLootModifierProvider(packOutput, lookupProvider));
+
+        //MODONOMICON
+        LanguageProviderCache bookLanguageCache = new LanguageProviderCache("en_us");
+        ResearchCache researchCache = new ResearchCache();
+
+        generator.addProvider(true, new BookProvider(packOutput, lookupProvider, GemColony.MOD_ID, List.of(new GemColonyBook()), bookLanguageCache, researchCache));
     }
 }
