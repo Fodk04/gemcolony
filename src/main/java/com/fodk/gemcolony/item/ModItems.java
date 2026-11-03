@@ -61,17 +61,18 @@ public class ModItems {
     public static final DeferredItem<Item> STRAWBERRY = ITEMS.registerItem("strawberry",
             properties -> new BlockItem(ModBlocks.STRAWBERRY_BUSH.get(), properties.food(ModFoods.STRAWBERRY)));
 
-    public static final DeferredItem<Item> GEM_SHARDS = ITEMS.registerItem("gem_shards",
-            properties -> new Item(properties.stacksTo(16)){
-                @Override
-                public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
-                    builder.accept(Component.translatable("tooltip.gemcolony.gem_shards.tooltip"));
-                    super.appendHoverText(itemStack, context, display, builder, tooltipFlag);
-                }
-            });
-
     public static final DeferredItem<Item> GEM_SEED = ITEMS.registerItem("gem_seed",
             properties -> new Item(properties.stacksTo(16)));
+
+    //MINERAL SHARDS
+    public static final DeferredItem<Item> PINK_MINERAL_SHARDS = ITEMS.registerItem("pink_mineral_shards",
+            properties -> new Item(properties.stacksTo(1).durability(50)));
+    public static final DeferredItem<Item> BLUE_MINERAL_SHARDS = ITEMS.registerItem("blue_mineral_shards",
+            properties -> new Item(properties.stacksTo(1).durability(50)));
+    public static final DeferredItem<Item> YELLOW_MINERAL_SHARDS = ITEMS.registerItem("yellow_mineral_shards",
+            properties -> new Item(properties.stacksTo(1).durability(50)));
+    public static final DeferredItem<Item> WHITE_MINERAL_SHARDS = ITEMS.registerItem("white_mineral_shards",
+            properties -> new Item(properties.stacksTo(1).durability(50)));
 
     //TOOLS AND WEAPONS
     public static final DeferredItem<Item> CHROMA_SWORD = ITEMS.registerItem("chroma_sword",

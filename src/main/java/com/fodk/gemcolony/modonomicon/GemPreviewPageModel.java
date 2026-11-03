@@ -5,6 +5,9 @@ import com.klikli_dev.modonomicon.api.datagen.book.page.BookPageModel;
 import net.minecraft.core.HolderLookup;
 import com.klikli_dev.modonomicon.book.page.BookPage;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+
+import java.util.Optional;
 
 public class GemPreviewPageModel extends BookPageModel<GemPreviewPageModel> {
 
@@ -17,6 +20,7 @@ public class GemPreviewPageModel extends BookPageModel<GemPreviewPageModel> {
     protected float defaultRotation = -45f;
 
     protected int variant = -1;
+    protected Optional<Item> chroma = Optional.empty();
 
     protected GemPreviewPageModel() {
         super(GemPreviewPage.ID);
@@ -37,6 +41,7 @@ public class GemPreviewPageModel extends BookPageModel<GemPreviewPageModel> {
                 this.rotate,
                 this.defaultRotation,
                 this.variant,
+                this.chroma,
                 this.id,
                 this.condition(provider)
         );
@@ -89,6 +94,11 @@ public class GemPreviewPageModel extends BookPageModel<GemPreviewPageModel> {
 
     public GemPreviewPageModel withVariant(int variant) {
         this.variant = variant;
+        return this;
+    }
+
+    public GemPreviewPageModel withChroma(Item chroma) {
+        this.chroma = Optional.of(chroma);
         return this;
     }
 }

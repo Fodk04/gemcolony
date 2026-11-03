@@ -25,7 +25,7 @@ public class FuseItem extends Item {
     private static final float gemMaxFusionDistance = 20.0f;
 
     public FuseItem(Properties properties) {
-        super(properties);
+        super(properties.stacksTo(1));
     }
 
     public InteractionResult tryAddGem(ItemStack stack, Player player, GemEntity gem) {

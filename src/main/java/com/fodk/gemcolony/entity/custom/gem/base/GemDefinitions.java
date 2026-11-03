@@ -44,6 +44,24 @@ public class GemDefinitions {
             ModItems.MOOKITE_JASPER_GEM.get(),
             ModItems.PEACH_PETAL_JASPER_GEM.get()),
             ModEntities.JASPER.get());
+    public static final GemDefinition PEARL = new GemDefinition("pearl", "Pearl", List.of(
+            ModItems.WHITE_PEARL_GEM.get(),
+            ModItems.SPECTER_PEARL_GEM.get(),
+            ModItems.SILVER_PEARL_GEM.get(),
+            ModItems.ACKEE_PEARL_GEM.get(),
+            ModItems.CHOCOLATE_PEARL_GEM.get(),
+            ModItems.CHERRY_PEARL_GEM.get(),
+            ModItems.APRICOT_PEARL_GEM.get(),
+            ModItems.YELLOW_PEARL_GEM.get(),
+            ModItems.OLIVE_PEARL_GEM.get(),
+            ModItems.FOREST_PEARL_GEM.get(),
+            ModItems.SKY_PEARL_GEM.get(),
+            ModItems.BLUE_PEARL_GEM.get(),
+            ModItems.OCEAN_PEARL_GEM.get(),
+            ModItems.PLUM_PEARL_GEM.get(),
+            ModItems.FUCHSIA_PEARL_GEM.get(),
+            ModItems.PINK_PEARL_GEM.get()),
+            ModEntities.PEARL.get());
 
     public static final List<GemDefinition> ALL = List.of(
             PERIDOT,

@@ -21,14 +21,15 @@ public enum GemAbility {
     CONSTRUCTOR(13, "Constructor", "Builds the base of all gem technology to get your colony started."),
     LAWYER(14, "Lawyer", "uuhhh"),
 
-    SHAPESHIFTER(15, "Shapeshifter", "Changes the gem's light projection into other creatures."),
-    CHARGEBALL(16, "Chargeball", "Curls up into a rapidly spinning ball before charging into enemies."),
+    SHAPESHIFTER(15, "Shapeshifter", "Changes the gem's light projection into other creatures. (W.I.P)"),
+    CHARGEBALL(16, "Chargeball", "Curls up into a rapidly spinning ball before charging into enemies. (W.I.P)"),
     GEM_WEAPON(17, "Gem Weapon", "This gem can wield a gem weapon."),
     FUTURE_VISION(18, "Future Vision", "You are fortunate for a while after seeing your future."),
     HOLOPEARL(19, "Holopearl", "Creates a holographic replica as a decoy."),
 
     PLAYMATE(20, "Playmate", "Makes gems around her happier so that they dont rebel."),
-    DANCER(21, "Dancer", "Dances to the sound of music.");
+    DANCER(21, "Dancer", "Dances to the sound of music."),
+    TECHNICIAN(22, "Technician", "Manages nearby machinery so your colony can keep going without you.");
 
     private final int id;
     private final String name;

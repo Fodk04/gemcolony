@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGB",
+    "GKG",
+    "WGY"
+  ],
+  "key": {
+    "P": "gemcolony:pink_chroma",
+    "G": "gemcolony:gray_chroma",
+    "B": "gemcolony:blue_chroma",
+    "W": "gemcolony:white_chroma",
+    "Y": "gemcolony:yellow_chroma",
+    "K": "minecraft:book"
+  },
+  "result": {
+    "id": "modonomicon:modonomicon",
+    "count": 1,
+    "components": {
+      "modonomicon:book_id": "gemcolony:gem_colony"
+    }
+  }
+}
+

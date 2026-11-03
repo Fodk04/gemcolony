@@ -10,10 +10,15 @@ import com.klikli_dev.modonomicon.registry.BookPageTypeRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+
+import java.util.Optional;
 
 public class GemPreviewPage extends BookEntityPage {
 
@@ -37,6 +42,8 @@ public class GemPreviewPage extends BookEntityPage {
                             .forGetter(GemPreviewPage::getDefaultRotation),
                     Codec.INT.optionalFieldOf("variant", 0)
                             .forGetter(GemPreviewPage::getVariant),
+                    BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("chroma")
+                            .forGetter(GemPreviewPage::getChroma),
                     Codec.STRING.fieldOf("id")
                             .forGetter(GemPreviewPage::getId),
                     BookCondition.CODEC.optionalFieldOf("condition", new BookNoneCondition())
@@ -53,6 +60,7 @@ public class GemPreviewPage extends BookEntityPage {
                     ByteBufCodecs.BOOL, GemPreviewPage::doesRotate,
                     ByteBufCodecs.FLOAT, GemPreviewPage::getDefaultRotation,
                     ByteBufCodecs.VAR_INT, GemPreviewPage::getVariant,
+                    ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.ITEM)), GemPreviewPage::getChroma,
                     ByteBufCodecs.STRING_UTF8, GemPreviewPage::getId,
                     BookCondition.STREAM_CODEC, GemPreviewPage::getCondition,
                     GemPreviewPage::new
@@ -64,12 +72,17 @@ public class GemPreviewPage extends BookEntityPage {
     public int getVariant() {
         return this.variant;
     }
+    private final Optional<Item> chroma;
+    public Optional<Item> getChroma() {
+        return this.chroma;
+    }
 
     public GemPreviewPage(BookTextHolder entityName, BookTextHolder text, String entityId,
                           float scale, float offset, boolean rotate, float defaultRotation,
-                          int variant, String id, BookCondition condition) {
+                          int variant, Optional<Item> chroma, String id, BookCondition condition) {
         super(entityName, text, entityId, scale, offset, rotate, defaultRotation, id, condition);
         this.variant = variant;
+        this.chroma = chroma;
     }
 
     @Override

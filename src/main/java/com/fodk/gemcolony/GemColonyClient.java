@@ -21,11 +21,14 @@ import com.fodk.gemcolony.entity.custom.gem.starter.*;
 import com.fodk.gemcolony.fluid.ModFluidTypes;
 import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.item.ModItems;
+import com.fodk.gemcolony.item.custom.EssenceType;
 import com.fodk.gemcolony.keymapping.ModKeyMappings;
 import com.fodk.gemcolony.menu.ModMenus;
+import com.fodk.gemcolony.modonomicon.ClipPage;
+import com.fodk.gemcolony.modonomicon.FluidMultiblockPage;
 import com.fodk.gemcolony.modonomicon.GemPreviewPage;
-import com.fodk.gemcolony.modonomicon.client.GemEntityPreviewPageRenderer;
-import com.fodk.gemcolony.modonomicon.client.GemEntityPreviewRegistry;
+import com.fodk.gemcolony.modonomicon.MultiblockSpotlightPage;
+import com.fodk.gemcolony.modonomicon.client.*;
 import com.fodk.gemcolony.networking.packet.BubblingPacketC2S;
 import com.fodk.gemcolony.networking.packet.ConfirmConstructionPacketC2S;
 import com.fodk.gemcolony.util.ColorUtil;
@@ -83,7 +86,15 @@ public class GemColonyClient {
         //regiister renderers
         event.enqueueWork(() -> {
             PageRendererRegistry.registerPageRenderer(GemPreviewPage.ID, page -> new GemEntityPreviewPageRenderer((GemPreviewPage) page));
+            PageRendererRegistry.registerPageRenderer(ClipPage.ID, page -> new ClipPageRenderer((ClipPage) page));
+            PageRendererRegistry.registerPageRenderer(MultiblockSpotlightPage.ID, page -> new MultiblockSpotlightPageRenderer((MultiblockSpotlightPage) page));
+            PageRendererRegistry.registerPageRenderer(FluidMultiblockPage.ID, page -> new FluidMultiblockPageRenderer((FluidMultiblockPage) page));
         });
+    }
+
+    @SubscribeEvent
+    static void onRegisterPictureInPictureRenderers(RegisterPictureInPictureRenderersEvent event) {
+        event.register(FluidMultiblockRenderState.class, FluidMultiblockRenderer::new);
     }
 
     @SubscribeEvent // on the mod event bus only on the physical client
@@ -119,7 +130,7 @@ public class GemColonyClient {
                         material("essence_still"),
                         material("essence_flow"),
                         null,
-                        FluidTintSources.constant(ColorUtil.colorToInt(new Color(10,60,200)))),
+                        FluidTintSources.constant(ColorUtil.colorToInt(EssenceType.BLUE.getTint()))),
                 ModFluids.BLUE_ESSENCE,
                 ModFluids.FLOWING_BLUE_ESSENCE);
 
@@ -128,7 +139,7 @@ public class GemColonyClient {
                         material("essence_still"),
                         material("essence_flow"),
                         null,
-                        FluidTintSources.constant(ColorUtil.colorToInt(new Color(220,250,0)))),
+                        FluidTintSources.constant(ColorUtil.colorToInt(EssenceType.YELLOW.getTint()))),
                 ModFluids.YELLOW_ESSENCE,
                 ModFluids.FLOWING_YELLOW_ESSENCE
         );
@@ -138,7 +149,7 @@ public class GemColonyClient {
                         material("essence_still"),
                         material("essence_flow"),
                         null,
-                        FluidTintSources.constant(ColorUtil.colorToInt(new Color(255,255,255)))),
+                        FluidTintSources.constant(ColorUtil.colorToInt(EssenceType.WHITE.getTint()))),
                 ModFluids.WHITE_ESSENCE,
                 ModFluids.FLOWING_WHITE_ESSENCE
         );
@@ -148,7 +159,7 @@ public class GemColonyClient {
                         material("essence_still"),
                         material("essence_flow"),
                         null,
-                        FluidTintSources.constant(ColorUtil.colorToInt(new Color(210,20,200)))),
+                        FluidTintSources.constant(ColorUtil.colorToInt(EssenceType.PINK.getTint()))),
                 ModFluids.PINK_ESSENCE,
                 ModFluids.FLOWING_PINK_ESSENCE
         );
@@ -164,7 +175,10 @@ public class GemColonyClient {
         event.registerFluidType(new IClientFluidTypeExtensions() {
             @Override
             public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
-                fluidFogColor.set(0.1F, 0.35F, 1.0F, 1.0F);
+                fluidFogColor.set(EssenceType.BLUE.getTint().getRed() / 255f,
+                        EssenceType.BLUE.getTint().getGreen() / 255f,
+                        EssenceType.BLUE.getTint().getBlue() / 255f,
+                        1.0F);
             }
 
             @Override
@@ -179,7 +193,10 @@ public class GemColonyClient {
         event.registerFluidType(new IClientFluidTypeExtensions() {
             @Override
             public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
-                fluidFogColor.set(1.0f, 0.8f, 0.1f, 1.0f);
+                fluidFogColor.set(EssenceType.YELLOW.getTint().getRed() / 255f,
+                        EssenceType.YELLOW.getTint().getGreen() / 255f,
+                        EssenceType.YELLOW.getTint().getBlue() / 255f,
+                        1.0f);
             }
 
             @Override
@@ -194,7 +211,10 @@ public class GemColonyClient {
         event.registerFluidType(new IClientFluidTypeExtensions() {
             @Override
             public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
-                fluidFogColor.set(1.0f, 1.0f, 1.0f, 1.0f);
+                fluidFogColor.set(EssenceType.WHITE.getTint().getRed() / 255f,
+                        EssenceType.WHITE.getTint().getGreen() / 255f,
+                        EssenceType.WHITE.getTint().getBlue() / 255f,
+                        1.0f);
             }
 
             @Override
@@ -209,7 +229,10 @@ public class GemColonyClient {
         event.registerFluidType(new IClientFluidTypeExtensions() {
             @Override
             public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
-                fluidFogColor.set(1.0f, 0.25f, 0.65f, 1.0f);
+                fluidFogColor.set(EssenceType.PINK.getTint().getRed() / 255f,
+                        EssenceType.PINK.getTint().getGreen() / 255f,
+                        EssenceType.PINK.getTint().getBlue() / 255f,
+                        1.0f);
             }
 
             @Override

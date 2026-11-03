@@ -9,6 +9,7 @@ import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.item.custom.EssenceType;
 import com.fodk.gemcolony.menu.InjectorMenu;
 import com.fodk.gemcolony.tags.ModTags;
+import com.fodk.gemcolony.util.ColorUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -39,6 +40,7 @@ import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 public class InjectorBlockEntity extends BlockEntity implements Container {
 
@@ -460,30 +462,33 @@ public class InjectorBlockEntity extends BlockEntity implements Container {
             return 0xFFFFFF;
         }
 
+        Color pinkE = EssenceType.PINK.getTint();
+        Color blueE = EssenceType.BLUE.getTint();
+        Color yellowE = EssenceType.YELLOW.getTint();
+        Color whiteE = EssenceType.WHITE.getTint();
+
         int red = (
-                0x0A * blueAmount
-                        + 0xDC * yellowAmount
-                        + 0xFF * whiteAmount
-                        + 0xD2 * pinkAmount
+                blueE.getRed() * blueAmount
+                        + yellowE.getRed() * yellowAmount
+                        + whiteE.getRed() * whiteAmount
+                        + pinkE.getRed() * pinkAmount
         ) / total;
 
         int green = (
-                0x3C * blueAmount
-                        + 0xFA * yellowAmount
-                        + 0xFF * whiteAmount
-                        + 0x14 * pinkAmount
+                blueE.getGreen() * blueAmount
+                        + yellowE.getGreen() * yellowAmount
+                        + whiteE.getGreen() * whiteAmount
+                        + pinkE.getGreen() * pinkAmount
         ) / total;
 
         int blue = (
-                0xFF * blueAmount
-                        + 0x00 * yellowAmount
-                        + 0xFF * whiteAmount
-                        + 0xC8 * pinkAmount
+                blueE.getBlue() * blueAmount
+                        + yellowE.getBlue() * yellowAmount
+                        + whiteE.getBlue() * whiteAmount
+                        + pinkE.getBlue() * pinkAmount
         ) / total;
 
-        return (red << 16)
-                | (green << 8)
-                | blue;
+        return ColorUtil.colorToInt(new Color(red, green, blue));
     }
 
     private void syncEssence() {

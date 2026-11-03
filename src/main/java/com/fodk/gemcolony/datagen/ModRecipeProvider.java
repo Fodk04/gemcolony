@@ -244,6 +244,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(Items.WATER_BUCKET), has(Items.WATER_BUCKET))
                 .save(output);
 
+        shaped(RecipeCategory.MISC, ModBlocks.ESSENCE_EXTRACTOR.get())
+                .pattern("CRC")
+                .pattern("RBR")
+                .pattern("CRC")
+                .define('C', ModBlocks.GRAY_POLISHED_CHROMA_BLOCK)
+                .define('R', Items.REDSTONE)
+                .define('B', Items.BUCKET)
+                .unlockedBy(getHasName(ModBlocks.GRAY_POLISHED_CHROMA_BLOCK), has(ModBlocks.GRAY_POLISHED_CHROMA_BLOCK))
+                .unlockedBy(getHasName(Items.BUCKET), has(Items.BUCKET))
+                .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+                .save(output);
+
         // CHROMA BLOCKS
         registerSmoothChromaRecipes();
         registerChromaRecipes();
@@ -265,118 +277,6 @@ public class ModRecipeProvider extends RecipeProvider {
 //                .group("chroma")
 //                .save(output);
 
-        //TOOLS
-        shaped(RecipeCategory.COMBAT, ModItems.CHROMA_SWORD.get())
-                .pattern("C")
-                .pattern("C")
-                .pattern("S")
-                .define('C', ModItems.WHITE_CHROMA)
-                .define('S', Items.STICK)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.TOOLS, ModItems.CHROMA_PICKAXE.get())
-                .pattern("CCC")
-                .pattern(" S ")
-                .pattern(" S ")
-                .define('C', ModItems.WHITE_CHROMA)
-                .define('S', Items.STICK)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.TOOLS, ModItems.CHROMA_SHOVEL.get())
-                .pattern("C")
-                .pattern("S")
-                .pattern("S")
-                .define('C', ModItems.WHITE_CHROMA)
-                .define('S', Items.STICK)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.TOOLS, ModItems.CHROMA_AXE.get())
-                .pattern("CC")
-                .pattern("SC")
-                .pattern("S ")
-                .define('C', ModItems.WHITE_CHROMA)
-                .define('S', Items.STICK)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.TOOLS, ModItems.CHROMA_HOE.get())
-                .pattern("CC")
-                .pattern("S ")
-                .pattern("S ")
-                .define('C', ModItems.WHITE_CHROMA)
-                .define('S', Items.STICK)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.COMBAT, ModItems.CHROMA_SPEAR.get())
-                .pattern("  C")
-                .pattern(" S ")
-                .pattern("S  ")
-                .define('C', ModItems.WHITE_CHROMA)
-                .define('S', Items.STICK)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.COMBAT, ModItems.CHROMA_BOW.get())
-                .pattern(" CS")
-                .pattern("C S")
-                .pattern(" CS")
-                .define('C', ModItems.WHITE_CHROMA)
-                .define('S', Items.STRING)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
-                .group("chroma")
-                .save(output);
-
-        //armor
-        shaped(RecipeCategory.COMBAT, ModItems.CHROMA_HELMET.get())
-                .pattern("CCC")
-                .pattern("C C")
-                .define('C', ModItems.WHITE_CHROMA)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.COMBAT, ModItems.CHROMA_CHESTPLATE.get())
-                .pattern("C C")
-                .pattern("CCC")
-                .pattern("CCC")
-                .define('C', ModItems.WHITE_CHROMA)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.COMBAT, ModItems.CHROMA_LEGGINGS.get())
-                .pattern("CCC")
-                .pattern("C C")
-                .pattern("C C")
-                .define('C', ModItems.WHITE_CHROMA)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .group("chroma")
-                .save(output);
-
-        shaped(RecipeCategory.COMBAT, ModItems.CHROMA_BOOTS.get())
-                .pattern("C C")
-                .pattern("C C")
-                .define('C', ModItems.WHITE_CHROMA)
-                .unlockedBy(getHasName(ModItems.WHITE_CHROMA.get()), has(ModItems.WHITE_CHROMA))
-                .group("chroma")
-                .save(output);
     }
 
     protected <T extends AbstractCookingRecipe> void oreCooking(AbstractCookingRecipe.Factory<T> factory, List<ItemLike> smeltables, RecipeCategory craftingCategory, CookingBookCategory cookingCategory, ItemLike result, float experience, int cookingTime, String group, String fromDesc) {

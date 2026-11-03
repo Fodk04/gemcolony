@@ -47,18 +47,23 @@ public class GettingStartedCategory extends CategoryProvider {
                 BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/welcome"), "book.gemcolony.welcome")
                         .withIcon(Items.WRITABLE_BOOK)
                         .withLocation(0, 0)
-                        .withPage(
+                        .withPages(
                                 BookTextPageModel.create()
                                         .withTitle("book.gemcolony.welcome.title")
                                         .withText("book.gemcolony.welcome.text")
-                                        .withId("welcome_intro")
+                                        .withId("welcome_intro"),
+
+                                BookCraftingRecipePageModel.create()
+                                        .withId("gemcolony_book_recipe")
+                                        .withRecipeId1("gemcolony:gem_colony")
                         )
         );
 
         this.add(
                 BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/chroma"), "book.gemcolony.chroma")
-                        .withIcon(ModItems.BLUE_CHROMA)
+                        .withIcon(ModItems.WHITE_CHROMA)
                         .withLocation(2, 0)
+                        .withParent(BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/welcome")))
                         .withPages(
                                 BookSpotlightPageModel.create()
                                         .withId("chroma_items")
@@ -87,7 +92,7 @@ public class GettingStartedCategory extends CategoryProvider {
 
         this.add(
                 BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/chroma_biomes"), "book.gemcolony.chroma_biomes")
-                        .withIcon(ModBlocks.BLUE_CHROMA_DEPOSIT)
+                        .withIcon(ModBlocks.WHITE_CHROMA_DEPOSIT)
                         .withLocation(4, 0)
                         .withParent(BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/chroma")))
                         .withPages(
@@ -99,97 +104,97 @@ public class GettingStartedCategory extends CategoryProvider {
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.white_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.white.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/white_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/white_biome_showcase.png"))
                                         .withId("white_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.light_gray_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.light_gray.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/light_gray_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/light_gray_biome_showcase.png"))
                                         .withId("light_gray_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.gray_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.gray.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/gray_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/gray_biome_showcase.png"))
                                         .withId("gray_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.black_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.black.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/black_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/black_biome_showcase.png"))
                                         .withId("black_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.brown_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.brown.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/brown_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/brown_biome_showcase.png"))
                                         .withId("brown_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.red_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.red.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/red_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/red_biome_showcase.png"))
                                         .withId("red_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.orange_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.orange.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/orange_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/orange_biome_showcase.png"))
                                         .withId("orange_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.yellow_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.yellow.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/yellow_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/yellow_biome_showcase.png"))
                                         .withId("yellow_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.lime_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.lime.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/lime_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/lime_biome_showcase.png"))
                                         .withId("lime_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.green_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.green.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/green_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/green_biome_showcase.png"))
                                         .withId("green_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.cyan_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.cyan.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/cyan_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/cyan_biome_showcase.png"))
                                         .withId("cyan_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.light_blue_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.light_blue.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/light_blue_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/light_blue_biome_showcase.png"))
                                         .withId("light_blue_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.blue_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.blue.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/blue_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/blue_biome_showcase.png"))
                                         .withId("blue_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.purple_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.purple.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/purple_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/purple_biome_showcase.png"))
                                         .withId("purple_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.magenta_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.magenta.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/magenta_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/magenta_biome_showcase.png"))
                                         .withId("magenta_biome_showcase"),
 
                                 BookImagePageModel.create()
                                         .withTitle("block.gemcolony.pink_chroma_deposit")
                                         .withText("book.gemcolony.chroma_biomes.pink.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/pink_biome_showcase.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/pink_biome_showcase.png"))
                                         .withId("pink_biome_showcase")
                         )
         );
@@ -324,93 +329,94 @@ public class GettingStartedCategory extends CategoryProvider {
                                         .withId("chroma_structure_ancient_city")
                                         .withTitle("book.gemcolony.chroma_structures.ancient_city.title")
                                         .withText("book.gemcolony.chroma_structures.ancient_city.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/ancient_city_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/ancient_city_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_dungeon")
                                         .withTitle("book.gemcolony.chroma_structures.dungeon.title")
                                         .withText("book.gemcolony.chroma_structures.dungeon.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/dungeon_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/dungeon_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_mineshaft")
                                         .withTitle("book.gemcolony.chroma_structures.mineshaft.title")
                                         .withText("book.gemcolony.chroma_structures.mineshaft.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/mineshaft_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/mineshaft_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_bastion")
                                         .withTitle("book.gemcolony.chroma_structures.bastion.title")
                                         .withText("book.gemcolony.chroma_structures.bastion.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/bastion_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/bastion_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_pillager_bases")
                                         .withTitle("book.gemcolony.chroma_structures.pillager_bases.title")
                                         .withText("book.gemcolony.chroma_structures.pillager_bases.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/pillager_bases_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/pillager_bases_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_nether_fortress")
                                         .withTitle("book.gemcolony.chroma_structures.nether_fortress.title")
                                         .withText("book.gemcolony.chroma_structures.nether_fortress.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/nether_fortress_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/nether_fortress_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_desert_pyramid")
                                         .withTitle("book.gemcolony.chroma_structures.desert_pyramid.title")
                                         .withText("book.gemcolony.chroma_structures.desert_pyramid.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/desert_pyramid_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/desert_pyramid_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_jungle_temple")
                                         .withTitle("book.gemcolony.chroma_structures.jungle_temple.title")
                                         .withText("book.gemcolony.chroma_structures.jungle_temple.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/jungle_temple_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/jungle_temple_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_underwater_ruins")
                                         .withTitle("book.gemcolony.chroma_structures.underwater_ruins.title")
                                         .withText("book.gemcolony.chroma_structures.underwater_ruins.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/underwater_ruins_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/underwater_ruins_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_treasures")
                                         .withTitle("book.gemcolony.chroma_structures.treasures.title")
                                         .withText("book.gemcolony.chroma_structures.treasures.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/treasures_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/treasures_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_igloo")
                                         .withTitle("book.gemcolony.chroma_structures.igloo.title")
                                         .withText("book.gemcolony.chroma_structures.igloo.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/igloo_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/igloo_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_ruined_portal")
                                         .withTitle("book.gemcolony.chroma_structures.ruined_portal.title")
                                         .withText("book.gemcolony.chroma_structures.ruined_portal.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/ruined_portal_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/ruined_portal_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_end_city")
                                         .withTitle("book.gemcolony.chroma_structures.end_city.title")
                                         .withText("book.gemcolony.chroma_structures.end_city.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/end_city_chroma.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/end_city_chroma.png")),
 
                                 BookImagePageModel.create()
                                         .withId("chroma_structure_village")
                                         .withTitle("book.gemcolony.chroma_structures.village.title")
                                         .withText("book.gemcolony.chroma_structures.village.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/village_chroma.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/village_chroma.png"))
                         )
         );
 
 
         this.add(
                 BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/essence"), "book.gemcolony.essence")
-                        .withIcon(ModItems.BLUE_ESSENCE_BUCKET)
+                        .withIcon(ModItems.WHITE_ESSENCE_BUCKET)
                         .withLocation(-2, 0)
+                        .withParent(BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/welcome")))
                         .withPages(
                                 BookSpotlightPageModel.create()
                                         .withId("essence_buckets")
@@ -431,6 +437,51 @@ public class GettingStartedCategory extends CategoryProvider {
         );
 
         this.add(
+                BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/essence_extractors"), "book.gemcolony.essence_extractors")
+                        .withIcon(ModBlocks.ESSENCE_EXTRACTOR)
+                        .withLocation(-3, -2)
+                        .withParent(BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/essence")))
+                        .withPages(
+                                BookSpotlightPageModel.create()
+                                        .withId("mineral_shards")
+                                        .withTitle("book.gemcolony.mineral_shards.title")
+                                        .withText("book.gemcolony.mineral_shards.text")
+                                        .withItem(Ingredient.of(this.registries().lookupOrThrow(Registries.ITEM).getOrThrow(ModTags.Items.MINERAL_SHARDS))),
+
+                                BookCraftingRecipePageModel.create()
+                                        .withId("essence_extractor_recipe")
+                                        .withTitle1("book.gemcolony.essence_extractor_recipe.title")
+                                        .withText("book.gemcolony.essence_extractor_recipe.text")
+                                        .withRecipeId1("gemcolony:essence_extractor"),
+
+                                FluidMultiblockPageModel.create()
+                                        .withId("essence_extractor_off")
+                                        .withMultiblockId(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "essence_extractor_off"))
+                                        .withMultiblockName("book.gemcolony.essence_extractors.off.multiblock_name"),
+
+                                FluidMultiblockPageModel.create()
+                                        .withId("essence_extractor_white")
+                                        .withMultiblockId(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "essence_extractor_white"))
+                                        .withMultiblockName("book.gemcolony.essence_extractors.white.multiblock_name"),
+
+                                FluidMultiblockPageModel.create()
+                                        .withId("essence_extractor_yellow")
+                                        .withMultiblockId(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "essence_extractor_yellow"))
+                                        .withMultiblockName("book.gemcolony.essence_extractors.yellow.multiblock_name"),
+
+                                FluidMultiblockPageModel.create()
+                                        .withId("essence_extractor_blue")
+                                        .withMultiblockId(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "essence_extractor_blue"))
+                                        .withMultiblockName("book.gemcolony.essence_extractors.blue.multiblock_name"),
+
+                                FluidMultiblockPageModel.create()
+                                        .withId("essence_extractor_pink")
+                                        .withMultiblockId(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "essence_extractor_pink"))
+                                        .withMultiblockName("book.gemcolony.essence_extractors.pink.multiblock_name")
+                        )
+        );
+
+        this.add(
                 BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/essence_structures"), "book.gemcolony.essence_structures")
                         .withIcon(Items.CHEST)
                         .withLocation(-4, 0)
@@ -445,25 +496,102 @@ public class GettingStartedCategory extends CategoryProvider {
                                         .withId("essence_structure_yellow")
                                         .withTitle("book.gemcolony.essence_structures.yellow.title")
                                         .withText("book.gemcolony.essence_structures.yellow.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/yellow_essence_structure.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/yellow_essence_structure.png")),
 
                                 BookImagePageModel.create()
                                         .withId("essence_structure_blue")
                                         .withTitle("book.gemcolony.essence_structures.blue.title")
                                         .withText("book.gemcolony.essence_structures.blue.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/blue_essence_structure.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/blue_essence_structure.png")),
 
                                 BookImagePageModel.create()
                                         .withId("essence_structure_pink")
                                         .withTitle("book.gemcolony.essence_structures.pink.title")
                                         .withText("book.gemcolony.essence_structures.pink.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/pink_essence_structure.png")),
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/pink_essence_structure.png")),
 
                                 BookImagePageModel.create()
                                         .withId("essence_structure_white")
                                         .withTitle("book.gemcolony.essence_structures.white.title")
                                         .withText("book.gemcolony.essence_structures.white.text")
-                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/gui/guide/white_essence_structure.png"))
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/white_essence_structure.png")),
+
+                                BookImagePageModel.create()
+                                        .withId("surface_ruins")
+                                        .withTitle("book.gemcolony.essence_structures.surface_ruins.title")
+                                        .withText("book.gemcolony.essence_structures.surface_ruins.text")
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/surface_ruins.png"))
+                        )
+        );
+
+        this.add(
+                BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/gems"), "book.gemcolony.gems")
+                        .withIcon(ModItems.ROSE_QUARTZ_GEM)
+                        .withLocation(0, 2)
+                        .withParent(BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/welcome")))
+                        .withPages(
+                                BookTextPageModel.create()
+                                        .withId("gems_intro")
+                                        .withTitle("book.gemcolony.gems_intro.title")
+                                        .withText("book.gemcolony.gems_intro.text"),
+
+                                BookImagePageModel.create()
+                                        .withId("gems_ui")
+                                        .withTitle("book.gemcolony.gems_ui.title")
+                                        .withText("book.gemcolony.gems_ui.text")
+                                        .withImages(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/image/gems_ui.png"))
+                        )
+        );
+
+        this.add(
+                BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/bodies_of_light"), "book.gemcolony.bodies_of_light")
+                        .withIcon(Items.GLOWSTONE_DUST)
+                        .withLocation(-1, 4)
+                        .withParent(BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/gems")))
+                        .withPages(
+                                ClipPageModel.create()
+                                        .withId("gems_poof")
+                                        .withTitle("book.gemcolony.gems_poof.title")
+                                        .withText("book.gemcolony.gems_poof.text")
+                                        .withTexture(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/clip/gems_poof.png"))
+                                        .withDuration(6.2f),
+
+                                ClipPageModel.create()
+                                        .withId("gems_reform")
+                                        .withTitle("book.gemcolony.gems_reform.title")
+                                        .withText("book.gemcolony.gems_reform.text")
+                                        .withTexture(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/clip/gems_reform.png"))
+                                        .withDuration(9f)
+                        )
+        );
+
+        this.add(
+                BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/sentient_rocks"), "book.gemcolony.sentient_rocks")
+                        .withIcon(Items.REDSTONE)
+                        .withLocation(1, 4)
+                        .withParent(BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/gems")))
+                        .withPages(
+                                ClipPageModel.create()
+                                        .withId("gems_commands")
+                                        .withTitle("book.gemcolony.gems_commands.title")
+                                        .withText("book.gemcolony.gems_commands.text")
+                                        .withTexture(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "modonomicon/clip/gems_commands.png"))
+                                        .withDuration(18.0F)
+                        )
+        );
+
+        this.add(
+                BookEntryModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/gem_seed"), "book.gemcolony.gem_seed")
+                        .withIcon(ModItems.GEM_SEED)
+                        .withLocation(0, 6)
+                        .withParents(BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/bodies_of_light")),
+                                BookEntryParentModel.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "getting_started/sentient_rocks")))
+                        .withPages(
+                                BookCraftingRecipePageModel.create()
+                                        .withId("gem_seed_recipe")
+                                        .withTitle1("book.gemcolony.gem_seed.title")
+                                        .withText("book.gemcolony.gem_seed.text")
+                                        .withRecipeId1("gemcolony:gem_seed")
                         )
         );
 

@@ -2,6 +2,7 @@ package com.fodk.gemcolony.block.entity;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
+import com.fodk.gemcolony.block.entity.custom.EssenceExtractorBlockEntity;
 import com.fodk.gemcolony.block.entity.custom.GemSeedBlockEntity;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
 import com.fodk.gemcolony.block.entity.custom.ShellBlockEntity;
@@ -19,7 +20,8 @@ public class ModBlockEntities {
                     () -> new BlockEntityType<>(
                             InjectorBlockEntity::new,
                             ModBlocks.DRILL.get()
-                    ));
+                    )
+            );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShellBlockEntity>> SHELL_BE =
             BLOCK_ENTITIES.register(
@@ -36,6 +38,15 @@ public class ModBlockEntities {
                     () -> new BlockEntityType<>(
                             GemSeedBlockEntity::new,
                             ModBlocks.GEM_SEED.get()
+                    )
+            );
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EssenceExtractorBlockEntity>> ESSENCE_EXTRACTOR_BE =
+            BLOCK_ENTITIES.register(
+                    "essence_extractor",
+                    () -> new BlockEntityType<>(
+                            EssenceExtractorBlockEntity::new,
+                            ModBlocks.ESSENCE_EXTRACTOR.get()
                     )
             );
 

@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -123,10 +124,14 @@ public class GemEntityPreviewPageRenderer extends BookPageRenderer<BookEntityPag
         }
 
         int textY = this.getTextY();
+        var chroma = ((GemPreviewPage) this.page).getChroma();
 
-        this.renderBookTextHolder(guiGraphics, this.getPage().getText(),
-                0, textY, BookEntryScreen.PAGE_WIDTH,
-                BookEntryScreen.PAGE_HEIGHT - textY);
+        int textHeight = BookEntryScreen.PAGE_HEIGHT - textY;
+        if (chroma.isPresent()) {
+            textHeight -= 24;
+        }
+
+        this.renderBookTextHolder(guiGraphics, this.getPage().getText(), 0, textY, BookEntryScreen.PAGE_WIDTH, textHeight);
 
         int x = BookEntryScreen.PAGE_WIDTH / 2 - 53;
         int y = 7;
@@ -140,6 +145,20 @@ public class GemEntityPreviewPageRenderer extends BookPageRenderer<BookEntityPag
         if (this.entity != null) {
             float rotation = this.page.doesRotate() ? ClientTicks.total : this.page.getDefaultRotation();
             this.renderEntity(guiGraphics, this.left, this.top, rotation);
+        }
+
+        if (chroma.isPresent()) {
+            int chromaX = BookEntryScreen.PAGE_WIDTH / 2 - 8;
+            int chromaY = BookEntryScreen.PAGE_HEIGHT - 20;
+
+            this.parentScreen.renderItemStack(
+                    guiGraphics,
+                    chromaX,
+                    chromaY,
+                    mouseX,
+                    mouseY,
+                    new ItemStack(chroma.get())
+            );
         }
 
         var style = this.getClickedComponentStyleAt(mouseX, mouseY);
@@ -160,11 +179,18 @@ public class GemEntityPreviewPageRenderer extends BookPageRenderer<BookEntityPag
                     return titleStyle;
             }
 
+            var chroma = ((GemPreviewPage) this.page).getChroma();
+
+            int textHeight = BookEntryScreen.PAGE_HEIGHT - this.getTextY();
+            if (chroma.isPresent()) {
+                textHeight -= 24;
+            }
+
             var bounds = this.getBookTextHolderBounds(
                     0, this.getTextY(),
-                    BookEntryScreen.PAGE_WIDTH,
-                    BookEntryScreen.PAGE_HEIGHT - this.getTextY()
+                    BookEntryScreen.PAGE_WIDTH, textHeight
             );
+
             var textStyle = this.getClickedComponentStyleAtForTextHolder(
                     this.page.getText(),
                     bounds.x, bounds.y, bounds.width, bounds.height,

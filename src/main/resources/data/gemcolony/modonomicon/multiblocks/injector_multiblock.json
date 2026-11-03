@@ -108,15 +108,6 @@
       "AAAAAAA",
       "AAAAAAA",
       "AAAAAAA"
-    ],
-    [
-      "DDRDRDD",
-      "RDDDDRD",
-      "DDRDDRD",
-      "DDDDDDR",
-      "DDDRDDD",
-      "DRDDRDD",
-      "DDRDDRD"
     ]
   ],
   "mapping": {
@@ -155,14 +146,6 @@
     "A": {
       "type": "modonomicon:block",
       "block": "minecraft:air"
-    },
-    "R": {
-      "type": "modonomicon:block",
-      "block": "minecraft:stone"
-    },
-    "D": {
-      "type": "modonomicon:block",
-      "block": "gemcolony:drained_stone"
     }
   }
 }

@@ -31,6 +31,7 @@ public class ModTags {
         public static final TagKey<Item> CHROMAS = createTag("chromas");
         public static final TagKey<Item> ESSENCE_BOTTLES = createTag("essence_bottles");
         public static final TagKey<Item> ESSENCE_BUCKETS = createTag("essence_buckets");
+        public static final TagKey<Item> MINERAL_SHARDS = createTag("mineral_shards");
 
         public static final TagKey<Item> CHROMA_REPAIRABLE = createTag("chroma_repairable");
 

@@ -2,8 +2,10 @@ package com.fodk.gemcolony.block.entity.screen;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.entity.custom.InjectorBlockEntity;
+import com.fodk.gemcolony.item.custom.EssenceType;
 import com.fodk.gemcolony.menu.InjectorMenu;
 import com.fodk.gemcolony.networking.packet.CycleInjectorOrientationPacketC2S;
+import com.fodk.gemcolony.util.ColorUtil;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -59,7 +61,7 @@ public class InjectorScreen extends AbstractContainerScreen<InjectorMenu> {
                 28 + ESSENCE_BARS_OFFSET_Y,
                 55,
                 7,
-                0xFF0A3CFF
+                ColorUtil.colorToInt(EssenceType.BLUE.getTint())
         );
 
         drawEssenceBar(
@@ -70,7 +72,7 @@ public class InjectorScreen extends AbstractContainerScreen<InjectorMenu> {
                 40 + ESSENCE_BARS_OFFSET_Y,
                 55,
                 7,
-                0xFFDCFA00
+                ColorUtil.colorToInt(EssenceType.YELLOW.getTint())
         );
 
         drawEssenceBar(
@@ -81,7 +83,7 @@ public class InjectorScreen extends AbstractContainerScreen<InjectorMenu> {
                 52 + ESSENCE_BARS_OFFSET_Y,
                 55,
                 7,
-                0xFFFFFFFF
+                ColorUtil.colorToInt(EssenceType.WHITE.getTint())
         );
 
         drawEssenceBar(
@@ -92,7 +94,7 @@ public class InjectorScreen extends AbstractContainerScreen<InjectorMenu> {
                 64 + ESSENCE_BARS_OFFSET_Y,
                 55,
                 7,
-                0xFFD214C8
+                ColorUtil.colorToInt(EssenceType.PINK.getTint())
         );
 
         drawMixedEssenceTank(

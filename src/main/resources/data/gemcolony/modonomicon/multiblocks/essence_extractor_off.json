@@ -1,0 +1,31 @@
+{
+  "type": "modonomicon:dense",
+  "pattern": [
+    [
+      "AAA",
+      "A0A",
+      "AAA"
+    ],
+    [
+      "CCC",
+      "CCC",
+      "CCC"
+    ]
+  ],
+  "mapping": {
+    "0": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:essence_extractor[color=0]"
+    },
+    "A": {
+      "type": "modonomicon:blockstate",
+      "block": "minecraft:air"
+    },
+    "C": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:gray_polished_chroma_block"
+    }
+  }
+}
+
+

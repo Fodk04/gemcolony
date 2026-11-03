@@ -38,6 +38,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
     protected void generate() {
         //simple block drop
         dropSelf(ModBlocks.DRAINED_STONE.get());
+        dropSelf(ModBlocks.ESSENCE_EXTRACTOR.get());
         //dropSelf(ModBlocks.DESTABILIZER_WALL_GENERATOR.get());
 
         // CHROMA PILLARS

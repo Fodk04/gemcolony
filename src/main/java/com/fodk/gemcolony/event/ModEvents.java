@@ -16,8 +16,12 @@ import com.fodk.gemcolony.networking.ClientPayloadHandler;
 import com.fodk.gemcolony.networking.packet.*;
 import com.fodk.gemcolony.potion.ModPotions;
 import com.fodk.gemcolony.util.GemCombatUtil;
+import com.klikli_dev.modonomicon.registry.DataComponentRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,6 +47,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -400,5 +405,27 @@ public class ModEvents {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             FusionRegistryData.get(level).tickSessions(level);
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+
+        var playerData = player.getPersistentData();
+
+        if (playerData.getBoolean("gemcolony_book_received").orElse(false)) {
+            return;
+        }
+
+        ItemStack book = new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath("modonomicon", "modonomicon")));
+        book.set(DataComponentRegistry.BOOK_ID.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gem_colony"));
+
+        if (!player.getInventory().add(book)) {
+            player.drop(book, false);
+        }
+
+        playerData.putBoolean("gemcolony_book_received", true);
     }
 }

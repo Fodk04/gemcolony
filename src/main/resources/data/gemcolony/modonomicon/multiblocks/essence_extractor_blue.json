@@ -1,0 +1,31 @@
+{
+  "type": "modonomicon:dense",
+  "pattern": [
+    [
+      "EEE",
+      "E0E",
+      "EEE"
+    ],
+    [
+      "CCC",
+      "CCC",
+      "CCC"
+    ]
+  ],
+  "mapping": {
+    "0": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:essence_extractor[color=2]"
+    },
+    "E": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:blue_essence"
+    },
+    "C": {
+      "type": "modonomicon:blockstate",
+      "block": "gemcolony:light_blue_polished_chroma_block"
+    }
+  }
+}
+
+

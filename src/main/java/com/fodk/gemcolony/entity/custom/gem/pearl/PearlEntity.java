@@ -150,7 +150,7 @@ public class PearlEntity extends GemEntity {
 
     @Override
     protected void initializeAbilities() {
-        addAbility(GemAbility.DANCER);
+        //addAbility(GemAbility.DANCER);
         addAbility(GemAbility.HOLOPEARL);
     }
 

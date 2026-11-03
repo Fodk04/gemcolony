@@ -2,7 +2,9 @@ package com.fodk.gemcolony.datagen;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.item.ModItems;
+import com.klikli_dev.modonomicon.registry.DataComponentRegistry;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.Identifier;
@@ -11,6 +13,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -175,7 +178,13 @@ public class ModExtraLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(ModItems.DUMORTIERITE_QUARTZ_GEM).setWeight(1))
                         .add(LootItem.lootTableItem(ModItems.SEA_SEDIMENT_JASPER_GEM).setWeight(1))
                         .add(LootItem.lootTableItem(ModItems.OCEAN_JASPER_GEM).setWeight(1))
-                        .when(LootItemRandomChanceCondition.randomChance(0.1F))));
+                        .when(LootItemRandomChanceCondition.randomChance(0.1F)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.BLUE_MINERAL_SHARDS).setWeight(3))
+                        .add(LootItem.lootTableItem(ModItems.PINK_MINERAL_SHARDS).setWeight(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.4F))
+                ));
 
         output.accept(YELLOW_SAUNA, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
@@ -191,6 +200,12 @@ public class ModExtraLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(ModItems.CHERT_QUARTZ_GEM).setWeight(1))
                         .add(LootItem.lootTableItem(ModItems.NOREENA_JASPER_GEM).setWeight(1))
                         .add(LootItem.lootTableItem(ModItems.BIGGS_JASPER_GEM).setWeight(1))
-                        .when(LootItemRandomChanceCondition.randomChance(0.1F))));
+                        .when(LootItemRandomChanceCondition.randomChance(0.1F)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.YELLOW_MINERAL_SHARDS).setWeight(3))
+                        .add(LootItem.lootTableItem(ModItems.WHITE_MINERAL_SHARDS).setWeight(1))
+                        .when(LootItemRandomChanceCondition.randomChance(0.4F))
+                ));
     }
 }

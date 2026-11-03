@@ -541,7 +541,8 @@ public class ModBlocks {
             "shell",
             properties -> new ShellBlock(
                     properties
-                            .strength(2F).explosionResistance(Float.MAX_VALUE)
+                            .strength(2F)
+                            .explosionResistance(Float.MAX_VALUE)
                             .noLootTable()
                             .sound(SoundType.METAL)
                             .noOcclusion()
@@ -555,6 +556,17 @@ public class ModBlocks {
                             .strength(1F)
                             .noLootTable()
                             .sound(SoundType.MOSS)
+                            .noOcclusion()
+            )
+    );
+
+    public static final DeferredBlock<Block> ESSENCE_EXTRACTOR = registerBlock(
+            "essence_extractor",
+            properties -> new EssenceExtractorBlock(
+                    properties
+                            .strength(2F)
+                            .explosionResistance(Float.MAX_VALUE)
+                            .sound(SoundType.METAL)
                             .noOcclusion()
             )
     );

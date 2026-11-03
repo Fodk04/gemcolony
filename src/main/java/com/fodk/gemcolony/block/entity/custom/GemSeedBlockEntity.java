@@ -23,10 +23,7 @@ import java.util.List;
 
 public class GemSeedBlockEntity extends BlockEntity {
 
-    private record TunnelPath(
-            Direction direction,
-            int distance
-    ) {
+    private record TunnelPath(Direction direction, int distance) {
     }
 
     private ItemStack chroma = ItemStack.EMPTY;
@@ -36,6 +33,9 @@ public class GemSeedBlockEntity extends BlockEntity {
     private static final int DRAIN_RADIUS = 4;
     private static final int BLOCKS_NEEDED = 450;
     private static final int MAX_TUNNEL_LENGTH = 32;
+    private int drainTimer = 0;
+    private static final int DRAIN_INTERVAL = 20; // 1 second
+    private final List<BlockPos> drainableBlocks = new ArrayList<>();
 
     public GemSeedBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.GEM_SEED_BE.get(), pos, state);
@@ -136,10 +136,6 @@ public class GemSeedBlockEntity extends BlockEntity {
 
         level.addFreshEntity(gem);
     }
-
-    private int drainTimer = 0;
-    private static final int DRAIN_INTERVAL = 20; // 1 second
-    private final List<BlockPos> drainableBlocks = new ArrayList<>();
 
     public void tick() {
         if (level == null || level.isClientSide()) {

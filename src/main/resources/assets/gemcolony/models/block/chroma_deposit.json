@@ -1,8 +1,8 @@
 {
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
-	"render_type": "translucent",
 	"parent": "chroma_deposit",
+	"render_type": "translucent",
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "gemcolony:block/chroma_deposit",
@@ -62,5 +62,37 @@
 			}
 		}
 	],
-	"display": {}
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"ground": {
+			"translation": [0, 1, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [20, 45, 0],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"fixed": {
+			"rotation": [0, 45, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"on_shelf": {
+			"scale": [0.6, 0.6, 0.6]
+		}
+	}
 }

@@ -41,8 +41,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.PINK_CHROMA);
 
                         output.accept(ModItems.CHROMA_SEED);
-
-                        output.accept(ModItems.GEM_SHARDS);
                         output.accept(ModItems.GEM_SEED);
 
                         output.accept(ModItems.PINK_ESSENCE_BOTTLE);
@@ -55,6 +53,11 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.YELLOW_ESSENCE_BUCKET);
                         output.accept(ModItems.WHITE_ESSENCE_BUCKET);
 
+                        output.accept(ModItems.PINK_MINERAL_SHARDS);
+                        output.accept(ModItems.BLUE_MINERAL_SHARDS);
+                        output.accept(ModItems.YELLOW_MINERAL_SHARDS);
+                        output.accept(ModItems.WHITE_MINERAL_SHARDS);
+
                         output.accept(ModItems.FUSE);
                     })
                     .build());
@@ -66,6 +69,7 @@ public class ModCreativeModeTabs {
                     .withTabsBefore(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "gem_ingredients_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.DRAINED_STONE);
+                        output.accept(ModBlocks.ESSENCE_EXTRACTOR);
 
                         // CHROMA DEPOSITS
                         output.accept(ModBlocks.WHITE_CHROMA_DEPOSIT);
@@ -369,7 +373,7 @@ public class ModCreativeModeTabs {
                     })
                     .build());
 
-    public static final Supplier<CreativeModeTab> GEM_SONGS_TAB = CREATIVE_MODE_TABS.register("gem_songs_tab",
+    /*public static final Supplier<CreativeModeTab> GEM_SONGS_TAB = CREATIVE_MODE_TABS.register("gem_songs_tab",
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.LOVE_LIKE_YOU_MUSIC_DISC.get()))
                     .title(Component.translatable("creativetab.gemcolony.gem_songs"))
@@ -378,7 +382,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.LOVE_LIKE_YOU_MUSIC_DISC);
                         output.accept(ModItems.ITS_OVER_ISNT_IT_MUSIC_DISC);
                     })
-                    .build());
+                    .build());*/
 
     public static void register(IEventBus eventBus){
         CREATIVE_MODE_TABS.register(eventBus);

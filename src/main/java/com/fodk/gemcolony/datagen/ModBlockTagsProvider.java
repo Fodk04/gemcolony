@@ -227,6 +227,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 //.add(ModBlocks.getRK(ModBlocks.CHROMA_TRAPDOOR))
 
                 .add(ModBlocks.getRK(ModBlocks.DRAINED_STONE))
+                .add(ModBlocks.getRK(ModBlocks.ESSENCE_EXTRACTOR))
                 //.add(ModBlocks.getRK(ModBlocks.DESTABILIZER_WALL_GENERATOR))
                 .addTag(ModTags.Blocks.CHROMA_DEPOSITS);
 
@@ -238,6 +239,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 //.add(ModBlocks.getRK(ModBlocks.CHROMA_DOOR))
                 //.add(ModBlocks.getRK(ModBlocks.CHROMA_TRAPDOOR))
 
+                .add(ModBlocks.getRK(ModBlocks.ESSENCE_EXTRACTOR))
                 .addTag(ModTags.Blocks.CHROMA_DEPOSITS);
 
         List<DeferredBlock<? extends Block>> chromaBuildingBlocks = new ArrayList<>(getChromaBuildingBlocks());

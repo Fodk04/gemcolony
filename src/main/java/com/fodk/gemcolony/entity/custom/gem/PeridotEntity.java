@@ -258,8 +258,8 @@ public class PeridotEntity extends GemEntity {
 
     @Override
     protected void initializeAbilities() {
+        addAbility(GemAbility.TECHNICIAN);
         addAbility(GemAbility.KINDERGARTNER);
-        addAbility(GemAbility.FERROKINESIS);
     }
 
     public void startAnalysis() {

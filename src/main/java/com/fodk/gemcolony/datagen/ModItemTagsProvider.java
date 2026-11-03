@@ -77,5 +77,11 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .add(ModItems.getRK(ModItems.YELLOW_ESSENCE_BUCKET))
                 .add(ModItems.getRK(ModItems.WHITE_ESSENCE_BUCKET))
                 .add(ModItems.getRK(ModItems.PINK_ESSENCE_BUCKET));
+
+        tag(ModTags.Items.MINERAL_SHARDS)
+                .add(ModItems.getRK(ModItems.BLUE_MINERAL_SHARDS))
+                .add(ModItems.getRK(ModItems.YELLOW_MINERAL_SHARDS))
+                .add(ModItems.getRK(ModItems.WHITE_MINERAL_SHARDS))
+                .add(ModItems.getRK(ModItems.PINK_MINERAL_SHARDS));
     }
 }

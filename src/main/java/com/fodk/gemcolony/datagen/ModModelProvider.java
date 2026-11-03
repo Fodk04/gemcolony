@@ -22,10 +22,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
@@ -172,6 +169,42 @@ public class ModModelProvider extends ModelProvider {
             TextureSlot.PARTICLE
     );
 
+    private void registerEssenceExtractor(BlockModelGenerators blockModels) {
+        Block block = ModBlocks.ESSENCE_EXTRACTOR.get();
+
+        String[] colors = {
+                "off",
+                "pink",
+                "blue",
+                "yellow",
+                "white"
+        };
+
+        Identifier[] models = new Identifier[colors.length];
+
+        for (int i = 0; i < colors.length; i++) {
+            String color = colors[i];
+
+            Material side = new Material(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/extractor_side_" + color));
+            Material top = new Material(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/extractor_top_" + color));
+            Material bottom = new Material(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/extractor_bottom_" + color));
+
+            TextureMapping mapping = new TextureMapping()
+                    .put(TextureSlot.SIDE, side)
+                    .put(TextureSlot.TOP, top)
+                    .put(TextureSlot.BOTTOM, bottom)
+                    .put(TextureSlot.PARTICLE, side);
+
+            models[i] = ModelTemplates.CUBE_BOTTOM_TOP.create(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "block/extractor_" + color), mapping, blockModels.modelOutput);
+        }
+
+        MultiVariantGenerator generator = MultiVariantGenerator.dispatch(block)
+                .with(PropertyDispatch.initial(EssenceExtractorBlock.COLOR).generate(color -> BlockModelGenerators.plainVariant(models[color])));
+
+        blockModels.blockStateOutput.accept(generator);
+        blockModels.registerSimpleItemModel(block, models[0]);
+    }
+
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels){
         //items
@@ -192,8 +225,6 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.MAGENTA_CHROMA.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.PINK_CHROMA.get(), ModelTemplates.FLAT_ITEM);
 
-        itemModels.generateFlatItem(ModItems.GEM_SHARDS.get(), ModelTemplates.FLAT_ITEM);
-        itemModels.generateFlatItem(ModItems.GEM_SEED.get(), ModelTemplates.FLAT_ITEM);
         blockModels.createCropBlock(ModBlocks.STRAWBERRY_BUSH.get(), StrawberryBushBlock.AGE, 0, 1, 2, 3);
 
         itemModels.generateFlatItem(ModItems.PINK_ESSENCE_BOTTLE.get(), ModelTemplates.FLAT_ITEM);
@@ -206,6 +237,12 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.YELLOW_ESSENCE_BUCKET.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.WHITE_ESSENCE_BUCKET.get(), ModelTemplates.FLAT_ITEM);
 
+        itemModels.generateFlatItem(ModItems.PINK_MINERAL_SHARDS.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.BLUE_MINERAL_SHARDS.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.YELLOW_MINERAL_SHARDS.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.WHITE_MINERAL_SHARDS.get(), ModelTemplates.FLAT_ITEM);
+
+        itemModels.generateFlatItem(ModItems.GEM_SEED.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.CHROMA_SEED.get(), ModelTemplates.FLAT_ITEM);
 
         generateGemItem(ModItems.PEBBLE_GEM.get(), itemModels);
@@ -341,6 +378,7 @@ public class ModModelProvider extends ModelProvider {
 
         blockModels.createTrivialCube(ModBlocks.DRAINED_STONE.get());
         blockModels.createNonTemplateModelBlock(ModBlocks.GEM_SEED.get());
+        registerEssenceExtractor(blockModels);
 
         //custom 3d model blocks with facing 6direc and age
 
@@ -507,10 +545,10 @@ public class ModModelProvider extends ModelProvider {
         );
 
         //fluids
-        blockModels.createNonTemplateModelBlock(ModBlocks.YELLOW_ESSENCE.get());
-        blockModels.createNonTemplateModelBlock(ModBlocks.WHITE_ESSENCE.get());
-        blockModels.createNonTemplateModelBlock(ModBlocks.PINK_ESSENCE.get());
-        blockModels.createNonTemplateModelBlock(ModBlocks.BLUE_ESSENCE.get());
+        blockModels.createNonTemplateModelBlock(ModBlocks.YELLOW_ESSENCE.get(), Blocks.WATER);
+        blockModels.createNonTemplateModelBlock(ModBlocks.WHITE_ESSENCE.get(), Blocks.WATER);
+        blockModels.createNonTemplateModelBlock(ModBlocks.PINK_ESSENCE.get(), Blocks.WATER);
+        blockModels.createNonTemplateModelBlock(ModBlocks.BLUE_ESSENCE.get(), Blocks.WATER);
 
         //on/off blocks
         /*blockModels.blockStateOutput.accept(
