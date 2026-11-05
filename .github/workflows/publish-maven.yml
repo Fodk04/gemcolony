@@ -34,7 +34,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Publish Maven artifacts
-        run: ./gradlew publish --no-daemon
+        run: bash ./gradlew publish --no-daemon
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
