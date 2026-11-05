@@ -329,7 +329,7 @@ public class PeridotEntity extends GemEntity {
         for (GemConditions conditions : GemConditionsRegistry.ALL) {
             float score = GemEnvironmentUtil.getGemScore(temperature, humidity, conditions);
 
-            results.add(new GemAnalysisResult(conditions.gemId(), score));
+            results.add(new GemAnalysisResult(conditions.id(), score));
         }
 
         return results;
@@ -353,7 +353,7 @@ public class PeridotEntity extends GemEntity {
         for (GemAnalysisResult result : results) {
             float percentage = result.score() / totalScore * 100.0f;
 
-            normalizedResults.add(new GemAnalysisResult(result.gemId(), percentage));
+            normalizedResults.add(new GemAnalysisResult(result.id(), percentage));
         }
 
         normalizedResults.sort(Comparator.comparingDouble(GemAnalysisResult::score).reversed());

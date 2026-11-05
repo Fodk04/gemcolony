@@ -1,78 +1,83 @@
 package com.fodk.gemcolony.entity.custom.gem.base;
 
-import com.fodk.gemcolony.entity.ModEntities;
-import com.fodk.gemcolony.item.ModItems;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 
-import java.util.List;
+import java.util.*;
 
 public class GemDefinitions {
 
-    public static final GemDefinition PERIDOT = new GemDefinition("peridot", "Peridot", List.of(ModItems.PERIDOT_GEM.get()), ModEntities.PERIDOT.get());
-    public static final GemDefinition QUARTZ = new GemDefinition("quartz", "Quartz", List.of(
-            ModItems.MILKY_QUARTZ_GEM.get(),
-            ModItems.PHANTOM_QUARTZ_GEM.get(),
-            ModItems.FLINT_QUARTZ_GEM.get(),
-            ModItems.ONYX_QUARTZ_GEM.get(),
-            ModItems.SMOKY_QUARTZ_GEM.get(),
-            ModItems.CARNELIAN_QUARTZ_GEM.get(),
-            ModItems.CHERT_QUARTZ_GEM.get(),
-            ModItems.CITRINE_QUARTZ_GEM.get(),
-            ModItems.PRASEOLITE_QUARTZ_GEM.get(),
-            ModItems.AVENTURINE_QUARTZ_GEM.get(),
-            ModItems.ANGEL_AURA_QUARTZ_GEM.get(),
-            ModItems.DUMORTIERITE_QUARTZ_GEM.get(),
-            ModItems.BLUE_QUARTZ_GEM.get(),
-            ModItems.AMETHYST_QUARTZ_GEM.get(),
-            ModItems.CHERRY_QUARTZ_GEM.get(),
-            ModItems.ROSE_QUARTZ_GEM.get()),
-            ModEntities.QUARTZ.get());
-    public static final GemDefinition JASPER = new GemDefinition("jasper", "Jasper", List.of(
-            ModItems.SPIDERWEB_JASPER_GEM.get(),
-            ModItems.PORCELAIN_JASPER_GEM.get(),
-            ModItems.ZEBRA_JASPER_GEM.get(),
-            ModItems.CHRYSANTHEMUM_JASPER_GEM.get(),
-            ModItems.SNAKESKIN_JASPER_GEM.get(),
-            ModItems.BIGGS_JASPER_GEM.get(),
-            ModItems.NOREENA_JASPER_GEM.get(),
-            ModItems.HONEY_JASPER_GEM.get(),
-            ModItems.MORRISONITE_JASPER_GEM.get(),
-            ModItems.RHYOLITE_JASPER_GEM.get(),
-            ModItems.KAMBABA_JASPER_GEM.get(),
-            ModItems.OCEAN_JASPER_GEM.get(),
-            ModItems.SEA_SEDIMENT_JASPER_GEM.get(),
-            ModItems.ROYAL_PLUME_JASPER_GEM.get(),
-            ModItems.MOOKITE_JASPER_GEM.get(),
-            ModItems.PEACH_PETAL_JASPER_GEM.get()),
-            ModEntities.JASPER.get());
-    public static final GemDefinition PEARL = new GemDefinition("pearl", "Pearl", List.of(
-            ModItems.WHITE_PEARL_GEM.get(),
-            ModItems.SPECTER_PEARL_GEM.get(),
-            ModItems.SILVER_PEARL_GEM.get(),
-            ModItems.ACKEE_PEARL_GEM.get(),
-            ModItems.CHOCOLATE_PEARL_GEM.get(),
-            ModItems.CHERRY_PEARL_GEM.get(),
-            ModItems.APRICOT_PEARL_GEM.get(),
-            ModItems.YELLOW_PEARL_GEM.get(),
-            ModItems.OLIVE_PEARL_GEM.get(),
-            ModItems.FOREST_PEARL_GEM.get(),
-            ModItems.SKY_PEARL_GEM.get(),
-            ModItems.BLUE_PEARL_GEM.get(),
-            ModItems.OCEAN_PEARL_GEM.get(),
-            ModItems.PLUM_PEARL_GEM.get(),
-            ModItems.FUCHSIA_PEARL_GEM.get(),
-            ModItems.PINK_PEARL_GEM.get()),
-            ModEntities.PEARL.get());
+    private static final Map<Identifier, GemDefinition> DEFINITIONS = new LinkedHashMap<>();
 
-    public static final List<GemDefinition> ALL = List.of(
-            PERIDOT,
-            QUARTZ,
-            JASPER
-    );
+    private static final List<GemDefinition> CONDITIONAL_DEFINITIONS = new ArrayList<>();
 
-    public static GemDefinition get(String id) {
-        return ALL.stream()
-                .filter(gem -> gem.id().equals(id))
-                .findFirst()
-                .orElse(null);
+    public static final Collection<GemDefinition> ALL = Collections.unmodifiableCollection(CONDITIONAL_DEFINITIONS);
+
+    public static void register(GemDefinition definition) {
+        Identifier id = definition.id();
+
+        if (DEFINITIONS.containsKey(id)) {
+            throw new IllegalArgumentException("Duplicate gem definition: " + id);
+        }
+
+        DEFINITIONS.put(id, definition);
+    }
+
+    public static GemDefinition get(Identifier id) {
+        return DEFINITIONS.get(id);
+    }
+
+    public static void RegisterGemDefinition(
+            Identifier id,
+            String name,
+            List<Item> items,
+            EntityType<? extends GemEntity> gem
+    ) {
+        GemDefinition definition = new GemDefinition(
+                id,
+                name,
+                List.copyOf(items),
+                gem
+        );
+
+        register(definition);
+    }
+
+    public static void RegisterGemDefinitionAndConditions(
+            Identifier id,
+            String name,
+            List<Item> items,
+            EntityType<? extends GemEntity> gem,
+            float optimalTemperature,
+            float optimalHumidity,
+            float temperatureSigma,
+            float humiditySigma,
+            float weight
+    ) {
+        if (GemConditionsRegistry.get(id) != null) {
+            throw new IllegalArgumentException("Duplicate gem conditions: " + id);
+        }
+
+        GemDefinition definition = new GemDefinition(
+                id,
+                name,
+                List.copyOf(items),
+                gem
+        );
+
+        GemConditions conditions = new GemConditions(
+                id,
+                optimalTemperature,
+                optimalHumidity,
+                temperatureSigma,
+                humiditySigma,
+                weight
+        );
+
+        register(definition);
+        GemConditionsRegistry.register(conditions);
+
+        CONDITIONAL_DEFINITIONS.add(definition);
     }
 }

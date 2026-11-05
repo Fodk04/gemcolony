@@ -569,7 +569,7 @@
   "book.gemcolony.starter_gems.shale.text": "Use a [#](5555ff)**Blue Essence Bottle**[#]() on [#](5555ff)**Clay**[#]() to give life to a [#](5555ff)**Shale**[#]().",
   "book.gemcolony.starter_gems.nacre.text": "Use a [#](d8d8d8)**White Essence Bottle**[#]() on [#](d8d8d8)**Calcite**[#]() to give life to a [#](d8d8d8)**Nacre**[#]().",
   "book.gemcolony.starter_gems.constructor.title": "Constructor Ability",
-  "book.gemcolony.starter_gems.constructor.text": "Press the ability and select the multiblock you want to build to start construction. To move the multiblock use **ARROW KEYS**, to lower it use **SHIFT**, to raise it use **SPACE**, use **RIGHT-CLICK** to confirm and **LEFT-CLICK** to cancel. Controls can be changed in keybinds.",
+  "book.gemcolony.starter_gems.constructor.text": "Press the ability and select the multiblock you want to build to start construction. To move the multiblock use **ARROW KEYS**, to lower it use **SHIFT**, to raise it use **SPACE**, to rotate use **R**, use **RIGHT-CLICK** to confirm and **LEFT-CLICK** to cancel. Controls can be changed in keybinds.",
 
   "book.gemcolony.pebble.text": "[#](ff9fcb)**Pebbles**[#]() are very good at constructing different gem structures, they can construct ... (W.I.P).",
   "book.gemcolony.shale.text": "[#](5555ff)**Shales**[#]() are caring constructors. They can construct [#](5555ff)**Incubators**[#]() capable of nurturing gems of higher quality, giving your colony stronger and more capable gems.",

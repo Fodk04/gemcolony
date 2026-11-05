@@ -9,6 +9,7 @@ import com.fodk.gemcolony.data.ModDataComponents;
 import com.fodk.gemcolony.effect.ModEffects;
 import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.custom.gem.savedata.ModEntityDataSerializers;
+import com.fodk.gemcolony.event.RegisterGemDefinitionsEvent;
 import com.fodk.gemcolony.fluid.ModFluidTypes;
 import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.item.BubbleColorTintSource;
@@ -24,9 +25,7 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.slf4j.Logger;
-
 import com.mojang.logging.LogUtils;
-
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -82,7 +81,7 @@ public class GemColony {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-
+        event.enqueueWork(() -> NeoForge.EVENT_BUS.post(new RegisterGemDefinitionsEvent()));
     }
 
     // Add the example block item to the building blocks tab

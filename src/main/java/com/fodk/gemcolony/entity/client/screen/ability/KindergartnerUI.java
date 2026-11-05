@@ -111,11 +111,11 @@ public class KindergartnerUI implements GemAbilityUI {
 
             for (int i = 0; i < peridot.getAnalysisResults().size(); i++) {
                 GemAnalysisResult result = peridot.getAnalysisResults().get(i);
-                GemDefinition currentGemDefinition = GemDefinitions.get(result.gemId());
+                GemDefinition currentGemDefinition = GemDefinitions.get(result.id());
 
                 graphics.text(
                         screen.getFont(),
-                        Component.literal(currentGemDefinition.id() + " " + String.format("%.1f%%", result.score())),
+                        Component.literal(currentGemDefinition.name() + " " + String.format("%.1f%%", result.score())),
                         resultX + 18,
                         resultY + 12 + i * 10 + 24,
                         textColor,
@@ -141,7 +141,7 @@ public class KindergartnerUI implements GemAbilityUI {
 
             for (int i = 0; i < peridot.getAnalysisResults().size(); i++) {
                 GemAnalysisResult result = peridot.getAnalysisResults().get(i);
-                GemDefinition currentGemDefinition = GemDefinitions.get(result.gemId());
+                GemDefinition currentGemDefinition = GemDefinitions.get(result.id());
 
                 if(currentGemDefinition.items().size() == 1){
                     graphics.item(new ItemStack(currentGemDefinition.items().get(0)), resultX + 64, resultY + i * 16 + 106);

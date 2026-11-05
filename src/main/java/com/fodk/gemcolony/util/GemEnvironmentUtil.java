@@ -97,7 +97,7 @@ public class GemEnvironmentUtil {
 
             float score = getGemScore(temperature, humidity, conditions);
 
-            results.add(new GemAnalysisResult(conditions.gemId(), score));
+            results.add(new GemAnalysisResult(conditions.id(), score));
 
             totalScore += score;
         }
@@ -112,7 +112,7 @@ public class GemEnvironmentUtil {
 
             float percentage = result.score() / totalScore * 100.0F;
 
-            normalizedResults.add(new GemAnalysisResult(result.gemId(), percentage));
+            normalizedResults.add(new GemAnalysisResult(result.id(), percentage));
         }
 
         normalizedResults.sort(Comparator.comparingDouble(GemAnalysisResult::score).reversed());

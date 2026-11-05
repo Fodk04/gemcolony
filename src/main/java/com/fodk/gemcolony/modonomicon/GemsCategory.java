@@ -302,7 +302,7 @@ public class GemsCategory extends CategoryProvider {
                                                         .withId("pearl_spotlight")
                                                         .withTitle("book.gemcolony.pearl.title")
                                                         .withText("book.gemcolony.pearl.text")
-                                                        .withItem(Ingredient.of(GemDefinitions.PEARL.items().toArray(Item[]::new)))),
+                                                        .withItem(Ingredient.of(this.registries().lookupOrThrow(Registries.ITEM).getOrThrow(ModTags.Items.PEARL_GEMSTONES)))),
 
                                         IntStream.range(0, chromas.length)
                                                 .mapToObj(variant -> GemPreviewPageModel.create()
@@ -344,7 +344,7 @@ public class GemsCategory extends CategoryProvider {
                                                                 .withId("quartz_spotlight")
                                                                 .withTitle("book.gemcolony.quartz.title")
                                                                 .withText("book.gemcolony.quartz.text")
-                                                                .withItem(Ingredient.of(GemDefinitions.QUARTZ.items().toArray(Item[]::new)))),
+                                                                .withItem(Ingredient.of(this.registries().lookupOrThrow(Registries.ITEM).getOrThrow(ModTags.Items.QUARTZ_GEMSTONES)))),
 
                                                 IntStream.range(0, chromas.length)
                                                         .mapToObj(variant -> GemPreviewPageModel.create()
@@ -369,7 +369,7 @@ public class GemsCategory extends CategoryProvider {
                                                                 .withId("jasper_spotlight")
                                                                 .withTitle("book.gemcolony.jasper.title")
                                                                 .withText("book.gemcolony.jasper.text")
-                                                                .withItem(Ingredient.of(GemDefinitions.JASPER.items().toArray(Item[]::new)))),
+                                                                .withItem(Ingredient.of(this.registries().lookupOrThrow(Registries.ITEM).getOrThrow(ModTags.Items.JASPER_GEMSTONES)))),
 
                                                 IntStream.range(0, chromas.length)
                                                         .mapToObj(variant -> GemPreviewPageModel.create()

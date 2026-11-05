@@ -10,6 +10,7 @@ import com.fodk.gemcolony.tags.ModTags;
 import com.fodk.gemcolony.util.GemEnvironmentUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +28,7 @@ public class GemSeedBlockEntity extends BlockEntity {
     }
 
     private ItemStack chroma = ItemStack.EMPTY;
-    private String selectedGemId = null;
+    private Identifier selectedGemId = null;
     private int drained = 0;
 
     private static final int DRAIN_RADIUS = 4;
@@ -59,7 +60,7 @@ public class GemSeedBlockEntity extends BlockEntity {
         }
 
         if (selectedGemId != null) {
-            output.putString("SelectedGemId", selectedGemId);
+            output.store("SelectedGemId", Identifier.CODEC, selectedGemId);
         }
 
         output.putInt("Drained", drained);
@@ -70,7 +71,7 @@ public class GemSeedBlockEntity extends BlockEntity {
         super.loadAdditional(input);
 
         chroma = input.read("Chroma", ItemStack.CODEC).orElse(ItemStack.EMPTY);
-        selectedGemId = input.getString("SelectedGemId").orElse(null);
+        selectedGemId = input.read("SelectedGemId", Identifier.CODEC).orElse(null);
         drained = input.getInt("Drained").orElse(0);
     }
 
@@ -91,12 +92,12 @@ public class GemSeedBlockEntity extends BlockEntity {
             roll -= result.score();
 
             if (roll <= 0.0F) {
-                selectedGemId = result.gemId();
+                selectedGemId = result.id();
                 return;
             }
         }
 
-        selectedGemId = results.get(results.size() - 1).gemId();
+        selectedGemId = results.get(results.size() - 1).id();
     }
 
     private int determineQuality(int drained) {

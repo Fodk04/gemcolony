@@ -33,6 +33,10 @@ public class ModTags {
         public static final TagKey<Item> ESSENCE_BUCKETS = createTag("essence_buckets");
         public static final TagKey<Item> MINERAL_SHARDS = createTag("mineral_shards");
 
+        public static final TagKey<Item> QUARTZ_GEMSTONES = createTag("quartz_gemstones");
+        public static final TagKey<Item> JASPER_GEMSTONES = createTag("jasper_gemstones");
+        public static final TagKey<Item> PEARL_GEMSTONES = createTag("pearl_gemstones");
+
         public static final TagKey<Item> CHROMA_REPAIRABLE = createTag("chroma_repairable");
 
         private static TagKey<Item> createTag(String name){

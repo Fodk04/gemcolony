@@ -1,42 +1,29 @@
 package com.fodk.gemcolony.entity.custom.gem.base;
 
-import java.util.List;
+import net.minecraft.resources.Identifier;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class GemConditionsRegistry {
 
-    public static final GemConditions PERIDOT =
-            new GemConditions(
-                    "peridot",
-                    0.8f,
-                    1.2f,
-                    0.3f,
-                    0.3f,
-                    1.0f
-            );
+    private static final Map<Identifier, GemConditions> CONDITIONS = new LinkedHashMap<>();
 
-    public static final GemConditions QUARTZ =
-            new GemConditions(
-                    "quartz",
-                    1f,
-                    1f,
-                    0.3f,
-                    0.3f,
-                    1.0f
-            );
+    public static final Collection<GemConditions> ALL =
+            Collections.unmodifiableCollection(CONDITIONS.values());
 
-    public static final GemConditions JASPER =
-            new GemConditions(
-                    "jasper",
-                    1.8f,
-                    0.2f,
-                    0.3f,
-                    0.3f,
-                    1.0f
-            );
+    public static void register(GemConditions conditions) {
+        Identifier id = conditions.id();
 
-    public static final List<GemConditions> ALL = List.of(
-            PERIDOT,
-            QUARTZ,
-            JASPER
-    );
+        if (CONDITIONS.containsKey(id)) {
+            throw new IllegalArgumentException("Duplicate gem conditions: " + id);
+        }
+
+        CONDITIONS.put(id, conditions);
+    }
+
+    public static GemConditions get(Identifier id) {
+        return CONDITIONS.get(id);
+    }
 }
