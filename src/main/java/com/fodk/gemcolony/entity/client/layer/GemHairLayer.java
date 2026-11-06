@@ -2,6 +2,7 @@ package com.fodk.gemcolony.entity.client.layer;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.client.render.GemRenderTypes;
+import com.fodk.gemcolony.entity.client.renderer.GemRenderer;
 import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
 import com.geckolib.animatable.GeoAnimatable;
 import com.geckolib.renderer.base.GeoRenderer;
@@ -14,16 +15,18 @@ import javax.annotation.Nullable;
 
 public class GemHairLayer<T extends GeoAnimatable, R extends GemRenderState> extends GemTintedTextureLayer<T, R> {
     private final String gemName;
+    private final String namespace;
 
     public GemHairLayer(GeoRenderer<T, Void, R> renderer, String gemName, int order) {
         super(renderer,order);
         this.gemName = gemName;
+        this.namespace = ((GemRenderer) renderer).getNamespace();
     }
 
     @Override
     protected @Nullable Identifier getTextureResource(R state) {
         if (state.hairstyle < 0) return null;
-        return Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/entity/gems/" + gemName + "/hairstyles/hair_" + state.hairstyle + ".png");
+        return Identifier.fromNamespaceAndPath(namespace, "textures/entity/gems/" + gemName + "/hairstyles/hair_" + state.hairstyle + ".png");
     }
 
     @Override

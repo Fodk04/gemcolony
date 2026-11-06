@@ -3,6 +3,7 @@ package com.fodk.gemcolony.entity.client.layer;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.client.render.GemRenderTypes;
+import com.fodk.gemcolony.entity.client.renderer.GemRenderer;
 import com.fodk.gemcolony.entity.client.renderstate.GemRenderState;
 import com.fodk.gemcolony.util.ColorUtil;
 import com.geckolib.animatable.GeoAnimatable;
@@ -26,11 +27,13 @@ public class GemPlacementLayer<T extends GeoAnimatable, R extends GeoRenderState
 
     private final int order;
     private final String gemName;
+    private final String namespace;
 
     public GemPlacementLayer(GeoRenderer<T, Void, R> renderer, String gemName, int order) {
         super(renderer);
         this.order = order;
         this.gemName = gemName;
+        this.namespace = ((GemRenderer) renderer).getNamespace();
     }
 
     protected List<Integer> getGemPlacements(R renderState){
@@ -76,7 +79,7 @@ public class GemPlacementLayer<T extends GeoAnimatable, R extends GeoRenderState
         GemRenderState state = (GemRenderState) renderState;
 
         if(placementIndex < 0|| state.reformProgress < 1) return  null;
-        return Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "textures/entity/gems/" + gemName + "/placements/gem_" + placementIndex + ".png");
+        return Identifier.fromNamespaceAndPath(namespace, "textures/entity/gems/" + gemName + "/placements/gem_" + placementIndex + ".png");
     }
 
     final float beginToShow = 0.55f;

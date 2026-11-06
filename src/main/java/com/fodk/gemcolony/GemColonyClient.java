@@ -99,15 +99,15 @@ public class GemColonyClient {
 
     @SubscribeEvent // on the mod event bus only on the physical client
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(ModEntities.PERIDOT.get(), context -> new GemRenderer(context, new GemModel<PeridotEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "peridot")), "peridot") {});
-        event.registerEntityRenderer(ModEntities.QUARTZ.get(), context -> new GemRenderer(context, new GemModel<QuartzEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quartz")), "quartz") {});
-        event.registerEntityRenderer(ModEntities.JASPER.get(), context -> new GemRenderer(context, new GemModel<JasperEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quartz")), "quartz") {});
-        event.registerEntityRenderer(ModEntities.PEARL.get(), context -> new GemRenderer(context, new GemModel<PearlEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pearl")), "pearl") {});
-        event.registerEntityRenderer(ModEntities.HOLOPEARL.get(), context -> new GemRenderer(context, new GemModel<HolopearlEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pearl")), "pearl") {});
-        event.registerEntityRenderer(ModEntities.PEBBLE.get(), context -> new GemRenderer(context, new GemModel<PebbleEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "starter_gem")), "pebble") {});
-        event.registerEntityRenderer(ModEntities.SHALE.get(), context -> new GemRenderer(context, new GemModel<ShaleEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "starter_gem")), "pebble") {});
-        event.registerEntityRenderer(ModEntities.MICA.get(), context -> new GemRenderer(context, new GemModel<MicaEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "starter_gem")), "pebble") {});
-        event.registerEntityRenderer(ModEntities.NACRE.get(), context -> new GemRenderer(context, new GemModel<NacreEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "starter_gem")), "pebble") {});
+        event.registerEntityRenderer(ModEntities.PERIDOT.get(), context -> new GemRenderer(context, new GemModel<PeridotEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "peridot")), "peridot", GemColony.MOD_ID) {});
+        event.registerEntityRenderer(ModEntities.QUARTZ.get(), context -> new GemRenderer(context, new GemModel<QuartzEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quartz")), "quartz", GemColony.MOD_ID) {});
+        event.registerEntityRenderer(ModEntities.JASPER.get(), context -> new GemRenderer(context, new GemModel<JasperEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "quartz")), "quartz", GemColony.MOD_ID) {});
+        event.registerEntityRenderer(ModEntities.PEARL.get(), context -> new GemRenderer(context, new GemModel<PearlEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pearl")), "pearl", GemColony.MOD_ID) {});
+        event.registerEntityRenderer(ModEntities.HOLOPEARL.get(), context -> new GemRenderer(context, new GemModel<HolopearlEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pearl")), "pearl", GemColony.MOD_ID) {});
+        event.registerEntityRenderer(ModEntities.PEBBLE.get(), context -> new GemRenderer(context, new GemModel<PebbleEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "starter_gem")), "pebble", GemColony.MOD_ID) {});
+        event.registerEntityRenderer(ModEntities.SHALE.get(), context -> new GemRenderer(context, new GemModel<ShaleEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "starter_gem")), "pebble", GemColony.MOD_ID) {});
+        event.registerEntityRenderer(ModEntities.MICA.get(), context -> new GemRenderer(context, new GemModel<MicaEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "starter_gem")), "pebble", GemColony.MOD_ID) {});
+        event.registerEntityRenderer(ModEntities.NACRE.get(), context -> new GemRenderer(context, new GemModel<NacreEntity>(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "starter_gem")), "pebble", GemColony.MOD_ID) {});
 
         event.registerEntityRenderer(ModEntities.GEM_RISING_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(ModEntities.BUBBLE.get(), BubbleRenderer::new);

@@ -34,9 +34,15 @@ import java.util.Map;
 public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState> extends GeoEntityRenderer<T, R> {
 
     private final Map<ShapeshiftForm, EntityModel<?>> shapeshiftModels = new EnumMap<>(ShapeshiftForm.class);
+    private final String namespace;
+    public String getNamespace(){
+        return namespace;
+    }
 
-    public GemRenderer(EntityRendererProvider.Context context, GeoModel<T> model, String name) {
+    public GemRenderer(EntityRendererProvider.Context context, GeoModel<T> model, String name, String namespace) {
         super(context, model);
+        this.namespace = namespace;
+
         for (ShapeshiftForm form : ShapeshiftForm.values()) {
             shapeshiftModels.put(form, form.createModel(context.getModelSet()));
         }
