@@ -18,12 +18,15 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.client.event.RenderNameTagEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -149,5 +152,57 @@ public abstract class GemRenderer<T extends GemEntity, R extends GemRenderState>
             case COW -> Identifier.withDefaultNamespace("textures/entity/cow/cow.png");
             case ZOMBIE -> Identifier.withDefaultNamespace("textures/entity/zombie/zombie.png");
         };
+    }
+
+    @Override
+    protected void submitNameDisplay(R state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
+        poseStack.pushPose();
+
+        if (state.scoreText != null) {
+            RenderNameTagEvent.DoRender event = new RenderNameTagEvent.DoRender(
+                    state, state.scoreText, this, poseStack,
+                    submitNodeCollector, camera, state.partialTick
+            );
+
+            if (!NeoForge.EVENT_BUS.post(event).isCanceled()) {
+                submitNodeCollector.submitNameTag(
+                        poseStack, state.nameTagAttachment, 0,
+                        state.scoreText, !state.isDiscrete,
+                        state.lightCoords, camera
+                );
+            }
+
+            poseStack.translate(0.0F, 0.25875F, 0.0F);
+        }
+
+        if (state.nameTag != null) {
+            RenderNameTagEvent.DoRender event = new RenderNameTagEvent.DoRender(
+                    state, state.nameTag, this, poseStack,
+                    submitNodeCollector, camera, state.partialTick
+            );
+
+            if (!NeoForge.EVENT_BUS.post(event).isCanceled()) {
+                String[] lines = event.getContent().getString().split("(?<=\\S) Facet-", 2);
+                if (lines.length == 2) {
+                    lines[1] = "Facet-" + lines[1];
+                }
+
+                for (int i = 0; i < lines.length; i++) {
+                    int offset = Math.round((i - (lines.length - 1) / 2.0F) * getFont().lineHeight);
+
+                    submitNodeCollector.submitNameTag(
+                            poseStack,
+                            state.nameTagAttachment,
+                            offset,
+                            Component.literal(lines[i]),
+                            !state.isDiscrete,
+                            state.lightCoords,
+                            camera
+                    );
+                }
+            }
+        }
+
+        poseStack.popPose();
     }
 }

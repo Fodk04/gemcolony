@@ -15,12 +15,14 @@ public class GemVariantData {
     private final Color lightInsignia;
     private final Color darkHair;
     private final Color lightHair;
+    private final Color darkMarkings;
+    private final Color lightMarkings;
     private final Color darkVisor;
     private final Color lightVisor;
 
     private final String name;
     private final Item gemItem;
-    private final int colorId;
+    private final Item chromaItem;
 
     public GemVariantData(
             Color darkSkin,
@@ -35,7 +37,35 @@ public class GemVariantData {
             Color lightVisor,
             String name,
             Item gemItem,
-            int colorId
+            Item chromaItem
+    ) {
+        this(
+                darkSkin, lightSkin,
+                darkOutfit, lightOutfit,
+                darkInsignia, lightInsignia,
+                darkHair, lightHair,
+                null, null,
+                darkVisor, lightVisor,
+                name, gemItem, chromaItem
+        );
+    }
+
+    private GemVariantData(
+            Color darkSkin,
+            Color lightSkin,
+            Color darkOutfit,
+            Color lightOutfit,
+            Color darkInsignia,
+            Color lightInsignia,
+            Color darkHair,
+            Color lightHair,
+            Color darkMarkings,
+            Color lightMarkings,
+            Color darkVisor,
+            Color lightVisor,
+            String name,
+            Item gemItem,
+            Item chromaItem
     ) {
         this.darkSkin = darkSkin;
         this.lightSkin = lightSkin;
@@ -45,11 +75,13 @@ public class GemVariantData {
         this.lightInsignia = lightInsignia;
         this.darkHair = darkHair;
         this.lightHair = lightHair;
+        this.darkMarkings = darkMarkings;
+        this.lightMarkings = lightMarkings;
         this.darkVisor = darkVisor;
         this.lightVisor = lightVisor;
         this.name = name;
         this.gemItem = gemItem;
-        this.colorId = colorId;
+        this.chromaItem = chromaItem;
     }
 
     public Color getSkinColor(float t) {
@@ -80,7 +112,31 @@ public class GemVariantData {
         return gemItem;
     }
 
-    public int getColorId() {
-        return colorId;
+    public Item getChromaItem() {
+        return chromaItem;
+    }
+
+    public boolean hasMarkings() {
+        return darkMarkings != null && lightMarkings != null;
+    }
+
+    public Color getMarkingsColor(float t) {
+        if (!hasMarkings()) {
+            return Color.BLACK;
+        }
+
+        return ColorUtil.lerpColor(lightMarkings, darkMarkings, t);
+    }
+
+    public GemVariantData withMarkings(Color darkMarkings, Color lightMarkings) {
+        return new GemVariantData(
+                darkSkin, lightSkin,
+                darkOutfit, lightOutfit,
+                darkInsignia, lightInsignia,
+                darkHair, lightHair,
+                darkMarkings, lightMarkings,
+                darkVisor, lightVisor,
+                name, gemItem, chromaItem
+        );
     }
 }

@@ -4,32 +4,24 @@ package com.fodk.gemcolony.modonomicon;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.block.custom.ConstructedMultiblock;
-import com.fodk.gemcolony.block.custom.DrillBlock;
-import com.fodk.gemcolony.entity.custom.gem.base.GemDefinitions;
-import com.fodk.gemcolony.entity.custom.gem.pearl.PearlEntity;
 import com.fodk.gemcolony.entity.custom.gem.variant.JasperVariants;
 import com.fodk.gemcolony.entity.custom.gem.variant.PearlVariants;
 import com.fodk.gemcolony.entity.custom.gem.variant.QuartzVariants;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.tags.ModTags;
-import com.fodk.gemcolony.util.GemVariantUtil;
 import com.klikli_dev.modonomicon.api.datagen.CategoryProvider;
 import com.klikli_dev.modonomicon.api.datagen.ModonomiconProviderBase;
 import com.klikli_dev.modonomicon.api.datagen.book.BookEntryModel;
 import com.klikli_dev.modonomicon.api.datagen.book.BookEntryParentModel;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
 import com.klikli_dev.modonomicon.api.datagen.book.page.*;
-import com.klikli_dev.modonomicon.book.ImageDisplayMode;
-import com.klikli_dev.modonomicon.book.ImageScaleMode;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import java.util.stream.IntStream;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 public class GemsCategory extends CategoryProvider {
@@ -304,13 +296,17 @@ public class GemsCategory extends CategoryProvider {
                                                         .withText("book.gemcolony.pearl.text")
                                                         .withItem(Ingredient.of(this.registries().lookupOrThrow(Registries.ITEM).getOrThrow(ModTags.Items.PEARL_GEMSTONES)))),
 
-                                        IntStream.range(0, chromas.length)
-                                                .mapToObj(variant -> GemPreviewPageModel.create()
-                                                        .withId("pearl_entity_" + variant)
-                                                        .withEntityId("gemcolony:pearl")
-                                                        .withEntityName(GemVariantUtil.getById(PearlVariants.class, variant).getName())
-                                                        .withVariant(variant)
-                                                        .withChroma(chromas[variant])))
+                                                Arrays.stream(PearlVariants.values())
+                                                        .map(variant -> {
+                                                            Identifier variantId = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, variant.name().toLowerCase(Locale.ROOT) + "_pearl");
+
+                                                            return GemPreviewPageModel.create()
+                                                                    .withId("pearl_entity_" + variant.name().toLowerCase(Locale.ROOT))
+                                                                    .withEntityId("gemcolony:pearl")
+                                                                    .withEntityName(variant.getName())
+                                                                    .withVariant(variantId)
+                                                                    .withChroma(variant.getChromaItem());
+                                                        }))
                                         .toArray(BookPageModel<?>[]::new)
                         )
         );
@@ -346,13 +342,17 @@ public class GemsCategory extends CategoryProvider {
                                                                 .withText("book.gemcolony.quartz.text")
                                                                 .withItem(Ingredient.of(this.registries().lookupOrThrow(Registries.ITEM).getOrThrow(ModTags.Items.QUARTZ_GEMSTONES)))),
 
-                                                IntStream.range(0, chromas.length)
-                                                        .mapToObj(variant -> GemPreviewPageModel.create()
-                                                                .withId("quartz_entity_" + variant)
-                                                                .withEntityId("gemcolony:quartz")
-                                                                .withEntityName(GemVariantUtil.getById(QuartzVariants.class, variant).getName())
-                                                                .withVariant(variant)
-                                                                .withChroma(chromas[variant])))
+                                                Arrays.stream(QuartzVariants.values())
+                                                        .map(variant -> {
+                                                            Identifier variantId = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, variant.name().toLowerCase(Locale.ROOT) + "_quartz");
+
+                                                            return GemPreviewPageModel.create()
+                                                                    .withId("quartz_entity_" + variant.name().toLowerCase(Locale.ROOT))
+                                                                    .withEntityId("gemcolony:quartz")
+                                                                    .withEntityName(variant.getName())
+                                                                    .withVariant(variantId)
+                                                                    .withChroma(variant.getChromaItem());
+                                                        }))
                                         .toArray(BookPageModel<?>[]::new)
                         )
         );
@@ -371,13 +371,17 @@ public class GemsCategory extends CategoryProvider {
                                                                 .withText("book.gemcolony.jasper.text")
                                                                 .withItem(Ingredient.of(this.registries().lookupOrThrow(Registries.ITEM).getOrThrow(ModTags.Items.JASPER_GEMSTONES)))),
 
-                                                IntStream.range(0, chromas.length)
-                                                        .mapToObj(variant -> GemPreviewPageModel.create()
-                                                                .withId("jasper_entity_" + variant)
-                                                                .withEntityId("gemcolony:jasper")
-                                                                .withEntityName(GemVariantUtil.getById(JasperVariants.class, variant).getName())
-                                                                .withVariant(variant)
-                                                                .withChroma(chromas[variant])))
+                                                Arrays.stream(JasperVariants.values())
+                                                        .map(variant -> {
+                                                            Identifier variantId = Identifier.fromNamespaceAndPath(GemColony.MOD_ID, variant.name().toLowerCase(Locale.ROOT) + "_jasper");
+
+                                                            return GemPreviewPageModel.create()
+                                                                    .withId("jasper_entity_" + variant.name().toLowerCase(Locale.ROOT))
+                                                                    .withEntityId("gemcolony:jasper")
+                                                                    .withEntityName(variant.getName())
+                                                                    .withVariant(variantId)
+                                                                    .withChroma(variant.getChromaItem());
+                                                        }))
                                         .toArray(BookPageModel<?>[]::new)
                         )
         );

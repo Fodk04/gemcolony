@@ -2,16 +2,11 @@ package com.fodk.gemcolony.entity.custom.gem.quartz;
 
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
 import com.fodk.gemcolony.entity.custom.gem.placement.GemPlacement;
-import com.fodk.gemcolony.entity.custom.gem.variant.JasperVariants;
-import com.fodk.gemcolony.util.GemVariantUtil;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-
-import java.awt.*;
 
 public class JasperEntity extends QuartzFamilyEntity {
 
@@ -48,11 +43,6 @@ public class JasperEntity extends QuartzFamilyEntity {
     }
 
     @Override
-    public Item getGemItem() {
-        return GemVariantUtil.getById(JasperVariants.class, entityData.get(VARIANT)).getGemItem();
-    }
-
-    @Override
     public int getMaxOutfits() {
         return 1;
     }
@@ -78,42 +68,6 @@ public class JasperEntity extends QuartzFamilyEntity {
     }
 
     @Override
-    public Color generateGemColor() {
-        JasperVariants jasperVariant = GemVariantUtil.getById(JasperVariants.class, entityData.get(VARIANT));
-        return jasperVariant.getSkinColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateOutfitColor() {
-        JasperVariants jasperVariant = GemVariantUtil.getById(JasperVariants.class, entityData.get(VARIANT));
-        return jasperVariant.getOutfitColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateInsigniaColor() {
-        JasperVariants jasperVariant = GemVariantUtil.getById(JasperVariants.class, entityData.get(VARIANT));
-        return jasperVariant.getInsigniaColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateHairColor() {
-        JasperVariants jasperVariant = GemVariantUtil.getById(JasperVariants.class, entityData.get(VARIANT));
-        return jasperVariant.getHairColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateMarkingsColor() {
-        JasperVariants jasperVariant = GemVariantUtil.getById(JasperVariants.class, entityData.get(VARIANT));
-        return JasperVariants.getMarkingsColor(jasperVariant.getLightMarkings(), jasperVariant.getDarkMarkings(), random.nextFloat());
-    }
-
-    @Override
-    public Color generateVisorColor() {
-        JasperVariants jasperVariant = GemVariantUtil.getById(JasperVariants.class, entityData.get(VARIANT));
-        return jasperVariant.getVisorColor(random.nextFloat());
-    }
-
-    @Override
     protected int getInventorySize() {
         float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
         return (int) (20 * qualityModifier);
@@ -127,11 +81,6 @@ public class JasperEntity extends QuartzFamilyEntity {
     }
 
     @Override
-    public String getGemTypeName() {
-        return GemVariantUtil.getById(JasperVariants.class, entityData.get(VARIANT)).getName() + " Jasper";
-    }
-
-    @Override
     public String getNameWithoutVariant() {
         return "Jasper";
     }
@@ -140,16 +89,6 @@ public class JasperEntity extends QuartzFamilyEntity {
     protected void initializeAbilities() {
         addAbility(GemAbility.SHAPESHIFTER);
         addAbility(GemAbility.CHARGEBALL);
-    }
-
-    @Override
-    public int getRandomVariant() {
-        return random.nextInt(JasperVariants.values().length);
-    }
-
-    @Override
-    public int getVariantFromChroma(int chromaIndex) {
-        return GemVariantUtil.getVariantFromChromaColor(JasperVariants.class, chromaIndex);
     }
 
     private static final int NAVY_OUTFIT = 1;

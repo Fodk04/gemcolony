@@ -8,6 +8,7 @@ import com.fodk.gemcolony.entity.custom.gem.bubble.BubbleEntity;
 import com.fodk.gemcolony.entity.custom.gem.savedata.GemSaveData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -27,7 +28,8 @@ public class GemItem extends Item {
 
     private final String name;
     public final EntityType<? extends GemEntity> entityType;
-    private int variant = -1;
+    @Nullable
+    private Identifier variantId;
 
     public GemItem(Properties properties, String name, EntityType<? extends GemEntity> entityType) {
         super(properties.fireResistant().stacksTo(1));
@@ -35,11 +37,11 @@ public class GemItem extends Item {
         this.entityType = entityType;
     }
 
-    public GemItem(Properties properties, String name, EntityType<? extends GemEntity> entityType, int variant) {
+    public GemItem(Properties properties, String name, EntityType<? extends GemEntity> entityType, Identifier variantId) {
         super(properties.fireResistant().stacksTo(1));
         this.name = name;
         this.entityType = entityType;
-        this.variant = variant;
+        this.variantId = variantId;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class GemItem extends Item {
             if(!context.getItemInHand().has(ModDataComponents.GEM_SAVE_DATA)){
                 BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
                 GemEntity gem = entityType.create((ServerLevel) level, null, pos, EntitySpawnReason.NATURAL, false, false);
-                gem.initializeGem(variant);
+                gem.initializeGem(variantId);
                 level.addFreshEntity(gem);
 
                 if(!context.getPlayer().isCreative()){

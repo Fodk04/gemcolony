@@ -1,10 +1,7 @@
 package com.fodk.gemcolony.entity.custom.gem.base;
 
 import com.fodk.gemcolony.GemColony;
-import com.fodk.gemcolony.data.FacetRegistryData;
-import com.fodk.gemcolony.data.FusionData;
-import com.fodk.gemcolony.data.FusionRegistryData;
-import com.fodk.gemcolony.data.ModDataComponents;
+import com.fodk.gemcolony.data.*;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
 import com.fodk.gemcolony.entity.custom.gem.ai.*;
 import com.fodk.gemcolony.entity.custom.gem.placement.GemPlacement;
@@ -81,7 +78,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     public static final EntityDataAccessor<Integer> GEM_PLACEMENT = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> QUALITY = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> CRACKED = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<String> VARIANT = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> WINGS = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> MARKINGS = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> MARKINGS_COLOR = SynchedEntityData.defineId(GemEntity.class, EntityDataSerializers.INT);
@@ -135,7 +132,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.define(GEM_PLACEMENT, -1);
         entityData.define(QUALITY, 1);
         entityData.define(CRACKED, false);
-        entityData.define(VARIANT, -1);
+        entityData.define(VARIANT, "");
         entityData.define(WINGS, -1);
         entityData.define(MARKINGS, -1);
         entityData.define(MARKINGS_COLOR, 0xFFFFFF);
@@ -191,7 +188,7 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, @Nullable SpawnGroupData groupData) {
         if (spawnReason == EntitySpawnReason.COMMAND) {
-            setVariant(getRandomVariant());
+            setVariant(getRandomVariantId());
             assignOrigin(level.getLevel(), blockPosition());
             generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
             entityData.set(EMERGED, true);
@@ -204,20 +201,27 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         return super.finalizeSpawn(level, difficulty, spawnReason, groupData);
     }
 
-    public int getRandomVariant(){
-        return -1;
+    public Identifier getRandomVariantId() {
+        return null;
     }
 
-    public void setVariant(int variant){
-        entityData.set(VARIANT, variant);
+    @Nullable
+    public Identifier getVariantId() {
+        String variant = entityData.get(VARIANT);
+        return variant.isBlank() ? null : Identifier.tryParse(variant);
     }
 
-    public int getVariantFromChroma(int chromaIndex){
-        return -1;
+    public void setVariant(@Nullable Identifier variantId) {
+        entityData.set(VARIANT, variantId == null ? "" : variantId.toString());
     }
 
-    public void initializeGem(int variant){
-        setVariant(variant);
+    @Nullable
+    public Identifier getVariantFromChroma(Item chromaItem) {
+        return null;
+    }
+
+    public void initializeGem(Identifier variantId){
+        setVariant(variantId);
         assignOrigin((ServerLevel) level(), blockPosition());
         generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
         entityData.set(EMERGED, true);
@@ -227,22 +231,22 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.inventory = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
     }
 
-    public void initializeGemPreview(int variant){
-        setVariant(variant);
+    public void initializeGemPreview(Identifier variantId){
+        setVariant(variantId);
         generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
         setQuality(random.nextInt(3));
         entityData.set(REFORM_PROGRESS, 0);
     }
 
     public void initializeGemPreview(){
-        setVariant(getRandomVariant());
+        setVariant(getRandomVariantId());
         generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
         setQuality(random.nextInt(3));
         entityData.set(REFORM_PROGRESS, 0);
     }
 
-    public void initializeGemFromChroma(int chromaIndex){
-        setVariant(getVariantFromChroma(chromaIndex));
+    public void initializeGemFromChroma(Item chromaItem){
+        setVariant(getVariantFromChroma(chromaItem));
         assignOrigin((ServerLevel) level(), blockPosition());
         generateAppearance(generateGemColor(), getMaxOutfits(), generateOutfitColor(), getMaxInsignias(), generateInsigniaColor(), getMaxHairstyles(), generateHairColor(), getMaxMarkings(), generateMarkingsColor(), getMaxVisors(), generateVisorColor());
         entityData.set(EMERGED, true);
@@ -259,8 +263,9 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
     }
 
     public void initializeSameGemFusion(){
-        setVariant(0);
-        generateAppearance(mixComponentsGemColors(), getMaxOutfits(), mixComponentsOutfitColors(), getMaxInsignias(), mixComponentsInsigniaColors(), getMaxHairstyles(), mixComponentsHairColors(), getMaxMarkings(), mixComponentsMarkingsColors(), getMaxVisors(), mixComponentsVisorColors());
+        setVariant(null);
+        Random random1 = createFusionRandom();
+        generateAppearance(mixComponentsGemColors(), getMaxOutfits(), mixComponentsOutfitColors(), getMaxInsignias(), mixComponentsInsigniaColors(), getMaxHairstyles(), mixComponentsHairColors(), getMaxMarkings(), mixComponentsMarkingsColors(), getMaxVisors(), mixComponentsVisorColors(), random1);
         setQuality(getFusionQuality());
         initializeAbilities();
         entityData.set(REFORM_PROGRESS, (int)(MAX_REFORM_PROGRESS * (1 - getPercentageToReform())));
@@ -284,6 +289,29 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         this.entityData.set(OWNER_UUID, getFusionComponents().get(0).get(ModDataComponents.GEM_SAVE_DATA).gemStateData().ownerUUID());
     }
 
+    private Random createFusionRandom() {
+        List<String> components = new ArrayList<>();
+
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData == null) continue;
+
+            GemAppearanceData appearance = saveData.gemAppearanceData();
+
+            components.add(
+                    appearance.outfit() + ":" +
+                            appearance.insignia() + ":" +
+                            appearance.hairstyle() + ":" +
+                            appearance.markings() + ":" +
+                            appearance.visor()
+            );
+        }
+
+        Collections.sort(components);
+
+        return new Random(components.hashCode());
+    }
+
     public void setQuality(int quality){
         entityData.set(QUALITY, quality);
         applyQualityModifiers();
@@ -293,14 +321,19 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         int regionX = Math.floorDiv(pos.getX(), 1024);
         int regionZ = Math.floorDiv(pos.getZ(), 1024);
 
-        FacetRegistryData.FacetAssignment assignment = FacetRegistryData.get(level).assignGem(level.dimension(), regionX, regionZ);
+        FacetRegistryData.FacetAssignment assignment = FacetRegistryData.get(level).assignGem(level.dimension(), regionX, regionZ, isCut());
 
         String facetSuffix = level.dimension() == Level.NETHER ? "N" : level.dimension() == Level.END ? "E" : "";
-        String cut = computeCutString(assignment.gemCountInRegion());
+        String cutOrCabochon = FacetRegion.computeCutString(assignment, isCut());
+        String cutType = isCut() ? " Cut-" : " Cabochon-";
 
-        String name = getGemTypeName() + " Facet-" + assignment.facetNumber() + facetSuffix + " Cut-" + cut;
+        String name = getGemTypeName() + " Facet-" + assignment.facetNumber() + facetSuffix + cutType + cutOrCabochon;
         this.entityData.set(NAME, name);
         setCustomName(Component.literal(name));
+    }
+
+    public boolean isCut(){
+        return true;
     }
 
     public void setNickname(String nickname) {
@@ -314,14 +347,6 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         }else{
             setCustomName(Component.literal(entityData.get(NICKNAME)));
         }
-    }
-
-    private static String computeCutString(int gemCountInRegion) {
-        int index0 = gemCountInRegion - 1;
-        int letterIndex = index0 / 9;
-        int number = (index0 % 9) + 1;
-        char letter = (char) ('A' + letterIndex);
-        return number + "X" + letter;
     }
 
     public abstract double getBaseMaxHealth();
@@ -417,6 +442,51 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
             }else{
                 // 90% chance it doesnt have a visor
                 visorIndex = -1;
+            }
+        }
+
+        this.entityData.set(GEM_COLOR, ColorUtil.colorToInt(gemColor));
+        this.entityData.set(OUTFIT, outfitIndex);
+        this.entityData.set(OUTFIT_COLOR, ColorUtil.colorToInt(outfitColor));
+        this.entityData.set(INSIGNIA, insigniaIndex);
+        this.entityData.set(INSIGNIA_COLOR, ColorUtil.colorToInt(insigniaColor));
+        this.entityData.set(HAIRSTYLE, hairstyleIndex);
+        this.entityData.set(HAIR_COLOR, ColorUtil.colorToInt(hairColor));
+        this.entityData.set(MARKINGS, markingsIndex);
+        this.entityData.set(MARKINGS_COLOR, ColorUtil.colorToInt(markingsColor));
+        this.entityData.set(VISOR, visorIndex);
+        this.entityData.set(VISOR_COLOR, ColorUtil.colorToInt(visorColor));
+        setGemPlacement(GemPlacement.getRandomGemPlacement().ordinal());
+
+        appearancePostProcess();
+    }
+
+    protected void generateAppearance(Color gemColor, int maxOutfits, Color outfitColor, int maxInsignias, Color insigniaColor, int maxHairstyles, Color hairColor, int maxMarkings, Color markingsColor, int maxVisors, Color visorColor, Random random) {
+        int outfitIndex = maxOutfits > 0 ? random.nextInt(maxOutfits) : -1;
+        int insigniaIndex = maxInsignias > 0 ? random.nextInt(maxInsignias) : -1;
+        int hairstyleIndex = maxHairstyles > 0 ? random.nextInt(maxHairstyles) : -1;
+        int markingsIndex = maxMarkings > 0 ? random.nextInt(maxMarkings) : -1;
+
+        int visorIndex;
+        if(alwaysHasVisor()){
+            // always "TRY" to set a visor
+            visorIndex = maxVisors > 0 ? random.nextInt(maxVisors) : -1;
+        }else{
+            if(random.nextFloat() < 0.10f){
+                // 10% chance it has a visor
+                visorIndex = maxVisors > 0 ? random.nextInt(maxVisors) : -1;
+            }else{
+                // 90% chance it doesnt have a visor
+                visorIndex = -1;
+            }
+        }
+
+        if(!getFusionComponents().isEmpty()){
+            for(ItemStack component : getFusionComponents()){
+                if(component.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().visor() >= 0 && visorIndex < 0){
+                    visorIndex = random.nextInt(maxVisors);
+                    break;
+                }
             }
         }
 
@@ -1357,76 +1427,82 @@ public abstract class GemEntity extends Monster implements GeoEntity, Container,
         entityData.set(FUSION_COMPONENTS, copies);
     }
 
-    private Color mixComponentsGemColors(){
-        int gemColor = 0;
-        for(ItemStack fusionComponent : getFusionComponents()){
-            if(gemColor == 0){
-                gemColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().color();
-            }else{
-                gemColor = ColorUtil.mixColorInts(gemColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().color(), 0.5f);
-            }
+    private Color mixComponentsGemColors() {
+        List<Integer> colors = new ArrayList<>();
+
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData == null) continue;
+
+            colors.add(saveData.gemAppearanceData().color());
         }
-        return ColorUtil.colorFromInt(gemColor);
+
+        return ColorUtil.colorFromInt(ColorUtil.averageColorInts(colors));
     }
 
-    private Color mixComponentsOutfitColors(){
-        int outfitColor = 0;
-        for(ItemStack fusionComponent : getFusionComponents()){
-            if(outfitColor == 0){
-                outfitColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().outfitColor();
-            }else{
-                outfitColor = ColorUtil.mixColorInts(outfitColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().outfitColor(), 0.5f);
-            }
+    private Color mixComponentsOutfitColors() {
+        List<Integer> colors = new ArrayList<>();
+
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData == null) continue;
+
+            colors.add(saveData.gemAppearanceData().outfitColor());
         }
-        return ColorUtil.colorFromInt(outfitColor);
+
+        return ColorUtil.colorFromInt(ColorUtil.averageColorInts(colors));
     }
 
-    private Color mixComponentsInsigniaColors(){
-        int insigniaColor = 0;
-        for(ItemStack fusionComponent : getFusionComponents()){
-            if(insigniaColor == 0){
-                insigniaColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().insigniaColor();
-            }else{
-                insigniaColor = ColorUtil.mixColorInts(insigniaColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().insigniaColor(), 0.5f);
-            }
+    private Color mixComponentsInsigniaColors() {
+        List<Integer> colors = new ArrayList<>();
+
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData == null) continue;
+
+            colors.add(saveData.gemAppearanceData().insigniaColor());
         }
-        return ColorUtil.colorFromInt(insigniaColor);
+
+        return ColorUtil.colorFromInt(ColorUtil.averageColorInts(colors));
     }
 
-    private Color mixComponentsHairColors(){
-        int hairColor = 0;
-        for(ItemStack fusionComponent : getFusionComponents()){
-            if(hairColor == 0){
-                hairColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().hairColor();
-            }else{
-                hairColor = ColorUtil.mixColorInts(hairColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().hairColor(), 0.5f);
-            }
+    private Color mixComponentsHairColors() {
+        List<Integer> colors = new ArrayList<>();
+
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData == null) continue;
+
+            colors.add(saveData.gemAppearanceData().hairColor());
         }
-        return ColorUtil.colorFromInt(hairColor);
+
+        return ColorUtil.colorFromInt(ColorUtil.averageColorInts(colors));
     }
 
-    private Color mixComponentsMarkingsColors(){
-        int markingsColor = 0;
-        for(ItemStack fusionComponent : getFusionComponents()){
-            if(markingsColor == 0){
-                markingsColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().markingsColor();
-            }else{
-                markingsColor = ColorUtil.mixColorInts(markingsColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().markingsColor(), 0.5f);
-            }
+    private Color mixComponentsMarkingsColors() {
+        List<Integer> colors = new ArrayList<>();
+
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData == null) continue;
+
+            colors.add(saveData.gemAppearanceData().markingsColor());
         }
-        return ColorUtil.colorFromInt(markingsColor);
+
+        return ColorUtil.colorFromInt(ColorUtil.averageColorInts(colors));
     }
 
-    private Color mixComponentsVisorColors(){
-        int visorColor = 0;
-        for(ItemStack fusionComponent : getFusionComponents()){
-            if(visorColor == 0){
-                visorColor = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().visorColor();
-            }else{
-                visorColor = ColorUtil.mixColorInts(visorColor, fusionComponent.get(ModDataComponents.GEM_SAVE_DATA).gemAppearanceData().visorColor(), 0.5f);
-            }
+    private Color mixComponentsVisorColors() {
+        List<Integer> colors = new ArrayList<>();
+
+        for (ItemStack fusionComponent : getFusionComponents()) {
+            GemSaveData saveData = fusionComponent.get(ModDataComponents.GEM_SAVE_DATA);
+            if (saveData == null) continue;
+
+            colors.add(saveData.gemAppearanceData().visorColor());
         }
-        return ColorUtil.colorFromInt(visorColor);
+
+        return ColorUtil.colorFromInt(ColorUtil.averageColorInts(colors));
     }
 
     private int getFusionQuality(){

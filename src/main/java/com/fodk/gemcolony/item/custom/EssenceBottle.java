@@ -55,7 +55,7 @@ public class EssenceBottle extends Item {
                 //add a gem_item with the corresponding data to player
                 EntityType<? extends GemEntity> entityType = essenceType.getEntityType();
                 GemEntity gem = entityType.create((ServerLevel) level, null, positionClicked, EntitySpawnReason.NATURAL, false, false);
-                gem.initializeGem(-1);
+                gem.initializeGem(null);
                 ItemStack gemItem = new ItemStack(gem.getGemItem());
                 gemItem.set(ModDataComponents.GEM_SAVE_DATA, gem.toSaveData());
                 gemItem.set(ModDataComponents.REFORM_TIME, 10);

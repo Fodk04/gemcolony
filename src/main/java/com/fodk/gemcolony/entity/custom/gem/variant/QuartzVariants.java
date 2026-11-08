@@ -1,6 +1,9 @@
 package com.fodk.gemcolony.entity.custom.gem.variant;
 
+import com.fodk.gemcolony.GemColony;
+import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.item.ModItems;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 import java.awt.*;
@@ -16,7 +19,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(238, 241, 255),
             new Color(199, 201, 205),
             new Color(255, 255, 255),
-            "Milky", ModItems.MILKY_QUARTZ_GEM.get(), 0),
+            "Milky", ModItems.MILKY_QUARTZ_GEM.get(), ModItems.WHITE_CHROMA.get()),
     PHANTOM(new Color(147, 147, 147),
             new Color(202, 202, 202),
             new Color(48, 48, 48),
@@ -27,7 +30,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(161, 160, 160),
             new Color(209, 209, 209),
             new Color(228, 228, 227),
-            "Phantom", ModItems.PHANTOM_QUARTZ_GEM.get(), 1),
+            "Phantom", ModItems.PHANTOM_QUARTZ_GEM.get(), ModItems.LIGHT_GRAY_CHROMA.get()),
     FLINT(new Color(40, 63, 94),
             new Color(110, 139, 169),
             new Color(26, 34, 51),
@@ -38,7 +41,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(69, 84, 113),
             new Color(69, 84, 113),
             new Color(112, 134, 179),
-            "Flint", ModItems.FLINT_QUARTZ_GEM.get(), 2),
+            "Flint", ModItems.FLINT_QUARTZ_GEM.get(), ModItems.GRAY_CHROMA.get()),
     ONYX(new Color(28, 26, 29),
             new Color(49, 49, 49),
             new Color(25, 22, 15),
@@ -49,7 +52,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(143, 143, 143),
             new Color(128, 128, 128),
             new Color(161, 161, 161),
-            "Onyx", ModItems.ONYX_QUARTZ_GEM.get(), 3),
+            "Onyx", ModItems.ONYX_QUARTZ_GEM.get(), ModItems.BLACK_CHROMA.get()),
     SMOKY(new Color(66, 49, 55),
             new Color(130, 100, 100),
             new Color(53, 39, 50),
@@ -60,7 +63,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(175, 124, 124),
             new Color(152, 105, 105),
             new Color(189, 114, 114),
-            "Smoky", ModItems.SMOKY_QUARTZ_GEM.get(), 4),
+            "Smoky", ModItems.SMOKY_QUARTZ_GEM.get(), ModItems.BROWN_CHROMA.get()),
     CARNELIAN(new Color(200, 45, 70),
             new Color(246, 11, 50),
             new Color(120, 10, 10),
@@ -71,7 +74,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(223, 22, 51),
             new Color(207, 20, 47),
             new Color(255, 52, 81),
-            "Carnelian", ModItems.CARNELIAN_QUARTZ_GEM.get(), 5),
+            "Carnelian", ModItems.CARNELIAN_QUARTZ_GEM.get(), ModItems.RED_CHROMA.get()),
     CHERT(new Color(198, 124, 30),
             new Color(250, 160, 70),
             new Color(100, 60, 25),
@@ -82,7 +85,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(244, 148, 66),
             new Color(207, 95, 0),
             new Color(244, 114, 3),
-            "Chert", ModItems.CHERT_QUARTZ_GEM.get(), 6),
+            "Chert", ModItems.CHERT_QUARTZ_GEM.get(), ModItems.ORANGE_CHROMA.get()),
     CITRINE(new Color(216, 182, 11),
             new Color(248, 248, 36),
             new Color(163, 143, 25),
@@ -93,7 +96,18 @@ public enum QuartzVariants implements GemVariant {
             new Color(243, 214, 69),
             new Color(207, 174, 6),
             new Color(255, 218, 30),
-            "Citrine", ModItems.CITRINE_QUARTZ_GEM.get(), 7),
+            "Citrine", ModItems.CITRINE_QUARTZ_GEM.get(), ModItems.YELLOW_CHROMA.get()),
+    /*LEMON(new Color(255, 218, 47),
+            new Color(255, 255, 79),
+            new Color(202, 174, 0),
+            new Color(255, 218, 0),
+            new Color(198, 194, 39),
+            new Color(255, 249, 53),
+            new Color(255, 250, 111),
+            new Color(255, 252, 153),
+            new Color(207, 174, 6),
+            new Color(255, 218, 30),
+            "Lemon", ModItems.LEMON_QUARTZ_GEM.get(), ModItems.YELLOW_CHROMA.get()),*/
     PRASEOLITE(new Color(114, 207, 77),
             new Color(165, 251, 134),
             new Color(2, 124, 63),
@@ -104,7 +118,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(222, 251, 209),
             new Color(153, 200, 133),
             new Color(207, 251, 186),
-            "Praseolite", ModItems.PRASEOLITE_QUARTZ_GEM.get(), 8),
+            "Praseolite", ModItems.PRASEOLITE_QUARTZ_GEM.get(), ModItems.LIME_CHROMA.get()),
     AVENTURINE(new Color(95, 195, 18),
             new Color(159, 248, 95),
             new Color(35, 66, 58),
@@ -115,7 +129,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(87, 147, 113),
             new Color(128, 220, 119),
             new Color(184, 250, 178),
-            "Aventurine", ModItems.AVENTURINE_QUARTZ_GEM.get(), 9),
+            "Aventurine", ModItems.AVENTURINE_QUARTZ_GEM.get(), ModItems.GREEN_CHROMA.get()),
     ANGEL_AURA(new Color(29, 151, 195),
             new Color(105, 217, 255),
             new Color(127, 130, 199),
@@ -126,7 +140,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(250, 225, 140),
             new Color(92, 173, 202),
             new Color(135, 214, 243),
-            "Angel Aura", ModItems.ANGEL_AURA_QUARTZ_GEM.get(), 10),
+            "Angel Aura", ModItems.ANGEL_AURA_QUARTZ_GEM.get(), ModItems.CYAN_CHROMA.get()),
     DUMORTIERITE(new Color(100, 141, 218),
             new Color(156, 204, 255),
             new Color(71, 108, 149),
@@ -137,7 +151,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(121, 180, 246),
             new Color(121, 180, 246),
             new Color(169, 210, 255),
-            "Dumortierite", ModItems.DUMORTIERITE_QUARTZ_GEM.get(), 11),
+            "Dumortierite", ModItems.DUMORTIERITE_QUARTZ_GEM.get(), ModItems.LIGHT_BLUE_CHROMA.get()),
     BLUE(new Color(16, 106, 202),
             new Color(50, 153, 250),
             new Color(0, 43, 85),
@@ -148,18 +162,18 @@ public enum QuartzVariants implements GemVariant {
             new Color(1, 39, 200),
             new Color(15, 42, 147),
             new Color(0, 49, 241),
-            "Blue", ModItems.BLUE_QUARTZ_GEM.get(), 12),
+            "Blue", ModItems.BLUE_QUARTZ_GEM.get(), ModItems.BLUE_CHROMA.get()),
     AMETHYST(new Color(118, 10, 225),
             new Color(200, 72, 251),
             new Color(70, 0, 150),
             new Color(120, 30, 210),
             new Color(63, 0, 100),
             new Color(103, 0, 200),
-            new Color(146, 61, 227),
-            new Color(212, 133, 244),
+            new Color(198, 136, 255),
+            new Color(236, 200, 255),
             new Color(93, 0, 180),
             new Color(92, 0, 230),
-            "Amethyst", ModItems.AMETHYST_QUARTZ_GEM.get(), 13),
+            "Amethyst", ModItems.AMETHYST_QUARTZ_GEM.get(), ModItems.PURPLE_CHROMA.get()),
     CHERRY(new Color(228, 90, 101),
             new Color(251, 105, 116),
             new Color(168, 51, 77),
@@ -170,7 +184,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(250, 55, 113),
             new Color(154, 97, 113),
             new Color(225, 141, 165),
-            "Cherry", ModItems.CHERRY_QUARTZ_GEM.get(), 14),
+            "Cherry", ModItems.CHERRY_QUARTZ_GEM.get(), ModItems.MAGENTA_CHROMA.get()),
     ROSE(new Color(253, 112, 164),
             new Color(253, 167, 216),
             new Color(170, 23, 78),
@@ -181,7 +195,7 @@ public enum QuartzVariants implements GemVariant {
             new Color(254, 128, 175),
             new Color(255, 79, 142),
             new Color(230, 76, 133),
-            "Rose", ModItems.ROSE_QUARTZ_GEM.get(), 15);
+            "Rose", ModItems.ROSE_QUARTZ_GEM.get(), ModItems.PINK_CHROMA.get());
 
     private final GemVariantData data;
     public GemVariantData getData() {
@@ -201,7 +215,7 @@ public enum QuartzVariants implements GemVariant {
             Color lightVisor,
             String name,
             Item gemItem,
-            int colorId
+            Item chromaItem
     ) {
         this.data = new GemVariantData(
                 darkSkin,
@@ -216,7 +230,27 @@ public enum QuartzVariants implements GemVariant {
                 lightVisor,
                 name,
                 gemItem,
-                colorId
+                chromaItem
         );
+    }
+
+    public static void registerVariants() {
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "milky_quartz"), ModEntities.QUARTZ.get(), MILKY.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"phantom_quartz"), ModEntities.QUARTZ.get(), PHANTOM.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"flint_quartz"), ModEntities.QUARTZ.get(), FLINT.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"onyx_quartz"), ModEntities.QUARTZ.get(), ONYX.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"smoky_quartz"), ModEntities.QUARTZ.get(), SMOKY.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"carnelian_quartz"), ModEntities.QUARTZ.get(), CARNELIAN.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"chert_quartz"), ModEntities.QUARTZ.get(), CHERT.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"citrine_quartz"), ModEntities.QUARTZ.get(), CITRINE.getData());
+        //GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"lemon_quartz"), ModEntities.QUARTZ.get(), LEMON.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"praseolite_quartz"), ModEntities.QUARTZ.get(), PRASEOLITE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"aventurine_quartz"), ModEntities.QUARTZ.get(), AVENTURINE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"angel_aura_quartz"), ModEntities.QUARTZ.get(), ANGEL_AURA.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"dumortierite_quartz"), ModEntities.QUARTZ.get(), DUMORTIERITE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "blue_quartz"), ModEntities.QUARTZ.get(), BLUE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"amethyst_quartz"), ModEntities.QUARTZ.get(), AMETHYST.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"cherry_quartz"), ModEntities.QUARTZ.get(), CHERRY.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID,"rose_quartz"), ModEntities.QUARTZ.get(), ROSE.getData());
     }
 }

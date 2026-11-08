@@ -1,7 +1,6 @@
 package com.fodk.gemcolony.block.entity.custom;
 
 import com.fodk.gemcolony.block.ModBlocks;
-import com.fodk.gemcolony.block.custom.DrillBlock;
 import com.fodk.gemcolony.block.custom.ShellBlock;
 import com.fodk.gemcolony.block.entity.ModBlockEntities;
 import com.fodk.gemcolony.data.ModDataComponents;
@@ -9,7 +8,6 @@ import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.item.ModItems;
-import com.fodk.gemcolony.item.custom.ChromaItem;
 import com.fodk.gemcolony.item.custom.EssenceType;
 import com.fodk.gemcolony.menu.ShellMenu;
 import com.fodk.gemcolony.tags.ModTags;
@@ -41,6 +39,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -91,9 +90,10 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
     private int drained = 0;
     private int waterDrained = 0;
 
-    private int chromaColorIndex = 0;
-    public int getChromaColorIndex() {
-        return chromaColorIndex;
+    private ItemStack chromaStack = ItemStack.EMPTY;
+
+    public Item getChromaItem() {
+        return chromaStack.getItem();
     }
 
     private final List<BlockPos> drainableBlocks = new ArrayList<>();
@@ -192,7 +192,7 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
         output.putInt("DrainTimer", drainTimer);
         output.putInt("Drained", drained);
         output.putInt("WaterDrained", waterDrained);
-        output.putInt("ChromaColorIndex", chromaColorIndex);
+        output.store("Chroma", ItemStack.CODEC, chromaStack);
     }
 
     @Override
@@ -206,7 +206,7 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
         drainTimer = input.getIntOr("DrainTimer", 0);
         drained = input.getIntOr("Drained", 0);
         waterDrained = input.getIntOr("WaterDrained", 0);
-        chromaColorIndex = input.getIntOr("ChromaColorIndex", 0);
+        chromaStack = input.read("Chroma", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override
@@ -399,8 +399,9 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
             return;
         }
 
-        ChromaItem chromaItem = (ChromaItem) items.get(CHROMA_SLOT).getItem();
-        chromaColorIndex = chromaItem.colorIndex;
+        chromaStack = items.get(CHROMA_SLOT).copy();
+        chromaStack.setCount(1);
+
         items.get(0).shrink(1);
         items.get(1).shrink(1);
         whiteTank.setAmount(whiteTank.getAmount() - ESSENCE_COST);
@@ -514,7 +515,7 @@ public class ShellBlockEntity extends BlockEntity implements Container, GeoBlock
         int quality = determinePearlQuality();
 
         GemEntity gem = ModEntities.PEARL.get().create((ServerLevel) level, null, worldPosition, EntitySpawnReason.NATURAL, false, false);
-        gem.initializeGemFromChroma(chromaColorIndex);
+        gem.initializeGemFromChroma(chromaStack.getItem());
         gem.setQuality(quality);
         ItemStack pearlGemItem = new ItemStack(gem.getGemItem());
         pearlGemItem.set(ModDataComponents.GEM_SAVE_DATA, gem.toSaveData());

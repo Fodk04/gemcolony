@@ -1,5 +1,6 @@
 package com.fodk.gemcolony.data;
 
+import com.fodk.gemcolony.GemColony;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
@@ -19,7 +20,7 @@ public class FacetRegistryData extends SavedData {
             .apply(instance, FacetRegistryData::new));
 
     public static final SavedDataType<FacetRegistryData> TYPE = new SavedDataType<>(
-            Identifier.fromNamespaceAndPath("gemcolony", "facet_registry"),
+            Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "facet_registry"),
             FacetRegistryData::new,
             CODEC
     );
@@ -38,20 +39,26 @@ public class FacetRegistryData extends SavedData {
         return level.getDataStorage().computeIfAbsent(TYPE);
     }
 
-    public record FacetAssignment(int facetNumber, int gemCountInRegion) {}
+    public record FacetAssignment(int facetNumber, int cutGemCountInRegion, int cabochonGemCountInRegion) {}
 
-    public FacetAssignment assignGem(ResourceKey<Level> dimension, int regionX, int regionZ) {
+    public FacetAssignment assignGem(ResourceKey<Level> dimension, int regionX, int regionZ, boolean isCut) {
         for (int i = 0; i < regions.size(); i++) {
             FacetRegion region = regions.get(i);
             if (region.dimension().equals(dimension) && region.regionX() == regionX && region.regionZ() == regionZ) {
-                FacetRegion updated = region.withIncrementedCount();
+                FacetRegion updated = region.withIncrementedCount(isCut);
                 regions.set(i, updated);
                 setDirty();
-                return new FacetAssignment(i + 1, updated.gemCount());
+                return new FacetAssignment(i + 1, updated.cutGemCount(), updated.cabochonGemCount());
             }
         }
-        regions.add(new FacetRegion(dimension, regionX, regionZ, 1));
-        setDirty();
-        return new FacetAssignment(regions.size(), 1);
+        if(isCut){
+            regions.add(new FacetRegion(dimension, regionX, regionZ, 1, 0));
+            setDirty();
+            return new FacetAssignment(regions.size(), 1, 0);
+        }else{
+            regions.add(new FacetRegion(dimension, regionX, regionZ, 0, 1));
+            setDirty();
+            return new FacetAssignment(regions.size(), 0, 1);
+        }
     }
 }

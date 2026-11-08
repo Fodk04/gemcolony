@@ -7,6 +7,9 @@ import com.fodk.gemcolony.entity.custom.gem.PeridotEntity;
 import com.fodk.gemcolony.entity.custom.gem.quartz.JasperEntity;
 import com.fodk.gemcolony.entity.custom.gem.quartz.QuartzEntity;
 import com.fodk.gemcolony.entity.custom.gem.starter.StarterGemEntity;
+import com.fodk.gemcolony.entity.custom.gem.variant.JasperVariants;
+import com.fodk.gemcolony.entity.custom.gem.variant.PearlVariants;
+import com.fodk.gemcolony.entity.custom.gem.variant.QuartzVariants;
 import com.fodk.gemcolony.item.ModItems;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -126,5 +129,9 @@ public class ModEventBusEvents {
                 ),
                 ModEntities.PEARL.get()
         );
+
+        QuartzVariants.registerVariants();
+        JasperVariants.registerVariants();
+        PearlVariants.registerVariants();
     }
 }

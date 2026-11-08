@@ -1,7 +1,10 @@
 package com.fodk.gemcolony.entity.custom.gem.variant;
 
+import com.fodk.gemcolony.GemColony;
+import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.util.ColorUtil;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 import java.awt.*;
@@ -19,7 +22,7 @@ public enum JasperVariants implements GemVariant {
             new Color(162, 91, 55),
             new Color(199, 201, 205),
             new Color(255, 255, 255),
-            "Spiderweb", ModItems.SPIDERWEB_JASPER_GEM.get(), 0),
+            "Spiderweb", ModItems.SPIDERWEB_JASPER_GEM.get(), ModItems.WHITE_CHROMA.get()),
     PORCELAIN(new Color(122, 122, 122),
             new Color(191, 191, 191),
             new Color(48, 48, 48),
@@ -32,7 +35,7 @@ public enum JasperVariants implements GemVariant {
             new Color(73, 72, 72),
             new Color(209, 209, 209),
             new Color(228, 228, 227),
-            "Porcelain", ModItems.PORCELAIN_JASPER_GEM.get(), 1),
+            "Porcelain", ModItems.PORCELAIN_JASPER_GEM.get(), ModItems.LIGHT_GRAY_CHROMA.get()),
     ZEBRA(new Color(146, 148, 149),
             new Color(221, 224, 225),
             new Color(41, 34, 34),
@@ -45,7 +48,7 @@ public enum JasperVariants implements GemVariant {
             new Color(119, 128, 125),
             new Color(199, 239, 234),
             new Color(239, 251, 250),
-            "Zebra", ModItems.ZEBRA_JASPER_GEM.get(), 2),
+            "Zebra", ModItems.ZEBRA_JASPER_GEM.get(), ModItems.GRAY_CHROMA.get()),
     CHRYSANTHEMUM(new Color(28, 26, 29),
             new Color(49, 49, 49),
             new Color(25, 22, 15),
@@ -58,7 +61,7 @@ public enum JasperVariants implements GemVariant {
             new Color(255, 255, 255),
             new Color(128, 128, 128),
             new Color(161, 161, 161),
-            "Chrysanthemum", ModItems.CHRYSANTHEMUM_JASPER_GEM.get(), 3),
+            "Chrysanthemum", ModItems.CHRYSANTHEMUM_JASPER_GEM.get(), ModItems.BLACK_CHROMA.get()),
     SNAKESKIN(new Color(83, 55, 45),
             new Color(138, 83, 64),
             new Color(74, 51, 43),
@@ -71,7 +74,7 @@ public enum JasperVariants implements GemVariant {
             new Color(172, 167, 99),
             new Color(250, 163, 144),
             new Color(255, 219, 212),
-            "Snakeskin", ModItems.SNAKESKIN_JASPER_GEM.get(), 4),
+            "Snakeskin", ModItems.SNAKESKIN_JASPER_GEM.get(), ModItems.BROWN_CHROMA.get()),
     BIGGS(new Color(198, 68, 52),
             new Color(244, 99, 81),
             new Color(128, 22, 44),
@@ -84,7 +87,7 @@ public enum JasperVariants implements GemVariant {
             new Color(179, 57, 41),
             new Color(253, 135, 166),
             new Color(246, 183, 193),
-            "Biggs", ModItems.BIGGS_JASPER_GEM.get(), 5),
+            "Biggs", ModItems.BIGGS_JASPER_GEM.get(), ModItems.RED_CHROMA.get()),
     NOREENA(new Color(251, 156, 81),
             new Color(246, 170, 111),
             new Color(142, 51, 48),
@@ -97,7 +100,7 @@ public enum JasperVariants implements GemVariant {
             new Color(230, 87, 83),
             new Color(248, 174, 111),
             new Color(248, 205, 167),
-            "Noreena", ModItems.NOREENA_JASPER_GEM.get(), 6),
+            "Noreena", ModItems.NOREENA_JASPER_GEM.get(), ModItems.ORANGE_CHROMA.get()),
     HONEY(new Color(193, 193, 0),
             new Color(241, 200, 16),
             new Color(163, 143, 25),
@@ -110,7 +113,7 @@ public enum JasperVariants implements GemVariant {
             new Color(249, 85, 0),
             new Color(239, 210, 64),
             new Color(255, 237, 147),
-            "Honey", ModItems.HONEY_JASPER_GEM.get(), 7),
+            "Honey", ModItems.HONEY_JASPER_GEM.get(), ModItems.YELLOW_CHROMA.get()),
     MORRISONITE(new Color(97, 158, 18),
             new Color(137, 204, 48),
             new Color(69, 103, 24),
@@ -123,7 +126,7 @@ public enum JasperVariants implements GemVariant {
             new Color(226, 106, 182),
             new Color(175, 237, 148),
             new Color(207, 251, 186),
-            "Morrisonite", ModItems.MORRISONITE_JASPER_GEM.get(), 8),
+            "Morrisonite", ModItems.MORRISONITE_JASPER_GEM.get(), ModItems.LIME_CHROMA.get()),
     RHYOLITE(new Color(69, 122, 2),
             new Color(116, 181, 32),
             new Color(17, 92, 11),
@@ -136,7 +139,7 @@ public enum JasperVariants implements GemVariant {
             new Color(253, 132, 16),
             new Color(128, 220, 119),
             new Color(184, 250, 178),
-            "Rhyolite", ModItems.RHYOLITE_JASPER_GEM.get(), 9),
+            "Rhyolite", ModItems.RHYOLITE_JASPER_GEM.get(), ModItems.GREEN_CHROMA.get()),
     KAMBABA(new Color(54, 163, 136),
             new Color(101, 203, 179),
             new Color(32, 96, 80),
@@ -149,7 +152,7 @@ public enum JasperVariants implements GemVariant {
             new Color(206, 166, 35),
             new Color(171, 255, 236),
             new Color(199, 255, 239),
-            "Kambaba", ModItems.KAMBABA_JASPER_GEM.get(), 10),
+            "Kambaba", ModItems.KAMBABA_JASPER_GEM.get(), ModItems.CYAN_CHROMA.get()),
     OCEAN(new Color(80, 147, 152),
             new Color(109, 192, 198),
             new Color(32, 94, 116),
@@ -162,7 +165,7 @@ public enum JasperVariants implements GemVariant {
             new Color(251, 198, 202),
             new Color(173, 210, 251),
             new Color(214, 232, 253),
-            "Ocean", ModItems.OCEAN_JASPER_GEM.get(), 11),
+            "Ocean", ModItems.OCEAN_JASPER_GEM.get(), ModItems.LIGHT_BLUE_CHROMA.get()),
     SEA_SEDIMENT(new Color(7, 50, 96),
             new Color(2, 79, 151),
             new Color(0, 69, 136),
@@ -175,7 +178,7 @@ public enum JasperVariants implements GemVariant {
             new Color(76, 254, 244),
             new Color(15, 42, 147),
             new Color(0, 49, 241),
-            "Sea Sediment", ModItems.SEA_SEDIMENT_JASPER_GEM.get(), 12),
+            "Sea Sediment", ModItems.SEA_SEDIMENT_JASPER_GEM.get(), ModItems.BLUE_CHROMA.get()),
     ROYAL_PLUME(new Color(75, 63, 191),
             new Color(125, 111, 255),
             new Color(91, 13, 181),
@@ -188,7 +191,7 @@ public enum JasperVariants implements GemVariant {
             new Color(252, 16, 215),
             new Color(180, 109, 246),
             new Color(197, 161, 250),
-            "Royal Plume", ModItems.ROYAL_PLUME_JASPER_GEM.get(), 13),
+            "Royal Plume", ModItems.ROYAL_PLUME_JASPER_GEM.get(), ModItems.PURPLE_CHROMA.get()),
     MOOKITE(new Color(163, 54, 134),
             new Color(225, 58, 181),
             new Color(96, 32, 79),
@@ -201,7 +204,7 @@ public enum JasperVariants implements GemVariant {
             new Color(252, 185, 16),
             new Color(253, 103, 214),
             new Color(255, 137, 224),
-            "Mookite", ModItems.MOOKITE_JASPER_GEM.get(), 14),
+            "Mookite", ModItems.MOOKITE_JASPER_GEM.get(), ModItems.MAGENTA_CHROMA.get()),
     PEACH_PETAL(new Color(191, 63, 93),
             new Color(255, 113, 146),
             new Color(149, 46, 70),
@@ -214,19 +217,11 @@ public enum JasperVariants implements GemVariant {
             new Color(231, 178, 222),
             new Color(253, 110, 161),
             new Color(230, 76, 133),
-            "Peach Petal", ModItems.PEACH_PETAL_JASPER_GEM.get(), 15);
+            "Peach Petal", ModItems.PEACH_PETAL_JASPER_GEM.get(), ModItems.PINK_CHROMA.get());
 
     private final GemVariantData data;
     public GemVariantData getData() {
         return data;
-    }
-    private final Color darkMarkings;
-    private final Color lightMarkings;
-    public Color getDarkMarkings(){
-        return darkMarkings;
-    }
-    public Color getLightMarkings(){
-        return lightMarkings;
     }
 
     JasperVariants(
@@ -244,7 +239,7 @@ public enum JasperVariants implements GemVariant {
             Color lightVisor,
             String name,
             Item gemItem,
-            int colorId
+            Item chromaItem
     ) {
         this.data = new GemVariantData(
                 darkSkin,
@@ -259,14 +254,26 @@ public enum JasperVariants implements GemVariant {
                 lightVisor,
                 name,
                 gemItem,
-                colorId
-        );
-
-        this.darkMarkings = darkMarkings;
-        this.lightMarkings = lightMarkings;
+                chromaItem
+        ).withMarkings(darkMarkings, lightMarkings);
     }
 
-    public static Color getMarkingsColor(Color lightMarkings, Color darkMarkings, float t){
-        return ColorUtil.lerpColor(lightMarkings, darkMarkings, t);
+    public static void registerVariants() {
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "spiderweb_jasper"), ModEntities.JASPER.get(), SPIDERWEB.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "porcelain_jasper"), ModEntities.JASPER.get(), PORCELAIN.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "zebra_jasper"), ModEntities.JASPER.get(), ZEBRA.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "chrysanthemum_jasper"), ModEntities.JASPER.get(), CHRYSANTHEMUM.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "snakeskin_jasper"), ModEntities.JASPER.get(), SNAKESKIN.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "biggs_jasper"), ModEntities.JASPER.get(), BIGGS.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "noreena_jasper"), ModEntities.JASPER.get(), NOREENA.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "honey_jasper"), ModEntities.JASPER.get(), HONEY.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "morrisonite_jasper"), ModEntities.JASPER.get(), MORRISONITE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "rhyolite_jasper"), ModEntities.JASPER.get(), RHYOLITE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "kambaba_jasper"), ModEntities.JASPER.get(), KAMBABA.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "ocean_jasper"), ModEntities.JASPER.get(), OCEAN.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "sea_sediment_jasper"), ModEntities.JASPER.get(), SEA_SEDIMENT.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "royal_plume_jasper"), ModEntities.JASPER.get(), ROYAL_PLUME.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "mookite_jasper"), ModEntities.JASPER.get(), MOOKITE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "peach_petal_jasper"), ModEntities.JASPER.get(), PEACH_PETAL.getData());
     }
 }

@@ -3,6 +3,7 @@ package com.fodk.gemcolony.item;
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.ModBlocks;
 import com.fodk.gemcolony.entity.ModEntities;
+import com.fodk.gemcolony.entity.custom.gem.variant.QuartzVariants;
 import com.fodk.gemcolony.fluid.ModFluids;
 import com.fodk.gemcolony.food.ModFoods;
 import com.fodk.gemcolony.item.custom.*;
@@ -10,6 +11,7 @@ import com.fodk.gemcolony.sound.ModSounds;
 import com.fodk.gemcolony.util.ColorUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.TooltipDisplay;
@@ -25,38 +27,22 @@ public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(GemColony.MOD_ID);
 
     //CHROMAS
-    public static final DeferredItem<Item> WHITE_CHROMA = ITEMS.registerItem("white_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.WHITE.getColorIndex()));
-    public static final DeferredItem<Item> LIGHT_GRAY_CHROMA = ITEMS.registerItem("light_gray_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.LIGHT_GRAY.getColorIndex()));
-    public static final DeferredItem<Item> GRAY_CHROMA = ITEMS.registerItem("gray_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.GRAY.getColorIndex()));
-    public static final DeferredItem<Item> BLACK_CHROMA = ITEMS.registerItem("black_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.BLACK.getColorIndex()));
-    public static final DeferredItem<Item> BROWN_CHROMA = ITEMS.registerItem("brown_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.BROWN.getColorIndex()));
-    public static final DeferredItem<Item> RED_CHROMA = ITEMS.registerItem("red_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.RED.getColorIndex()));
-    public static final DeferredItem<Item> ORANGE_CHROMA = ITEMS.registerItem("orange_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.ORANGE.getColorIndex()));
-    public static final DeferredItem<Item> YELLOW_CHROMA = ITEMS.registerItem("yellow_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.YELLOW.getColorIndex()));
-    public static final DeferredItem<Item> LIME_CHROMA = ITEMS.registerItem("lime_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.LIME.getColorIndex()));
-    public static final DeferredItem<Item> GREEN_CHROMA = ITEMS.registerItem("green_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.GREEN.getColorIndex()));
-    public static final DeferredItem<Item> CYAN_CHROMA = ITEMS.registerItem("cyan_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.CYAN.getColorIndex()));
-    public static final DeferredItem<Item> LIGHT_BLUE_CHROMA = ITEMS.registerItem("light_blue_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.LIGHT_BLUE.getColorIndex()));
-    public static final DeferredItem<Item> BLUE_CHROMA = ITEMS.registerItem("blue_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.BLUE.getColorIndex()));
-    public static final DeferredItem<Item> PURPLE_CHROMA = ITEMS.registerItem("purple_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.PURPLE.getColorIndex()));
-    public static final DeferredItem<Item> MAGENTA_CHROMA = ITEMS.registerItem("magenta_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.MAGENTA.getColorIndex()));
-    public static final DeferredItem<Item> PINK_CHROMA = ITEMS.registerItem("pink_chroma",
-            properties -> new ChromaItem(properties, ColorUtil.PINK.getColorIndex()));
+    public static final DeferredItem<Item> WHITE_CHROMA = ITEMS.registerItem("white_chroma", Item::new);
+    public static final DeferredItem<Item> LIGHT_GRAY_CHROMA = ITEMS.registerItem("light_gray_chroma", Item::new);
+    public static final DeferredItem<Item> GRAY_CHROMA = ITEMS.registerItem("gray_chroma", Item::new);
+    public static final DeferredItem<Item> BLACK_CHROMA = ITEMS.registerItem("black_chroma", Item::new);
+    public static final DeferredItem<Item> BROWN_CHROMA = ITEMS.registerItem("brown_chroma", Item::new);
+    public static final DeferredItem<Item> RED_CHROMA = ITEMS.registerItem("red_chroma", Item::new);
+    public static final DeferredItem<Item> ORANGE_CHROMA = ITEMS.registerItem("orange_chroma", Item::new);
+    public static final DeferredItem<Item> YELLOW_CHROMA = ITEMS.registerItem("yellow_chroma", Item::new);
+    public static final DeferredItem<Item> LIME_CHROMA = ITEMS.registerItem("lime_chroma", Item::new);
+    public static final DeferredItem<Item> GREEN_CHROMA = ITEMS.registerItem("green_chroma", Item::new);
+    public static final DeferredItem<Item> CYAN_CHROMA = ITEMS.registerItem("cyan_chroma", Item::new);
+    public static final DeferredItem<Item> LIGHT_BLUE_CHROMA = ITEMS.registerItem("light_blue_chroma", Item::new);
+    public static final DeferredItem<Item> BLUE_CHROMA = ITEMS.registerItem("blue_chroma", Item::new);
+    public static final DeferredItem<Item> PURPLE_CHROMA = ITEMS.registerItem("purple_chroma", Item::new);
+    public static final DeferredItem<Item> MAGENTA_CHROMA = ITEMS.registerItem("magenta_chroma", Item::new);
+    public static final DeferredItem<Item> PINK_CHROMA = ITEMS.registerItem("pink_chroma", Item::new);
 
     public static final DeferredItem<Item> STRAWBERRY = ITEMS.registerItem("strawberry",
             properties -> new BlockItem(ModBlocks.STRAWBERRY_BUSH.get(), properties.food(ModFoods.STRAWBERRY)));
@@ -125,107 +111,109 @@ public class ModItems {
     public static final DeferredItem<Item> PERIDOT_GEM = ITEMS.registerItem("peridot_gem",
             properties -> new GemItem(properties, "Peridot", ModEntities.PERIDOT.get()));
 
-    //QUARTZES
+    // QUARTZES
     public static final DeferredItem<Item> MILKY_QUARTZ_GEM = ITEMS.registerItem("milky_quartz_gem",
-            properties -> new GemItem(properties, "Milky Quartz", ModEntities.QUARTZ.get(), 0));
+            properties -> new GemItem(properties, "Milky Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "milky_quartz")));
     public static final DeferredItem<Item> PHANTOM_QUARTZ_GEM = ITEMS.registerItem("phantom_quartz_gem",
-            properties -> new GemItem(properties, "Phantom Quartz", ModEntities.QUARTZ.get(), 1));
+            properties -> new GemItem(properties, "Phantom Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "phantom_quartz")));
     public static final DeferredItem<Item> FLINT_QUARTZ_GEM = ITEMS.registerItem("flint_quartz_gem",
-            properties -> new GemItem(properties, "Flint Quartz", ModEntities.QUARTZ.get(), 2));
+            properties -> new GemItem(properties, "Flint Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "flint_quartz")));
     public static final DeferredItem<Item> ONYX_QUARTZ_GEM = ITEMS.registerItem("onyx_quartz_gem",
-            properties -> new GemItem(properties, "Onyx Quartz", ModEntities.QUARTZ.get(), 3));
+            properties -> new GemItem(properties, "Onyx Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "onyx_quartz")));
     public static final DeferredItem<Item> SMOKY_QUARTZ_GEM = ITEMS.registerItem("smoky_quartz_gem",
-            properties -> new GemItem(properties, "Smoky Quartz", ModEntities.QUARTZ.get(), 4));
+            properties -> new GemItem(properties, "Smoky Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "smoky_quartz")));
     public static final DeferredItem<Item> CARNELIAN_QUARTZ_GEM = ITEMS.registerItem("carnelian_quartz_gem",
-            properties -> new GemItem(properties, "Carnelian Quartz", ModEntities.QUARTZ.get(), 5));
+            properties -> new GemItem(properties, "Carnelian Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "carnelian_quartz")));
     public static final DeferredItem<Item> CHERT_QUARTZ_GEM = ITEMS.registerItem("chert_quartz_gem",
-            properties -> new GemItem(properties, "Chert Quartz", ModEntities.QUARTZ.get(), 6));
+            properties -> new GemItem(properties, "Chert Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "chert_quartz")));
     public static final DeferredItem<Item> CITRINE_QUARTZ_GEM = ITEMS.registerItem("citrine_quartz_gem",
-            properties -> new GemItem(properties, "Citrine Quartz", ModEntities.QUARTZ.get(), 7));
+            properties -> new GemItem(properties, "Citrine Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "citrine_quartz")));
+    //public static final DeferredItem<Item> LEMON_QUARTZ_GEM = ITEMS.registerItem("lemon_quartz_gem",
+    //        properties -> new GemItem(properties, "Lemon Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "lemon_quartz")));
     public static final DeferredItem<Item> PRASEOLITE_QUARTZ_GEM = ITEMS.registerItem("praseolite_quartz_gem",
-            properties -> new GemItem(properties, "Praseolite Quartz", ModEntities.QUARTZ.get(), 8));
+            properties -> new GemItem(properties, "Praseolite Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "praseolite_quartz")));
     public static final DeferredItem<Item> AVENTURINE_QUARTZ_GEM = ITEMS.registerItem("aventurine_quartz_gem",
-            properties -> new GemItem(properties, "Aventurine Quartz", ModEntities.QUARTZ.get(), 9));
+            properties -> new GemItem(properties, "Aventurine Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "aventurine_quartz")));
     public static final DeferredItem<Item> ANGEL_AURA_QUARTZ_GEM = ITEMS.registerItem("angel_aura_quartz_gem",
-            properties -> new GemItem(properties, "Angel Aura Quartz", ModEntities.QUARTZ.get(), 10));
+            properties -> new GemItem(properties, "Angel Aura Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "angel_aura_quartz")));
     public static final DeferredItem<Item> DUMORTIERITE_QUARTZ_GEM = ITEMS.registerItem("dumortierite_quartz_gem",
-            properties -> new GemItem(properties, "Dumortierite Quartz", ModEntities.QUARTZ.get(), 11));
+            properties -> new GemItem(properties, "Dumortierite Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "dumortierite_quartz")));
     public static final DeferredItem<Item> BLUE_QUARTZ_GEM = ITEMS.registerItem("blue_quartz_gem",
-            properties -> new GemItem(properties, "Blue Quartz", ModEntities.QUARTZ.get(), 12));
+            properties -> new GemItem(properties, "Blue Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "blue_quartz")));
     public static final DeferredItem<Item> AMETHYST_QUARTZ_GEM = ITEMS.registerItem("amethyst_quartz_gem",
-            properties -> new GemItem(properties, "Amethyst Quartz", ModEntities.QUARTZ.get(), 13));
+            properties -> new GemItem(properties, "Amethyst Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "amethyst_quartz")));
     public static final DeferredItem<Item> CHERRY_QUARTZ_GEM = ITEMS.registerItem("cherry_quartz_gem",
-            properties -> new GemItem(properties, "Cherry Quartz", ModEntities.QUARTZ.get(), 14));
+            properties -> new GemItem(properties, "Cherry Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "cherry_quartz")));
     public static final DeferredItem<Item> ROSE_QUARTZ_GEM = ITEMS.registerItem("rose_quartz_gem",
-            properties -> new GemItem(properties, "Rose Quartz", ModEntities.QUARTZ.get(), 15));
+            properties -> new GemItem(properties, "Rose Quartz", ModEntities.QUARTZ.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "rose_quartz")));
 
-    //JASPERS
+    // JASPERS
     public static final DeferredItem<Item> SPIDERWEB_JASPER_GEM = ITEMS.registerItem("spiderweb_jasper_gem",
-            properties -> new GemItem(properties, "Spiderweb Jasper", ModEntities.JASPER.get(), 0));
+            properties -> new GemItem(properties, "Spiderweb Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "spiderweb_jasper")));
     public static final DeferredItem<Item> PORCELAIN_JASPER_GEM = ITEMS.registerItem("porcelain_jasper_gem",
-            properties -> new GemItem(properties, "Porcelain Jasper", ModEntities.JASPER.get(), 1));
+            properties -> new GemItem(properties, "Porcelain Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "porcelain_jasper")));
     public static final DeferredItem<Item> ZEBRA_JASPER_GEM = ITEMS.registerItem("zebra_jasper_gem",
-            properties -> new GemItem(properties, "Zebra Jasper", ModEntities.JASPER.get(), 2));
+            properties -> new GemItem(properties, "Zebra Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "zebra_jasper")));
     public static final DeferredItem<Item> CHRYSANTHEMUM_JASPER_GEM = ITEMS.registerItem("chrysanthemum_jasper_gem",
-            properties -> new GemItem(properties, "Chrysanthemum Jasper", ModEntities.JASPER.get(), 3));
+            properties -> new GemItem(properties, "Chrysanthemum Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "chrysanthemum_jasper")));
     public static final DeferredItem<Item> SNAKESKIN_JASPER_GEM = ITEMS.registerItem("snakeskin_jasper_gem",
-            properties -> new GemItem(properties, "Snakeskin Jasper", ModEntities.JASPER.get(), 4));
+            properties -> new GemItem(properties, "Snakeskin Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "snakeskin_jasper")));
     public static final DeferredItem<Item> BIGGS_JASPER_GEM = ITEMS.registerItem("biggs_jasper_gem",
-            properties -> new GemItem(properties, "Bigs Jasper", ModEntities.JASPER.get(), 5));
+            properties -> new GemItem(properties, "Biggs Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "biggs_jasper")));
     public static final DeferredItem<Item> NOREENA_JASPER_GEM = ITEMS.registerItem("noreena_jasper_gem",
-            properties -> new GemItem(properties, "Noreena Jasper", ModEntities.JASPER.get(), 6));
+            properties -> new GemItem(properties, "Noreena Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "noreena_jasper")));
     public static final DeferredItem<Item> HONEY_JASPER_GEM = ITEMS.registerItem("honey_jasper_gem",
-            properties -> new GemItem(properties, "Honey Jasper", ModEntities.JASPER.get(), 7));
+            properties -> new GemItem(properties, "Honey Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "honey_jasper")));
     public static final DeferredItem<Item> MORRISONITE_JASPER_GEM = ITEMS.registerItem("morrisonite_jasper_gem",
-            properties -> new GemItem(properties, "Morrisonite Jasper", ModEntities.JASPER.get(), 8));
+            properties -> new GemItem(properties, "Morrisonite Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "morrisonite_jasper")));
     public static final DeferredItem<Item> RHYOLITE_JASPER_GEM = ITEMS.registerItem("rhyolite_jasper_gem",
-            properties -> new GemItem(properties, "Rhyolite Jasper", ModEntities.JASPER.get(), 9));
+            properties -> new GemItem(properties, "Rhyolite Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "rhyolite_jasper")));
     public static final DeferredItem<Item> KAMBABA_JASPER_GEM = ITEMS.registerItem("kambaba_jasper_gem",
-            properties -> new GemItem(properties, "Kambaba Jasper", ModEntities.JASPER.get(), 10));
+            properties -> new GemItem(properties, "Kambaba Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "kambaba_jasper")));
     public static final DeferredItem<Item> OCEAN_JASPER_GEM = ITEMS.registerItem("ocean_jasper_gem",
-            properties -> new GemItem(properties, "Ocean Jasper", ModEntities.JASPER.get(), 11));
+            properties -> new GemItem(properties, "Ocean Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "ocean_jasper")));
     public static final DeferredItem<Item> SEA_SEDIMENT_JASPER_GEM = ITEMS.registerItem("sea_sediment_jasper_gem",
-            properties -> new GemItem(properties, "Sea Sediment Jasper", ModEntities.JASPER.get(), 12));
+            properties -> new GemItem(properties, "Sea Sediment Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "sea_sediment_jasper")));
     public static final DeferredItem<Item> ROYAL_PLUME_JASPER_GEM = ITEMS.registerItem("royal_plume_jasper_gem",
-            properties -> new GemItem(properties, "Royal Plume Jasper", ModEntities.JASPER.get(), 13));
+            properties -> new GemItem(properties, "Royal Plume Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "royal_plume_jasper")));
     public static final DeferredItem<Item> MOOKITE_JASPER_GEM = ITEMS.registerItem("mookite_jasper_gem",
-            properties -> new GemItem(properties, "Mookite Jasper", ModEntities.JASPER.get(), 14));
+            properties -> new GemItem(properties, "Mookite Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "mookite_jasper")));
     public static final DeferredItem<Item> PEACH_PETAL_JASPER_GEM = ITEMS.registerItem("peach_petal_jasper_gem",
-            properties -> new GemItem(properties, "Peach Petal Jasper", ModEntities.JASPER.get(), 15));
+            properties -> new GemItem(properties, "Peach Petal Jasper", ModEntities.JASPER.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "peach_petal_jasper")));
 
-    //PEARLS
+    // PEARLS
     public static final DeferredItem<Item> WHITE_PEARL_GEM = ITEMS.registerItem("white_pearl_gem",
-            properties -> new GemItem(properties, "White Pearl", ModEntities.PEARL.get(), 0));
+            properties -> new GemItem(properties, "White Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "white_pearl")));
     public static final DeferredItem<Item> SPECTER_PEARL_GEM = ITEMS.registerItem("specter_pearl_gem",
-            properties -> new GemItem(properties, "Specter Pearl", ModEntities.PEARL.get(), 1));
+            properties -> new GemItem(properties, "Specter Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "specter_pearl")));
     public static final DeferredItem<Item> SILVER_PEARL_GEM = ITEMS.registerItem("silver_pearl_gem",
-            properties -> new GemItem(properties, "Silver Pearl", ModEntities.PEARL.get(), 2));
+            properties -> new GemItem(properties, "Silver Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "silver_pearl")));
     public static final DeferredItem<Item> ACKEE_PEARL_GEM = ITEMS.registerItem("ackee_pearl_gem",
-            properties -> new GemItem(properties, "Ackee Pearl", ModEntities.PEARL.get(), 3));
+            properties -> new GemItem(properties, "Ackee Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "ackee_pearl")));
     public static final DeferredItem<Item> CHOCOLATE_PEARL_GEM = ITEMS.registerItem("chocolate_pearl_gem",
-            properties -> new GemItem(properties, "Chocolate Pearl", ModEntities.PEARL.get(), 4));
+            properties -> new GemItem(properties, "Chocolate Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "chocolate_pearl")));
     public static final DeferredItem<Item> CHERRY_PEARL_GEM = ITEMS.registerItem("cherry_pearl_gem",
-            properties -> new GemItem(properties, "Cherry Pearl", ModEntities.PEARL.get(), 5));
+            properties -> new GemItem(properties, "Cherry Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "cherry_pearl")));
     public static final DeferredItem<Item> APRICOT_PEARL_GEM = ITEMS.registerItem("apricot_pearl_gem",
-            properties -> new GemItem(properties, "Apricot Pearl", ModEntities.PEARL.get(), 6));
+            properties -> new GemItem(properties, "Apricot Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "apricot_pearl")));
     public static final DeferredItem<Item> YELLOW_PEARL_GEM = ITEMS.registerItem("yellow_pearl_gem",
-            properties -> new GemItem(properties, "Yellow Pearl", ModEntities.PEARL.get(), 7));
+            properties -> new GemItem(properties, "Yellow Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "yellow_pearl")));
     public static final DeferredItem<Item> OLIVE_PEARL_GEM = ITEMS.registerItem("olive_pearl_gem",
-            properties -> new GemItem(properties, "Olive Pearl", ModEntities.PEARL.get(), 8));
+            properties -> new GemItem(properties, "Olive Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "olive_pearl")));
     public static final DeferredItem<Item> FOREST_PEARL_GEM = ITEMS.registerItem("forest_pearl_gem",
-            properties -> new GemItem(properties, "Forest Pearl", ModEntities.PEARL.get(), 9));
+            properties -> new GemItem(properties, "Forest Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "forest_pearl")));
     public static final DeferredItem<Item> SKY_PEARL_GEM = ITEMS.registerItem("sky_pearl_gem",
-            properties -> new GemItem(properties, "Sky Pearl", ModEntities.PEARL.get(), 10));
+            properties -> new GemItem(properties, "Sky Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "sky_pearl")));
     public static final DeferredItem<Item> BLUE_PEARL_GEM = ITEMS.registerItem("blue_pearl_gem",
-            properties -> new GemItem(properties, "Blue Pearl", ModEntities.PEARL.get(), 11));
+            properties -> new GemItem(properties, "Blue Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "blue_pearl")));
     public static final DeferredItem<Item> OCEAN_PEARL_GEM = ITEMS.registerItem("ocean_pearl_gem",
-            properties -> new GemItem(properties, "Ocean Pearl", ModEntities.PEARL.get(), 12));
+            properties -> new GemItem(properties, "Ocean Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "ocean_pearl")));
     public static final DeferredItem<Item> PLUM_PEARL_GEM = ITEMS.registerItem("plum_pearl_gem",
-            properties -> new GemItem(properties, "Plum Pearl", ModEntities.PEARL.get(), 13));
+            properties -> new GemItem(properties, "Plum Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "plum_pearl")));
     public static final DeferredItem<Item> FUCHSIA_PEARL_GEM = ITEMS.registerItem("fuchsia_pearl_gem",
-            properties -> new GemItem(properties, "Fuchsia Pearl", ModEntities.PEARL.get(), 14));
+            properties -> new GemItem(properties, "Fuchsia Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "fuchsia_pearl")));
     public static final DeferredItem<Item> PINK_PEARL_GEM = ITEMS.registerItem("pink_pearl_gem",
-            properties -> new GemItem(properties, "Pink Pearl", ModEntities.PEARL.get(), 15));
+            properties -> new GemItem(properties, "Pink Pearl", ModEntities.PEARL.get(), Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pink_pearl")));
 
     public static final DeferredItem<Item> RUBY_GEM = ITEMS.registerItem("ruby_gem",
             properties -> new GemItem(properties, "Ruby", ModEntities.PERIDOT.get()));

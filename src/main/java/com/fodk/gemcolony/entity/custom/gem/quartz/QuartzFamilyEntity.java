@@ -3,11 +3,12 @@ package com.fodk.gemcolony.entity.custom.gem.quartz;
 import com.fodk.gemcolony.entity.custom.gem.ai.GemAttackGoal;
 import com.fodk.gemcolony.entity.custom.gem.ai.GemGuardGoal;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.variant.VariantGemEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 
-public abstract class QuartzFamilyEntity extends GemEntity {
+public abstract class QuartzFamilyEntity extends VariantGemEntity {
 
     public QuartzFamilyEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);

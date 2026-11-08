@@ -36,7 +36,7 @@ public interface GemVariant {
         return getData().getGemItem();
     }
 
-    default int getColorId() {
-        return getData().getColorId();
+    default Item getChromaItem() {
+        return getData().getChromaItem();
     }
 }

@@ -260,6 +260,7 @@ public class ModModelProvider extends ModelProvider {
         generateGemItem(ModItems.CARNELIAN_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.CHERT_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.CITRINE_QUARTZ_GEM.get(), itemModels);
+        //generateGemItem(ModItems.LEMON_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.PRASEOLITE_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.AVENTURINE_QUARTZ_GEM.get(), itemModels);
         generateGemItem(ModItems.ANGEL_AURA_QUARTZ_GEM.get(), itemModels);

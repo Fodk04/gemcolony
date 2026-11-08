@@ -2,6 +2,8 @@ package com.fodk.gemcolony.event;
 
 import com.fodk.gemcolony.entity.custom.gem.base.GemDefinitions;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
+import com.fodk.gemcolony.entity.custom.gem.variant.GemVariantData;
+import com.fodk.gemcolony.entity.custom.gem.variant.GemVariantRegistry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -41,5 +43,9 @@ public class RegisterGemDefinitionsEvent extends Event {
                 humiditySigma,
                 weight
         );
+    }
+
+    public void RegisterGemVariant(Identifier id, EntityType<? extends GemEntity> entityType, GemVariantData data) {
+        GemVariantRegistry.register(id, entityType, data);
     }
 }

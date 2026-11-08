@@ -292,6 +292,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(Tags.Blocks.NATURAL_LOGS)
                 .addTag(Tags.Blocks.GRAVELS)
                 .addTag(Tags.Blocks.COBBLESTONES)
+                .add(BlockItemIds.CALCITE.block())
                 .addTag(BlockTags.GRASS_BLOCKS)
                 .addTag(Tags.Blocks.SANDSTONE_BLOCKS)
                 .addTag(BlockTags.SUBSTRATE_OVERWORLD)

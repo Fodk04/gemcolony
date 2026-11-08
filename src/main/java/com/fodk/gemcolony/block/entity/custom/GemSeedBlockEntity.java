@@ -5,7 +5,6 @@ import com.fodk.gemcolony.block.entity.ModBlockEntities;
 import com.fodk.gemcolony.data.GemAnalysisResult;
 import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
 import com.fodk.gemcolony.entity.custom.gem.base.GemDefinitions;
-import com.fodk.gemcolony.item.custom.ChromaItem;
 import com.fodk.gemcolony.tags.ModTags;
 import com.fodk.gemcolony.util.GemEnvironmentUtil;
 import net.minecraft.core.BlockPos;
@@ -124,7 +123,7 @@ public class GemSeedBlockEntity extends BlockEntity {
 
         GemEntity gem = GemDefinitions.get(selectedGemId).gem().create((ServerLevel) level, null, getBlockPos(), EntitySpawnReason.NATURAL, false, false);
 
-        gem.initializeGemFromChroma(((ChromaItem) chroma.getItem()).colorIndex);
+        gem.initializeGemFromChroma(chroma.getItem());
         gem.setQuality(quality);
 
         int height = (int) Math.ceil(gem.getHitbox().getYsize());

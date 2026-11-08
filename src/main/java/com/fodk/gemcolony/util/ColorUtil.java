@@ -1,6 +1,7 @@
 package com.fodk.gemcolony.util;
 
 import java.awt.*;
+import java.util.List;
 
 public enum ColorUtil {
     WHITE(0, Color.WHITE, "white"),
@@ -73,15 +74,54 @@ public enum ColorUtil {
         return new Color(r, g, b, a);
     }
 
-    public static int mixColorInts(int colorInt1, int colorInt2, float weight){
+    public static int mixColorInts(int colorInt1, int colorInt2, float weight) {
         Color color1 = colorFromInt(colorInt1);
         Color color2 = colorFromInt(colorInt2);
 
-        float averageR = color1.getRed() * (1f - weight) + color2.getRed() * weight;
-        float averageG = color1.getGreen() * (1f - weight) + color2.getGreen() * weight;
-        float averageB = color1.getBlue() * (1f - weight) + color2.getBlue() * weight;
+        float w = Math.clamp(weight, 0f, 1f);
 
-        return colorToInt(new Color((int)averageR, (int)averageG, (int)averageB));
+        float c1 = 1f - color1.getRed() / 255f;
+        float m1 = 1f - color1.getGreen() / 255f;
+        float y1 = 1f - color1.getBlue() / 255f;
+
+        float c2 = 1f - color2.getRed() / 255f;
+        float m2 = 1f - color2.getGreen() / 255f;
+        float y2 = 1f - color2.getBlue() / 255f;
+
+        float c = c1 * (1f - w) + c2 * w;
+        float m = m1 * (1f - w) + m2 * w;
+        float y = y1 * (1f - w) + y2 * w;
+
+        int r = Math.round((1f - c) * 255f);
+        int g = Math.round((1f - m) * 255f);
+        int b = Math.round((1f - y) * 255f);
+
+        return colorToInt(new Color(r, g, b));
+    }
+
+    public static int averageColorInts(List<Integer> colors) {
+        if (colors.isEmpty()) {
+            return 0;
+        }
+
+        float r = 0;
+        float g = 0;
+        float b = 0;
+
+        for (int colorInt : colors) {
+            Color color = colorFromInt(colorInt);
+            r += color.getRed();
+            g += color.getGreen();
+            b += color.getBlue();
+        }
+
+        int count = colors.size();
+
+        return colorToInt(new Color(
+                Math.round(r / count),
+                Math.round(g / count),
+                Math.round(b / count)
+        ));
     }
 
     public static int multiplyColors(int colorInt1, int colorInt2){

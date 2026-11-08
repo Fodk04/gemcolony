@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -83,8 +84,8 @@ public class GemEntityPreviewPageRenderer extends BookPageRenderer<BookEntityPag
                 }
 
                 this.entity.setId(-1);
-                int variant = ((GemPreviewPage)page).getVariant();
-                if(variant >= 0){
+                Identifier variant = ((GemPreviewPage)page).getVariant();
+                if(variant != null){
                     ((GemEntity) entity).initializeGemPreview(variant);
                 }else{
                     ((GemEntity) entity).initializeGemPreview();

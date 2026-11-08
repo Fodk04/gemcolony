@@ -2,10 +2,7 @@ package com.fodk.gemcolony.entity.custom.gem.pearl;
 
 import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
-import com.fodk.gemcolony.entity.custom.gem.base.GemEntity;
-import com.fodk.gemcolony.entity.custom.gem.variant.PearlVariants;
-import com.fodk.gemcolony.util.ColorUtil;
-import com.fodk.gemcolony.util.GemVariantUtil;
+import com.fodk.gemcolony.entity.custom.gem.variant.VariantGemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,12 +13,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
-import java.awt.*;
-
-public class PearlEntity extends GemEntity {
+public class PearlEntity extends VariantGemEntity {
 
     public PearlEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -56,11 +50,6 @@ public class PearlEntity extends GemEntity {
     }
 
     @Override
-    public Item getGemItem() {
-        return GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT)).getGemItem();
-    }
-
-    @Override
     public int getMaxOutfits() {
         return 5;
     }
@@ -86,44 +75,14 @@ public class PearlEntity extends GemEntity {
     }
 
     @Override
-    public Color generateGemColor() {
-        PearlVariants pearlVariants = GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT));
-        return pearlVariants.getSkinColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateOutfitColor() {
-        PearlVariants pearlVariants = GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT));
-        return pearlVariants.getOutfitColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateInsigniaColor() {
-        PearlVariants pearlVariants = GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT));
-        return pearlVariants.getInsigniaColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateHairColor() {
-        PearlVariants pearlVariants = GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT));
-        return pearlVariants.getHairColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateMarkingsColor() {
-        return Color.black;
-    }
-
-    @Override
-    public Color generateVisorColor() {
-        PearlVariants pearlVariants = GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT));
-        return pearlVariants.getVisorColor(random.nextFloat());
-    }
-
-    @Override
     protected int getInventorySize() {
         float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
         return (int) (94 * qualityModifier);
+    }
+
+    @Override
+    public boolean isCut() {
+        return false;
     }
 
     @Override
@@ -139,11 +98,6 @@ public class PearlEntity extends GemEntity {
     }
 
     @Override
-    public String getGemTypeName() {
-        return GemVariantUtil.getById(PearlVariants.class, entityData.get(VARIANT)).getName() + " Pearl";
-    }
-
-    @Override
     public String getNameWithoutVariant() {
         return "Pearl";
     }
@@ -152,16 +106,6 @@ public class PearlEntity extends GemEntity {
     protected void initializeAbilities() {
         //addAbility(GemAbility.DANCER);
         addAbility(GemAbility.HOLOPEARL);
-    }
-
-    @Override
-    public int getRandomVariant() {
-        return random.nextInt(PearlVariants.values().length);
-    }
-
-    @Override
-    public int getVariantFromChroma(int chromaIndex) {
-        return GemVariantUtil.getVariantFromChromaColor(PearlVariants.class, chromaIndex);
     }
 
     @Override

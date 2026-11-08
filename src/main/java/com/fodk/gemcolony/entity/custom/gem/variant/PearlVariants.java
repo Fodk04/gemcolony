@@ -1,6 +1,9 @@
 package com.fodk.gemcolony.entity.custom.gem.variant;
 
+import com.fodk.gemcolony.GemColony;
+import com.fodk.gemcolony.entity.ModEntities;
 import com.fodk.gemcolony.item.ModItems;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 import java.awt.*;
@@ -16,7 +19,7 @@ public enum PearlVariants implements GemVariant {
             new Color(238, 241, 255),
             new Color(199, 201, 205),
             new Color(255, 255, 255),
-            "White", ModItems.WHITE_PEARL_GEM.get(), 0),
+            "White", ModItems.WHITE_PEARL_GEM.get(), ModItems.WHITE_CHROMA.get()),
     SPECTER(new Color(147, 147, 147),
             new Color(202, 202, 202),
             new Color(48, 48, 48),
@@ -27,7 +30,7 @@ public enum PearlVariants implements GemVariant {
             new Color(161, 160, 160),
             new Color(209, 209, 209),
             new Color(228, 228, 227),
-            "Specter", ModItems.SPECTER_PEARL_GEM.get(), 1),
+            "Specter", ModItems.SPECTER_PEARL_GEM.get(), ModItems.LIGHT_GRAY_CHROMA.get()),
     SILVER(new Color(40, 63, 94),
             new Color(110, 139, 169),
             new Color(26, 34, 51),
@@ -38,7 +41,7 @@ public enum PearlVariants implements GemVariant {
             new Color(69, 84, 113),
             new Color(69, 84, 113),
             new Color(112, 134, 179),
-            "Silver", ModItems.SILVER_PEARL_GEM.get(), 2),
+            "Silver", ModItems.SILVER_PEARL_GEM.get(), ModItems.GRAY_CHROMA.get()),
     ACKEE(new Color(28, 26, 29),
             new Color(49, 49, 49),
             new Color(25, 22, 15),
@@ -49,7 +52,7 @@ public enum PearlVariants implements GemVariant {
             new Color(143, 143, 143),
             new Color(128, 128, 128),
             new Color(161, 161, 161),
-            "Ackee", ModItems.ACKEE_PEARL_GEM.get(), 3),
+            "Ackee", ModItems.ACKEE_PEARL_GEM.get(), ModItems.BLACK_CHROMA.get()),
     CHOCOLATE(new Color(66, 49, 55),
             new Color(130, 100, 100),
             new Color(53, 39, 50),
@@ -60,7 +63,7 @@ public enum PearlVariants implements GemVariant {
             new Color(175, 124, 124),
             new Color(152, 105, 105),
             new Color(189, 114, 114),
-            "Chocolate", ModItems.CHOCOLATE_PEARL_GEM.get(), 4),
+            "Chocolate", ModItems.CHOCOLATE_PEARL_GEM.get(), ModItems.BROWN_CHROMA.get()),
     CHERRY(new Color(202, 41, 67),
             new Color(227, 57, 85),
             new Color(158, 23, 23),
@@ -71,7 +74,7 @@ public enum PearlVariants implements GemVariant {
             new Color(255, 59, 88),
             new Color(243, 73, 99),
             new Color(251, 118, 137),
-            "Cherry", ModItems.CHERRY_PEARL_GEM.get(), 5),
+            "Cherry", ModItems.CHERRY_PEARL_GEM.get(), ModItems.RED_CHROMA.get()),
     APRICOT(new Color(150, 110, 60),
             new Color(250, 160, 70),
             new Color(100, 60, 25),
@@ -82,7 +85,7 @@ public enum PearlVariants implements GemVariant {
             new Color(244, 148, 66),
             new Color(207, 95, 0),
             new Color(244, 114, 3),
-            "Apricot", ModItems.APRICOT_PEARL_GEM.get(), 6),
+            "Apricot", ModItems.APRICOT_PEARL_GEM.get(), ModItems.ORANGE_CHROMA.get()),
     YELLOW(new Color(150, 130, 30),
             new Color(225, 225, 33),
             new Color(163, 143, 25),
@@ -93,7 +96,7 @@ public enum PearlVariants implements GemVariant {
             new Color(243, 214, 69),
             new Color(207, 174, 6),
             new Color(255, 218, 30),
-            "Yellow", ModItems.YELLOW_PEARL_GEM.get(), 7),
+            "Yellow", ModItems.YELLOW_PEARL_GEM.get(), ModItems.YELLOW_CHROMA.get()),
     OLIVE(new Color(128, 170, 45),
             new Color(174, 207, 76),
             new Color(76, 91, 35),
@@ -104,7 +107,7 @@ public enum PearlVariants implements GemVariant {
             new Color(211, 237, 102),
             new Color(204, 218, 159),
             new Color(239, 247, 213),
-            "Olive", ModItems.OLIVE_PEARL_GEM.get(), 8),
+            "Olive", ModItems.OLIVE_PEARL_GEM.get(), ModItems.LIME_CHROMA.get()),
     FOREST(new Color(85, 136, 46),
             new Color(134, 191, 93),
             new Color(35, 66, 58),
@@ -115,7 +118,7 @@ public enum PearlVariants implements GemVariant {
             new Color(87, 147, 113),
             new Color(128, 220, 119),
             new Color(184, 250, 178),
-            "Forest", ModItems.FOREST_PEARL_GEM.get(), 9),
+            "Forest", ModItems.FOREST_PEARL_GEM.get(), ModItems.GREEN_CHROMA.get()),
     SKY(new Color(46, 110, 133),
             new Color(184, 237, 255),
             new Color(20, 100, 129),
@@ -126,7 +129,7 @@ public enum PearlVariants implements GemVariant {
             new Color(166, 232, 255),
             new Color(113, 189, 216),
             new Color(135, 214, 243),
-            "Sky", ModItems.SKY_PEARL_GEM.get(), 10),
+            "Sky", ModItems.SKY_PEARL_GEM.get(), ModItems.CYAN_CHROMA.get()),
     BLUE(new Color(118, 141, 185),
             new Color(154, 186, 224),
             new Color(71, 108, 149),
@@ -137,7 +140,7 @@ public enum PearlVariants implements GemVariant {
             new Color(121, 180, 246),
             new Color(121, 180, 246),
             new Color(169, 210, 255),
-            "Blue", ModItems.BLUE_PEARL_GEM.get(), 11),
+            "Blue", ModItems.BLUE_PEARL_GEM.get(), ModItems.LIGHT_BLUE_CHROMA.get()),
     OCEAN(new Color(7, 50, 96),
             new Color(2, 79, 151),
             new Color(0, 43, 85),
@@ -148,7 +151,7 @@ public enum PearlVariants implements GemVariant {
             new Color(1, 39, 200),
             new Color(15, 42, 147),
             new Color(0, 49, 241),
-            "Ocean", ModItems.OCEAN_PEARL_GEM.get(), 12),
+            "Ocean", ModItems.OCEAN_PEARL_GEM.get(), ModItems.BLUE_CHROMA.get()),
     PLUM(new Color(70, 10, 130),
             new Color(200, 80, 250),
             new Color(70, 0, 150),
@@ -159,7 +162,7 @@ public enum PearlVariants implements GemVariant {
             new Color(212, 133, 244),
             new Color(93, 0, 180),
             new Color(92, 0, 230),
-            "Plum", ModItems.PLUM_PEARL_GEM.get(), 13),
+            "Plum", ModItems.PLUM_PEARL_GEM.get(), ModItems.PURPLE_CHROMA.get()),
     FUCHSIA(new Color(190, 45, 125),
             new Color(235, 91, 171),
             new Color(105, 35, 75),
@@ -170,7 +173,7 @@ public enum PearlVariants implements GemVariant {
             new Color(255, 137, 205),
             new Color(241, 177, 211),
             new Color(255, 226, 242),
-            "Fuchsia", ModItems.FUCHSIA_PEARL_GEM.get(), 14),
+            "Fuchsia", ModItems.FUCHSIA_PEARL_GEM.get(), ModItems.MAGENTA_CHROMA.get()),
     PINK(new Color(253, 112, 164),
             new Color(253, 167, 216),
             new Color(170, 23, 78),
@@ -181,7 +184,7 @@ public enum PearlVariants implements GemVariant {
             new Color(248, 166, 196),
             new Color(255, 79, 142),
             new Color(230, 76, 133),
-            "Pink", ModItems.PINK_PEARL_GEM.get(), 15);
+            "Pink", ModItems.PINK_PEARL_GEM.get(), ModItems.PINK_CHROMA.get());
 
     private final GemVariantData data;
     public GemVariantData getData() {
@@ -201,7 +204,7 @@ public enum PearlVariants implements GemVariant {
             Color lightVisor,
             String name,
             Item gemItem,
-            int colorId
+            Item chromaItem
     ) {
         this.data = new GemVariantData(
                 darkSkin,
@@ -216,7 +219,26 @@ public enum PearlVariants implements GemVariant {
                 lightVisor,
                 name,
                 gemItem,
-                colorId
+                chromaItem
         );
+    }
+
+    public static void registerVariants() {
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "white_pearl"), ModEntities.PEARL.get(), WHITE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "specter_pearl"), ModEntities.PEARL.get(), SPECTER.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "silver_pearl"), ModEntities.PEARL.get(), SILVER.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "ackee_pearl"), ModEntities.PEARL.get(), ACKEE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "chocolate_pearl"), ModEntities.PEARL.get(), CHOCOLATE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "cherry_pearl"), ModEntities.PEARL.get(), CHERRY.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "apricot_pearl"), ModEntities.PEARL.get(), APRICOT.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "yellow_pearl"), ModEntities.PEARL.get(), YELLOW.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "olive_pearl"), ModEntities.PEARL.get(), OLIVE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "forest_pearl"), ModEntities.PEARL.get(), FOREST.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "sky_pearl"), ModEntities.PEARL.get(), SKY.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "blue_pearl"), ModEntities.PEARL.get(), BLUE.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "ocean_pearl"), ModEntities.PEARL.get(), OCEAN.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "plum_pearl"), ModEntities.PEARL.get(), PLUM.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "fuchsia_pearl"), ModEntities.PEARL.get(), FUCHSIA.getData());
+        GemVariantRegistry.register(Identifier.fromNamespaceAndPath(GemColony.MOD_ID, "pink_pearl"), ModEntities.PEARL.get(), PINK.getData());
     }
 }

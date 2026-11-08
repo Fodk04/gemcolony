@@ -2,17 +2,13 @@ package com.fodk.gemcolony.block.entity.screen;
 
 import com.fodk.gemcolony.GemColony;
 import com.fodk.gemcolony.block.entity.custom.ShellBlockEntity;
-import com.fodk.gemcolony.entity.custom.gem.variant.PearlVariants;
-import com.fodk.gemcolony.item.ModItems;
 import com.fodk.gemcolony.menu.ShellMenu;
-import com.fodk.gemcolony.util.GemVariantUtil;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 
 public class ShellScreen extends AbstractContainerScreen<ShellMenu> {
 

@@ -40,7 +40,7 @@ public class GemPreviewPage extends BookEntityPage {
                             .forGetter(GemPreviewPage::doesRotate),
                     Codec.FLOAT.optionalFieldOf("default_rotation", -45f)
                             .forGetter(GemPreviewPage::getDefaultRotation),
-                    Codec.INT.optionalFieldOf("variant", 0)
+                    Identifier.CODEC.optionalFieldOf("variant", null)
                             .forGetter(GemPreviewPage::getVariant),
                     BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("chroma")
                             .forGetter(GemPreviewPage::getChroma),
@@ -59,7 +59,7 @@ public class GemPreviewPage extends BookEntityPage {
                     ByteBufCodecs.FLOAT, GemPreviewPage::getOffset,
                     ByteBufCodecs.BOOL, GemPreviewPage::doesRotate,
                     ByteBufCodecs.FLOAT, GemPreviewPage::getDefaultRotation,
-                    ByteBufCodecs.VAR_INT, GemPreviewPage::getVariant,
+                    Identifier.STREAM_CODEC, GemPreviewPage::getVariant,
                     ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.ITEM)), GemPreviewPage::getChroma,
                     ByteBufCodecs.STRING_UTF8, GemPreviewPage::getId,
                     BookCondition.STREAM_CODEC, GemPreviewPage::getCondition,
@@ -68,8 +68,8 @@ public class GemPreviewPage extends BookEntityPage {
 
     public static final BookPageType<GemPreviewPage> TYPE = BookPageTypeRegistry.register(ID, CODEC, STREAM_CODEC);
 
-    private final int variant;
-    public int getVariant() {
+    private final Identifier variant;
+    public Identifier getVariant() {
         return this.variant;
     }
     private final Optional<Item> chroma;
@@ -79,7 +79,7 @@ public class GemPreviewPage extends BookEntityPage {
 
     public GemPreviewPage(BookTextHolder entityName, BookTextHolder text, String entityId,
                           float scale, float offset, boolean rotate, float defaultRotation,
-                          int variant, Optional<Item> chroma, String id, BookCondition condition) {
+                          Identifier variant, Optional<Item> chroma, String id, BookCondition condition) {
         super(entityName, text, entityId, scale, offset, rotate, defaultRotation, id, condition);
         this.variant = variant;
         this.chroma = chroma;

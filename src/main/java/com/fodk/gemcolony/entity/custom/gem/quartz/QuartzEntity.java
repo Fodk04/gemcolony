@@ -2,17 +2,11 @@ package com.fodk.gemcolony.entity.custom.gem.quartz;
 
 import com.fodk.gemcolony.entity.custom.gem.ability.GemAbility;
 import com.fodk.gemcolony.entity.custom.gem.placement.GemPlacement;
-import com.fodk.gemcolony.entity.custom.gem.variant.QuartzVariants;
-import com.fodk.gemcolony.util.ColorUtil;
-import com.fodk.gemcolony.util.GemVariantUtil;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-
-import java.awt.*;
 
 public class QuartzEntity extends QuartzFamilyEntity {
 
@@ -49,11 +43,6 @@ public class QuartzEntity extends QuartzFamilyEntity {
     }
 
     @Override
-    public Item getGemItem() {
-        return GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT)).getGemItem();
-    }
-
-    @Override
     public int getMaxOutfits() {
         return 1;
     }
@@ -79,41 +68,6 @@ public class QuartzEntity extends QuartzFamilyEntity {
     }
 
     @Override
-    public Color generateGemColor() {
-        QuartzVariants quartzVariant = GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT));
-        return quartzVariant.getSkinColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateOutfitColor() {
-        QuartzVariants quartzVariant = GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT));
-        return quartzVariant.getOutfitColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateInsigniaColor() {
-        QuartzVariants quartzVariant = GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT));
-        return quartzVariant.getInsigniaColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateHairColor() {
-        QuartzVariants quartzVariant = GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT));
-        return quartzVariant.getHairColor(random.nextFloat());
-    }
-
-    @Override
-    public Color generateMarkingsColor() {
-        return Color.black;
-    }
-
-    @Override
-    public Color generateVisorColor() {
-        QuartzVariants quartzVariant = GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT));
-        return quartzVariant.getVisorColor(random.nextFloat());
-    }
-
-    @Override
     protected int getInventorySize() {
         float qualityModifier = entityData.get(QUALITY) == 0 ? 0.5f : entityData.get(QUALITY) == 2 ? 1.5f : 1f;
         return (int) (20 * qualityModifier);
@@ -127,11 +81,6 @@ public class QuartzEntity extends QuartzFamilyEntity {
     }
 
     @Override
-    public String getGemTypeName() {
-        return GemVariantUtil.getById(QuartzVariants.class, entityData.get(VARIANT)).getName() + " Quartz";
-    }
-
-    @Override
     public String getNameWithoutVariant() {
         return "Quartz";
     }
@@ -140,16 +89,6 @@ public class QuartzEntity extends QuartzFamilyEntity {
     protected void initializeAbilities() {
         addAbility(GemAbility.SHAPESHIFTER);
         addAbility(GemAbility.CHARGEBALL);
-    }
-
-    @Override
-    public int getRandomVariant() {
-        return random.nextInt(QuartzVariants.values().length);
-    }
-
-    @Override
-    public int getVariantFromChroma(int chromaIndex) {
-        return GemVariantUtil.getVariantFromChromaColor(QuartzVariants.class, chromaIndex);
     }
 
     private static final int NAVY_OUTFIT = 1;
